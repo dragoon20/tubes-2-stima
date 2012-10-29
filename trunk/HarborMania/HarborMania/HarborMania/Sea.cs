@@ -7,20 +7,45 @@ namespace HarborMania
 {
     class Sea
     {
-        Node[10][10] Tile;
-        int Width;
-        int Height;
+        Node [][] Tile;
+        int WidthPerTile;
+        int HeightPerTile;
+        int totalNodeX;
+        int totalNodeY;
 
-        public Sea (int W, int H) {
-            Width = W;
-            Height = H;
-            for (int i=1; i<=Height; i++) {
-                for (int j=1; j<=Width; j++) {
-                    Tile[i][j] = new Node(i, j, 100, 100); //100 dan 100 adalah ukuran tinggi dan lebar masing2 Tile
+        public Sea()
+        {
+            WidthPerTile = 100;
+            HeightPerTile = 100;
+            totalNodeX = 6;
+            totalNodeY = 6;
+            Tile = new Node[totalNodeY][];
+            for (int i = 0; i < totalNodeY; i++)
+            {
+                Tile[i] = new Node[totalNodeX];
+                for (int j = 0; j < totalNodeX; j++)
+                {
+                    Tile[i][j] = new Node();
                 }
             }
         }
 
+        public Sea(int W, int H, int totalNodeX_, int totalNodeY_)
+        {
+            WidthPerTile = W;
+            HeightPerTile = H;
+            totalNodeX = totalNodeX_;
+            totalNodeY = totalNodeY_;
+            Tile = new Node[totalNodeY][];
+            for (int i = 0; i < totalNodeY; i++)
+            {
+                Tile[i] = new Node[totalNodeX];
+                for (int j = 0; j < totalNodeX; j++)
+                {
+                    Tile[i][j] = new Node();
+                }
+            }
 
+        }
     }
 }
