@@ -17,7 +17,6 @@ namespace HarborMania
 
         public Boat(Texture2D texture_, int height_, int weight_, int posX_, int posY_, int arah_)
         {
-            
             texture = texture_;
             height = height_;
             weight = weight_;
@@ -58,3 +57,4 @@ namespace HarborMania
 
     }
 }
+

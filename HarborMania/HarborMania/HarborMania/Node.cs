@@ -2,40 +2,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace HarborMania
 {
     class Node
     {
-        int X;
-        int Y;
-        int Width;
-        int Height;
-        //tambahin : gambar tile per node
+        int status; //0 kosong, 1 isi
+        Texture2D gambar;
+        GraphicsDevice gd;
 
-        public Node(int X_, int Y_, int Width_, int Height_)
+        public Node(int status_)
         {
-            X = X_;
-            Y = Y_;
-            Width = Width_;
-            Height = Height_;
+            status = status_;
         }
 
         public Node()
         {
-            X = 0;
-            Y = 0;
-            Width = 0;
-            Height = 0;
+            status = 0;
+            /*
+            gd = Graphic
+            using(FileStream stream = File.OpenRead("sea-1.png")) {
+                gambar = Texture2D.FromStream(gd, stream);
+            } */
         }
 
-        public void updateNode(int newX, int newY, int newWidth, int newHeight)
+        public void setStatus(int status_)
         {
-            X = newX;
-            Y = newY;
-            Width = newWidth;
-            Height = newHeight;
+            status = status_;
         }
 
+        public int getStatus()
+        {
+            return status;
+        }
     }
 }
