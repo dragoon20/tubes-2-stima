@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HarborMania", "HarborMania\HarborMania\HarborMania.csproj", "{3D004063-229C-493A-99F7-2C01151AAE33}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "HarborManiaContent", "HarborMania\HarborManiaContent\HarborManiaContent.contentproj", "{1B7A025A-7906-4948-8CDF-BF1ABE208F92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Windows Phone = Debug|Windows Phone
+		Release|Windows Phone = Release|Windows Phone
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D004063-229C-493A-99F7-2C01151AAE33}.Debug|Windows Phone.ActiveCfg = Debug|Windows Phone
+		{3D004063-229C-493A-99F7-2C01151AAE33}.Debug|Windows Phone.Build.0 = Debug|Windows Phone
+		{3D004063-229C-493A-99F7-2C01151AAE33}.Debug|Windows Phone.Deploy.0 = Debug|Windows Phone
+		{3D004063-229C-493A-99F7-2C01151AAE33}.Release|Windows Phone.ActiveCfg = Release|Windows Phone
+		{3D004063-229C-493A-99F7-2C01151AAE33}.Release|Windows Phone.Build.0 = Release|Windows Phone
+		{3D004063-229C-493A-99F7-2C01151AAE33}.Release|Windows Phone.Deploy.0 = Release|Windows Phone
+		{1B7A025A-7906-4948-8CDF-BF1ABE208F92}.Debug|Windows Phone.ActiveCfg = Debug|Windows Phone
+		{1B7A025A-7906-4948-8CDF-BF1ABE208F92}.Release|Windows Phone.ActiveCfg = Release|Windows Phone
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
