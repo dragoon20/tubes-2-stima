@@ -2,27 +2,44 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace HarborMania
 {
-    class Boat
+    class Boat : Microsoft.Xna.Framework.DrawableGameComponent
     {
         int height;
-        int weight;
+        int width;
         int posX; //posX adalah posisi X dari boat head
         int posY; //posY adalah posisi Y dari boat head
         int arah; //arah adalah arah dari boat head
+        Vector2 position;
+        Vector2 size;
         Texture2D texture; //masih blm tau ini utk apa
 
-        public Boat(Texture2D texture_, int height_, int weight_, int posX_, int posY_, int arah_)
+        public Vector2 Size
         {
-            texture = texture_;
-            height = height_;
-            weight = weight_;
-            posX = posX_;
-            posY = posY_;
-            arah = arah_;
+            get { return size; }
+            set { size = value; }
+        }
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        public Boat(Game game) : base(game)
+        {
+            position = new Vector2();
+            size = new Vector2();
+        }
+
+        public Boat(Game game, Vector2 Position, Vector2 Size)
+            : base(game)
+        {
+            position = Position;
+            size = Size;
         }
 
         public void Draw (SpriteBatch spriteBatch) 
@@ -30,6 +47,30 @@ namespace HarborMania
             spriteBatch.Begin();
             //spriteBatch.Draw(texture, position, color);
             spriteBatch.End();
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+
+        public void LoadContent()
+        {
+            if ((height == 1) && (width == 1))
+            {
+                texture = Game.Content.Load<Texture2D>("");
+            }
+            base.LoadContent();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
         }
 
         public void Move(int jarak)

@@ -2,40 +2,65 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 
 namespace HarborMania
 {
-    class Node
+    class Node : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        int status; //0 kosong, 1 isi
+        int status; //0 kosong, 1 isi, 2 dll
+        Vector2 size;
+        Vector2 position;
         Texture2D gambar;
-        GraphicsDevice gd;
+        //GraphicsDevice gd;
 
-        public Node(int status_)
+        public int Status
         {
-            status = status_;
+            get { return status; }
+            set { status = value; }
         }
 
-        public Node()
+        public Vector2 Size
         {
-            status = 0;
-            /*
-            gd = Graphic
-            using(FileStream stream = File.OpenRead("sea-1.png")) {
-                gambar = Texture2D.FromStream(gd, stream);
-            } */
+            get { return size; }
+            set { size = value; }
         }
 
-        public void setStatus(int status_)
+        public Vector2 Position
         {
-            status = status_;
+            get { return position; }
+            set { position = value; }
         }
 
-        public int getStatus()
+        public Node(Game game) : base(game)
         {
-            return status;
+            position = new Vector2();
+            size = new Vector2();
+
+            LoadContent();
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+
+        public void LoadContent()
+        {
+            gambar = Game.Content.Load<Texture2D>("");
+            base.LoadContent();
+        }
+
+        public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        public override void Draw(Microsoft.Xna.Framework.GameTime gameTime)
+        {
+            base.Draw(gameTime);
         }
     }
 }
