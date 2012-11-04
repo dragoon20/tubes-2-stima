@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HarborMania
 {
-    class Sea
+    class Sea : Microsoft.Xna.Framework.GameComponent
     {
         Node [][] Tile;
         int WidthPerTile;
@@ -13,7 +13,12 @@ namespace HarborMania
         int totalNodeX;
         int totalNodeY;
 
-        public Sea()
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+
+        public Sea (Game1 game) : base(game)
         {
             WidthPerTile = 100;
             HeightPerTile = 100;
@@ -25,12 +30,12 @@ namespace HarborMania
                 Tile[i] = new Node[totalNodeX];
                 for (int j = 0; j < totalNodeX; j++)
                 {
-                    Tile[i][j] = new Node();
+                    Tile[i][j] = new Node(game);
                 }
             }
         }
 
-        public Sea(int W, int H, int totalNodeX_, int totalNodeY_)
+        public Sea (Game1 game, int W, int H, int totalNodeX_, int totalNodeY_) : base(game)
         {
             WidthPerTile = W;
             HeightPerTile = H;
@@ -42,7 +47,7 @@ namespace HarborMania
                 Tile[i] = new Node[totalNodeX];
                 for (int j = 0; j < totalNodeX; j++)
                 {
-                    Tile[i][j] = new Node();
+                    Tile[i][j] = new Node(game);
                 }
             }
 
