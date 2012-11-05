@@ -29,7 +29,7 @@ namespace HarborMania
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        Vector2 resolution = new Vector2(800,480);
+        Vector2 resolution = new Vector2(800, 480);
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -43,6 +43,18 @@ namespace HarborMania
         Texture2D mainMenu;
         Texture2D menuButton;
         Texture2D levelbox;
+
+        Texture2D boat12;
+        Texture2D boat21;
+        Texture2D boat13;
+        Texture2D boat31;
+        Texture2D boatPlayer;
+        Texture2D nextButton;
+        Texture2D gameTitle;
+        Texture2D clue;
+        Texture2D seaTile;
+        Texture2D woodTile;
+
         SpriteFont font1;
         SpriteFont font2;
         SpriteFont font3;
@@ -53,7 +65,7 @@ namespace HarborMania
         Rectangle menuHelp;
         Rectangle menuHuman;
         Rectangle menuComputer;
-        
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -67,8 +79,8 @@ namespace HarborMania
             InactiveSleepTime = TimeSpan.FromSeconds(1);
 
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
-            graphics.PreferredBackBufferHeight = (int) resolution.Y;
-            graphics.PreferredBackBufferWidth = (int) resolution.X;
+            graphics.PreferredBackBufferHeight = (int)resolution.Y;
+            graphics.PreferredBackBufferWidth = (int)resolution.X;
 
             // Bagian konfigurasi developer
             // Set GameState jadi menu utama
@@ -105,6 +117,18 @@ namespace HarborMania
             mainMenu = Content.Load<Texture2D>("MainScreen");
             menuButton = Content.Load<Texture2D>("menu_button");
             levelbox = Content.Load<Texture2D>("Rect");
+
+            boat12 = Content.Load<Texture2D>("boat12");
+            boat21 = Content.Load<Texture2D>("boat21");
+            boat13 = Content.Load<Texture2D>("boat13");
+            boat31 = Content.Load<Texture2D>("boat31");
+            boatPlayer = Content.Load<Texture2D>("BoatPlayer");
+            nextButton = Content.Load<Texture2D>("Next");
+            gameTitle = Content.Load<Texture2D>("HarborMania");
+            seaTile = Content.Load<Texture2D>("Sea");
+            woodTile = Content.Load<Texture2D>("Wood");
+            clue = Content.Load<Texture2D>("Clue_1");
+
             font1 = Content.Load<SpriteFont>("SpriteFont1");
             font2 = Content.Load<SpriteFont>("SpriteFont2");
             font3 = Content.Load<SpriteFont>("SpriteFont3");
@@ -147,72 +171,92 @@ namespace HarborMania
             switch (_GameState)
             {
                 case GameState.MainMenu:
-                {
-                    // Bagian Menu Utama
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
-                    spriteBatch.Draw(menuButton, menuPlay, Color.White);
-                    spriteBatch.DrawString(font1, "Mulai Permainan", new Vector2(menuPlay.X+70,menuPlay.Y+10), Color.White);
-                    spriteBatch.Draw(menuButton, menuHelp, Color.White);
-                    spriteBatch.DrawString(font1, "Petunjuk", new Vector2(menuHelp.X + 70, menuHelp.Y + 10), Color.White);
-                    spriteBatch.End();
-                    break;
-                }
-                case GameState.Help:
-                {
-                    // Bagian Help
-                    GraphicsDevice.Clear(Color.Tomato);
-                    break;
-                }
-                case GameState.ChoosePlay:
-                {
-                    // Bagian Pilih jenis permainan
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
-                    spriteBatch.DrawString(font3, "Jenis Permainan", new Vector2(40, 30), Color.DarkSlateBlue);
-                    spriteBatch.Draw(menuButton, menuHuman, Color.White);
-                    spriteBatch.DrawString(font1, "Player Main", new Vector2(menuHuman.X + 70, menuHuman.Y + 10), Color.White);
-                    spriteBatch.Draw(menuButton, menuComputer, Color.White);
-                    spriteBatch.DrawString(font1, "Computer Main", new Vector2(menuComputer.X + 70, menuComputer.Y + 10), Color.White);
-                    spriteBatch.End();
-                    break;
-                }
-                case GameState.ChooseLevel:
-                {
-                    // Bagian Pilih Level
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
-                    spriteBatch.DrawString(font3, "Pilih Level", new Vector2(40, 30), Color.DarkSlateBlue);
-                    for (int j = 0; j < 3; ++j)
                     {
-                        for (int i = 0; i < 6; ++i)
-                        {
-                            spriteBatch.Draw(levelbox, new Rectangle(60 + i * 115, 110 + j * 110, 100, 100), Color.White);
-                            int digit = 0;
-                            int temp = ((j * 6) + (i + 1));
-                            while (temp >= 10)
-                            {
-                                temp /= 10;
-                                digit++;
-                            }
-                            spriteBatch.DrawString(font2, ((j * 6) + (i + 1)).ToString(), new Vector2(98 - (digit * 14) + i * 115, 135 + j * 110), Color.White);
-                        }
+                        // Bagian Menu Utama
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
+                        spriteBatch.Draw(menuButton, menuPlay, Color.White);
+                        spriteBatch.DrawString(font1, "Mulai Permainan", new Vector2(menuPlay.X + 70, menuPlay.Y + 10), Color.White);
+                        spriteBatch.Draw(menuButton, menuHelp, Color.White);
+                        spriteBatch.DrawString(font1, "Petunjuk", new Vector2(menuHelp.X + 70, menuHelp.Y + 10), Color.White);
+                        spriteBatch.End();
+                        break;
                     }
-                    spriteBatch.End();
-                    break;
-                }
+                case GameState.Help:
+                    {
+                        // Bagian Help
+                        GraphicsDevice.Clear(Color.AntiqueWhite);
+                        spriteBatch.Begin();
+                        for (int i = 0; i < 7; i++)
+                        {
+                            for (int j = 0; j < 6; j++)
+                            {
+                                if ((i==6) && (j==4))
+                                    spriteBatch.Draw(woodTile, new Vector2(i*80, j*80), Color.White);
+                                else
+                                    spriteBatch.Draw(seaTile, new Vector2(i*80, j*80), Color.White);
+                            }
+                        }
+                        spriteBatch.Draw(boat21, new Vector2(320, 160), Color.White);
+                        spriteBatch.Draw(boat12, new Vector2(400, 240), Color.White);
+                        spriteBatch.Draw(boat13, new Vector2(0, 0), Color.White);
+                        spriteBatch.Draw(boatPlayer, new Vector2(0, 320), Color.White);
+                        spriteBatch.Draw(gameTitle, new Vector2(560, 0), Color.White);
+                        spriteBatch.Draw(clue, new Vector2(560, 80), Color.White);
+                        spriteBatch.Draw(nextButton, new Vector2(720, 400), Color.White);
+
+                        spriteBatch.End();
+                        break;
+                    }
+                case GameState.ChoosePlay:
+                    {
+                        // Bagian Pilih jenis permainan
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
+                        spriteBatch.DrawString(font3, "Jenis Permainan", new Vector2(40, 30), Color.DarkSlateBlue);
+                        spriteBatch.Draw(menuButton, menuHuman, Color.White);
+                        spriteBatch.DrawString(font1, "Player Main", new Vector2(menuHuman.X + 70, menuHuman.Y + 10), Color.White);
+                        spriteBatch.Draw(menuButton, menuComputer, Color.White);
+                        spriteBatch.DrawString(font1, "Computer Main", new Vector2(menuComputer.X + 70, menuComputer.Y + 10), Color.White);
+                        spriteBatch.End();
+                        break;
+                    }
+                case GameState.ChooseLevel:
+                    {
+                        // Bagian Pilih Level
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
+                        spriteBatch.DrawString(font3, "Pilih Level", new Vector2(40, 30), Color.DarkSlateBlue);
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            for (int i = 0; i < 6; ++i)
+                            {
+                                spriteBatch.Draw(levelbox, new Rectangle(60 + i * 115, 110 + j * 110, 100, 100), Color.White);
+                                int digit = 0;
+                                int temp = ((j * 6) + (i + 1));
+                                while (temp >= 10)
+                                {
+                                    temp /= 10;
+                                    digit++;
+                                }
+                                spriteBatch.DrawString(font2, ((j * 6) + (i + 1)).ToString(), new Vector2(98 - (digit * 14) + i * 115, 135 + j * 110), Color.White);
+                            }
+                        }
+                        spriteBatch.End();
+                        break;
+                    }
                 case GameState.HumanPlay:
-                {
-                    // Bagian Player
-                    GraphicsDevice.Clear(Color.AliceBlue);
-                    break;
-                }
+                    {
+                        // Bagian Player
+                        GraphicsDevice.Clear(Color.AliceBlue);
+                        break;
+                    }
                 case GameState.ComputerPlay:
-                {
-                    // Bagian Computer
-                    GraphicsDevice.Clear(Color.BurlyWood);
-                    break;
-                }
+                    {
+                        // Bagian Computer
+                        GraphicsDevice.Clear(Color.BurlyWood);
+                        break;
+                    }
                 default: break;
             }
 
@@ -224,6 +268,7 @@ namespace HarborMania
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        int helpCount = 0;
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
@@ -232,41 +277,41 @@ namespace HarborMania
                 switch (_GameState)
                 {
                     case GameState.MainMenu:
-                    {
-                        // Bagian Menu Utama
-                        this.Exit();
-                        break;
-                    }
+                        {
+                            // Bagian Menu Utama
+                            this.Exit();
+                            break;
+                        }
                     case GameState.Help:
-                    {
-                        // Bagian Help
-                        _GameState = GameState.MainMenu;
-                        break;
-                    }
+                        {
+                            // Bagian Help
+                            _GameState = GameState.MainMenu;
+                            break;
+                        }
                     case GameState.ChoosePlay:
-                    {
-                        // Bagian Pilih jenis permainan
-                        _GameState = GameState.MainMenu;
-                        break;
-                    }
+                        {
+                            // Bagian Pilih jenis permainan
+                            _GameState = GameState.MainMenu;
+                            break;
+                        }
                     case GameState.ChooseLevel:
-                    {
-                        // Bagian Pilih Level
-                        _GameState = GameState.ChoosePlay;
-                        break;
-                    }
+                        {
+                            // Bagian Pilih Level
+                            _GameState = GameState.ChoosePlay;
+                            break;
+                        }
                     case GameState.HumanPlay:
-                    {
-                        // Bagian Player
-                        _GameState = GameState.ChooseLevel;
-                        break;
-                    }
+                        {
+                            // Bagian Player
+                            _GameState = GameState.ChooseLevel;
+                            break;
+                        }
                     case GameState.ComputerPlay:
-                    {
-                        // Bagian Computer
-                        _GameState = GameState.ChooseLevel;
-                        break;
-                    }
+                        {
+                            // Bagian Computer
+                            _GameState = GameState.ChooseLevel;
+                            break;
+                        }
                     default: break;
                 }
             }
@@ -276,138 +321,178 @@ namespace HarborMania
                 switch (_GameState)
                 {
                     case GameState.MainMenu:
-                    {
-                        // Bagian Menu Utama
-                        TouchCollection touchStateMain = TouchPanel.GetState();
-                        if ((!touchflag)&&(touchStateMain.Count > 0))
                         {
-                            // Kalau ditouch
-                            touchflag = true;
-                            touchTimer = 5;
-                            foreach (TouchLocation t in touchStateMain)
+                            // Bagian Menu Utama
+                            TouchCollection touchStateMain = TouchPanel.GetState();
+                            if ((!touchflag) && (touchStateMain.Count > 0))
                             {
-                                if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuPlay.X) && ((t.Position.X <= menuPlay.X + menuPlay.Width))) &&
-                                    ((t.Position.Y >= menuPlay.Y) && ((t.Position.Y <= menuPlay.Y + menuPlay.Height))))
+                                // Kalau ditouch
+                                touchflag = true;
+                                touchTimer = 5;
+                                foreach (TouchLocation t in touchStateMain)
                                 {
-                                    // Jika menyentuh menu tertentu
-                                    _GameState = GameState.ChoosePlay;
-                                }
-                                else if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuHelp.X) && ((t.Position.X <= menuHelp.X + menuHelp.Width))) &&
-                                     ((t.Position.Y >= menuHelp.Y) && ((t.Position.Y <= menuHelp.Y + menuHelp.Height))))
-                                {
-                                    // Jika menyentuh menu tertentu
-                                    _GameState = GameState.Help;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (touchTimer == 0)
-                            {
-                                touchflag = false;
-                            }
-                            else
-                            {
-                                touchTimer--;
-                            }
-                        }
-                        break;
-                    }
-                    case GameState.Help:
-                    {
-                        // Bagian Help
-                        break;
-                    }
-                    case GameState.ChoosePlay:
-                    {
-                        // Bagian Pilih jenis permainan
-                        TouchCollection touchStateMain = TouchPanel.GetState();
-                        if ((!touchflag)&&(touchStateMain.Count > 0))
-                        {
-                            // Kalau ditouch
-                            touchflag = true;
-                            touchTimer = 5;
-                            foreach (TouchLocation t in touchStateMain)
-                            {
-                                if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuHuman.X) && ((t.Position.X <= menuHuman.X + menuHuman.Width))) &&
-                                    ((t.Position.Y >= menuHuman.Y) && ((t.Position.Y <= menuHuman.Y + menuHuman.Height))))
-                                {
-                                    // Jika menyentuh menu tertentu
-                                    play = GameType.Human;
-                                    _GameState = GameState.ChooseLevel;
-                                }
-                                else if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuComputer.X) && ((t.Position.X <= menuComputer.X + menuComputer.Width))) &&
-                                     ((t.Position.Y >= menuComputer.Y) && ((t.Position.Y <= menuComputer.Y + menuComputer.Height))))
-                                {
-                                    // Jika menyentuh menu tertentu
-                                    play = GameType.Computer;
-                                    _GameState = GameState.ChooseLevel;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (touchTimer == 0)
-                            {
-                                touchflag = false;
-                            }
-                            else
-                            {
-                                touchTimer--;
-                            }
-                        }
-                        break;
-                    }
-                    case GameState.ChooseLevel:
-                    {
-                        // Bagian Pilih Level
-                        TouchCollection touchStateMain = TouchPanel.GetState();
-                        if ((!touchflag) && (touchStateMain.Count > 0))
-                        {
-                            foreach (TouchLocation t in touchStateMain)
-                            {
-                                for (int j = 0; j < 3; ++j)
-                                {
-                                    for (int i = 0; i < 6; ++i)
+                                    if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuPlay.X) && ((t.Position.X <= menuPlay.X + menuPlay.Width))) &&
+                                        ((t.Position.Y >= menuPlay.Y) && ((t.Position.Y <= menuPlay.Y + menuPlay.Height))))
                                     {
-                                        if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= 60 + i * 115) && ((t.Position.X <= 60 + i * 115 + 100))) &&
-                                        ((t.Position.Y >= 110 + j * 110) && ((t.Position.Y <= 110 + j * 110 + 100))))
+                                        // Jika menyentuh menu tertentu
+                                        _GameState = GameState.ChoosePlay;
+                                    }
+                                    else if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuHelp.X) && ((t.Position.X <= menuHelp.X + menuHelp.Width))) &&
+                                         ((t.Position.Y >= menuHelp.Y) && ((t.Position.Y <= menuHelp.Y + menuHelp.Height))))
+                                    {
+                                        // Jika menyentuh menu tertentu
+                                        _GameState = GameState.Help;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (touchTimer == 0)
+                                {
+                                    touchflag = false;
+                                }
+                                else
+                                {
+                                    touchTimer--;
+                                }
+                            }
+                            break;
+                        }
+                    case GameState.Help:
+                        {
+                            // Bagian Help
+                            //Vector2 v = new Vector2(0,0);
+                            TouchCollection touchStateMain = TouchPanel.GetState();
+                            if ((!touchflag) && (touchStateMain.Count > 0))
+                            {
+                                // Kalau di-touch
+                                touchflag = true;
+                                touchTimer = 5;
+                                foreach (TouchLocation t in touchStateMain)
+                                {
+                                    if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 720) && (t.Position.X <= 800) && (t.Position.Y >= 400) && (t.Position.Y <= 480))
+                                    {
+                                        helpCount++;
+                                        spriteBatch.Begin();
+                                        if (helpCount == 1)
                                         {
-                                            // Jika menyentuh menu tertentu
-                                            level = j * 6 + i;
-                                            if (play == GameType.Human)
-                                                _GameState = GameState.HumanPlay;
-                                            else if (play == GameType.Computer)
-                                                _GameState = GameState.ComputerPlay;
+                                            clue = Content.Load<Texture2D>("Clue_2");
+                                            //320, 400
+                                            spriteBatch.Draw(clue, new Vector2(0,0), Color.White);
+                                        }
+                                        if (helpCount == 2)
+                                        {
+                                            clue = Content.Load<Texture2D>("Clue_3");
+                                            //240, 320
+                                            spriteBatch.Draw(clue, new Vector2(80,80), Color.White);
+                                        }
+                                        spriteBatch.End();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (touchTimer == 0)
+                                {
+                                    touchflag = false;
+                                }
+                                else
+                                {
+                                    touchTimer--;
+                                }
+                            }
+                            break;
+                        }
+                    case GameState.ChoosePlay:
+                        {
+                            // Bagian Pilih jenis permainan
+                            TouchCollection touchStateMain = TouchPanel.GetState();
+                            if ((!touchflag) && (touchStateMain.Count > 0))
+                            {
+                                // Kalau ditouch
+                                touchflag = true;
+                                touchTimer = 5;
+                                foreach (TouchLocation t in touchStateMain)
+                                {
+                                    if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuHuman.X) && ((t.Position.X <= menuHuman.X + menuHuman.Width))) &&
+                                        ((t.Position.Y >= menuHuman.Y) && ((t.Position.Y <= menuHuman.Y + menuHuman.Height))))
+                                    {
+                                        // Jika menyentuh menu tertentu
+                                        play = GameType.Human;
+                                        _GameState = GameState.ChooseLevel;
+                                    }
+                                    else if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuComputer.X) && ((t.Position.X <= menuComputer.X + menuComputer.Width))) &&
+                                         ((t.Position.Y >= menuComputer.Y) && ((t.Position.Y <= menuComputer.Y + menuComputer.Height))))
+                                    {
+                                        // Jika menyentuh menu tertentu
+                                        play = GameType.Computer;
+                                        _GameState = GameState.ChooseLevel;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (touchTimer == 0)
+                                {
+                                    touchflag = false;
+                                }
+                                else
+                                {
+                                    touchTimer--;
+                                }
+                            }
+                            break;
+                        }
+                    case GameState.ChooseLevel:
+                        {
+                            // Bagian Pilih Level
+                            TouchCollection touchStateMain = TouchPanel.GetState();
+                            if ((!touchflag) && (touchStateMain.Count > 0))
+                            {
+                                foreach (TouchLocation t in touchStateMain)
+                                {
+                                    for (int j = 0; j < 3; ++j)
+                                    {
+                                        for (int i = 0; i < 6; ++i)
+                                        {
+                                            if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= 60 + i * 115) && ((t.Position.X <= 60 + i * 115 + 100))) &&
+                                            ((t.Position.Y >= 110 + j * 110) && ((t.Position.Y <= 110 + j * 110 + 100))))
+                                            {
+                                                // Jika menyentuh menu tertentu
+                                                level = j * 6 + i;
+                                                if (play == GameType.Human)
+                                                    _GameState = GameState.HumanPlay;
+                                                else if (play == GameType.Computer)
+                                                    _GameState = GameState.ComputerPlay;
 
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        else
-                        {
-                            if (touchTimer == 0)
-                            {
-                                touchflag = false;
-                            }
                             else
                             {
-                                touchTimer--;
+                                if (touchTimer == 0)
+                                {
+                                    touchflag = false;
+                                }
+                                else
+                                {
+                                    touchTimer--;
+                                }
                             }
+                            break;
                         }
-                        break;
-                    }
                     case GameState.HumanPlay:
-                    {
-                        // Bagian Player
-                        break;
-                    }
+                        {
+                            // Bagian Player
+                            break;
+                        }
                     case GameState.ComputerPlay:
-                    {
-                        // Bagian Computer
-                        break;
-                    }
+                        {
+                            // Bagian Computer
+                            break;
+                        }
                     default: break;
                 }
             }

@@ -33,7 +33,8 @@ namespace HarborMania
             set { position = value; }
         }
 
-        public Node(Game game) : base(game)
+        public Node(Game game)
+            : base(game)
         {
             position = new Vector2();
             size = new Vector2();

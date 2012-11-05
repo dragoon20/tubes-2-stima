@@ -11,7 +11,7 @@ namespace HarborMania
 {
     class Sea : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        Node [][] Tile;
+        Node[][] Tile;
         int WidthPerTile;
         int HeightPerTile;
         int totalNodeX;
@@ -23,10 +23,10 @@ namespace HarborMania
             base.Initialize();
         }
 
-        public Sea (Game1 game) : base(game)
+        public Sea(Game1 game) : base(game)
         {
-            WidthPerTile = 100;
-            HeightPerTile = 100;
+            WidthPerTile = 80;
+            HeightPerTile = 80;
             totalNodeX = 6;
             totalNodeY = 6;
             Tile = new Node[totalNodeY][];
@@ -40,7 +40,7 @@ namespace HarborMania
             }
         }
 
-        public Sea (Game1 game, int W, int H, int totalNodeX_, int totalNodeY_) : base(game)
+        public Sea(Game1 game, int W, int H, int totalNodeX_, int totalNodeY_) : base(game)
         {
             WidthPerTile = W;
             HeightPerTile = H;
@@ -66,7 +66,7 @@ namespace HarborMania
             for (int i = 0; i < totalNodeY; ++i)
             {
                 String line = loadpath.ReadLine();
-                String [] splitline = line.Split(' ');
+                String[] splitline = line.Split(' ');
                 for (int j = 0; j < totalNodeX; ++j)
                 {
                     Tile[i][j].Status = Convert.ToInt16(splitline[j]);
