@@ -59,12 +59,14 @@ namespace HarborMania
         SpriteFont font2;
         SpriteFont font3;
         Dictionary<int, string> mapLevel;
-        int level;
-
+        
         Rectangle menuPlay;
         Rectangle menuHelp;
         Rectangle menuHuman;
         Rectangle menuComputer;
+
+        int helpCount = 0;
+        int level;
 
         public Game1()
         {
@@ -197,14 +199,47 @@ namespace HarborMania
                                     spriteBatch.Draw(seaTile, new Vector2(i*80, j*80), Color.White);
                             }
                         }
-                        spriteBatch.Draw(boat21, new Vector2(320, 160), Color.White);
-                        spriteBatch.Draw(boat12, new Vector2(400, 240), Color.White);
-                        spriteBatch.Draw(boat13, new Vector2(0, 0), Color.White);
-                        spriteBatch.Draw(boatPlayer, new Vector2(0, 320), Color.White);
                         spriteBatch.Draw(gameTitle, new Vector2(560, 0), Color.White);
-                        spriteBatch.Draw(clue, new Vector2(560, 80), Color.White);
                         spriteBatch.Draw(nextButton, new Vector2(720, 400), Color.White);
+                        spriteBatch.Draw(boat13, new Vector2(0, 0), Color.White);
 
+                        if (helpCount < 3) { spriteBatch.Draw(boat21, new Vector2(320, 160), Color.White); }
+                        if (helpCount < 4) { spriteBatch.Draw(boat12, new Vector2(400, 240), Color.White); }
+                        if (helpCount < 5) { spriteBatch.Draw(boatPlayer, new Vector2(0, 320), Color.White); }
+                        
+                        if (helpCount == 0)
+                        {
+                            spriteBatch.Draw(clue, new Vector2(560, 80), Color.White);
+                        }
+                        else
+                        if (helpCount == 1)
+                        {
+                            clue = Content.Load<Texture2D>("Clue_2");
+                            spriteBatch.Draw(clue, new Vector2(240,320), Color.White);
+                        }
+                        else
+                        if (helpCount == 2)
+                        {
+                            clue = Content.Load<Texture2D>("Clue_3");
+                            spriteBatch.Draw(clue, new Vector2(160,160), Color.White);
+                        }
+                        if (helpCount >= 3)
+                        {
+                            spriteBatch.Draw(boat21, new Vector2(160, 160), Color.White);
+                        }
+                        if (helpCount >= 4)
+                        {
+                            spriteBatch.Draw(boat12, new Vector2(400, 80), Color.White);
+                        }
+                        if (helpCount >= 5)
+                        {
+                            spriteBatch.Draw(boatPlayer, new Vector2(400,320), Color.White);
+                        }
+                        if (helpCount == 6)
+                        {
+                            clue = Content.Load<Texture2D>("Clue_4");
+                            spriteBatch.Draw(clue, new Vector2(80, 320), Color.White);
+                        }
                         spriteBatch.End();
                         break;
                     }
@@ -268,7 +303,6 @@ namespace HarborMania
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        int helpCount = 0;
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
@@ -373,20 +407,8 @@ namespace HarborMania
                                     if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 720) && (t.Position.X <= 800) && (t.Position.Y >= 400) && (t.Position.Y <= 480))
                                     {
                                         helpCount++;
-                                        spriteBatch.Begin();
-                                        if (helpCount == 1)
-                                        {
-                                            clue = Content.Load<Texture2D>("Clue_2");
-                                            //320, 400
-                                            spriteBatch.Draw(clue, new Vector2(0,0), Color.White);
-                                        }
-                                        if (helpCount == 2)
-                                        {
-                                            clue = Content.Load<Texture2D>("Clue_3");
-                                            //240, 320
-                                            spriteBatch.Draw(clue, new Vector2(80,80), Color.White);
-                                        }
-                                        spriteBatch.End();
+                                        if (helpCount == 7)
+                                            _GameState = GameState.MainMenu; 
                                     }
                                 }
                             }
