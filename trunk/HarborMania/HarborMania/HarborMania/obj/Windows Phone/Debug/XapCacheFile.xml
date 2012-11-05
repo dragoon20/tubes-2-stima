@@ -1,10 +1,13 @@
-﻿<xapCache source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\HarborMania.xap" wasSigned="False" certificateThumbprint="" TimeStampUrl="" lastWriteTime="11/4/2012 5:33:46 PM">
+﻿<xapCache source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\HarborMania.xap" wasSigned="False" certificateThumbprint="" TimeStampUrl="" lastWriteTime="11/5/2012 4:33:38 PM">
   <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\Background.png" archivePath="Background.png" lastWriteTime="10/31/2012 12:14:17 AM" />
   <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\PhoneGameThumb.png" archivePath="PhoneGameThumb.png" lastWriteTime="10/31/2012 12:14:17 AM" />
   <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\AppManifest.xaml" archivePath="AppManifest.xaml" lastWriteTime="11/3/2012 3:06:46 PM" />
   <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\WMAppManifest.xml" archivePath="WMAppManifest.xml" lastWriteTime="11/3/2012 3:06:46 PM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\HarborMania.dll" archivePath="HarborMania.dll" lastWriteTime="11/4/2012 5:33:45 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\HarborMania.dll" archivePath="HarborMania.dll" lastWriteTime="11/5/2012 4:33:38 PM" />
   <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\MainScreen.xnb" archivePath="Content\MainScreen.xnb" lastWriteTime="11/4/2012 5:22:11 PM" />
   <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\menu_button.xnb" archivePath="Content\menu_button.xnb" lastWriteTime="11/4/2012 3:42:31 PM" />
   <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont1.xnb" archivePath="Content\SpriteFont1.xnb" lastWriteTime="11/4/2012 3:52:03 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Rect.xnb" archivePath="Content\Rect.xnb" lastWriteTime="11/5/2012 4:33:37 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont2.xnb" archivePath="Content\SpriteFont2.xnb" lastWriteTime="11/5/2012 10:44:39 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont3.xnb" archivePath="Content\SpriteFont3.xnb" lastWriteTime="11/5/2012 10:44:39 AM" />
 </xapCache>

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -9,8 +11,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
-using System.Diagnostics;
-
 
 namespace HarborMania
 {
@@ -42,12 +42,18 @@ namespace HarborMania
         List<Boat> boats;
         Texture2D mainMenu;
         Texture2D menuButton;
+        Texture2D levelbox;
         SpriteFont font1;
+        SpriteFont font2;
+        SpriteFont font3;
+        Dictionary<int, string> mapLevel;
         int level;
 
         Rectangle menuPlay;
         Rectangle menuHelp;
-
+        Rectangle menuHuman;
+        Rectangle menuComputer;
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -70,6 +76,8 @@ namespace HarborMania
             touchflag = false;
             menuPlay = new Rectangle(30, 40, 300, 61);
             menuHelp = new Rectangle(30, 118, 300, 61);
+            menuHuman = new Rectangle(30, 95, 300, 61);
+            menuComputer = new Rectangle(30, 173, 300, 61);
         }
 
         /// <summary>
@@ -93,10 +101,29 @@ namespace HarborMania
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            // TODO: use this.Content to load your game content here
             mainMenu = Content.Load<Texture2D>("MainScreen");
             menuButton = Content.Load<Texture2D>("menu_button");
+            levelbox = Content.Load<Texture2D>("Rect");
             font1 = Content.Load<SpriteFont>("SpriteFont1");
-            // TODO: use this.Content to load your game content here
+            font2 = Content.Load<SpriteFont>("SpriteFont2");
+            font3 = Content.Load<SpriteFont>("SpriteFont3");
+            //LoadLevel();
+        }
+
+        public void LoadLevel()
+        {
+            Stream streampath = TitleContainer.OpenStream("level.txt");
+            StreamReader loadpath = new StreamReader(streampath);
+
+            String templine = loadpath.ReadLine();
+            while (templine != null)
+            {
+                String[] splitline = templine.Split(' ');
+                if (splitline.Count() > 0)
+                    mapLevel.Add(Convert.ToInt32(splitline[0]), splitline[1]);
+                templine = loadpath.ReadLine();
+            }
         }
 
         /// <summary>
@@ -142,10 +169,11 @@ namespace HarborMania
                     // Bagian Pilih jenis permainan
                     spriteBatch.Begin();
                     spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
-                    spriteBatch.Draw(menuButton, menuPlay, Color.White);
-                    spriteBatch.DrawString(font1, "Player Main", new Vector2(menuPlay.X + 70, menuPlay.Y + 10), Color.White);
-                    spriteBatch.Draw(menuButton, menuHelp, Color.White);
-                    spriteBatch.DrawString(font1, "Computer Main", new Vector2(menuHelp.X + 70, menuHelp.Y + 10), Color.White);
+                    spriteBatch.DrawString(font3, "Jenis Permainan", new Vector2(40, 30), Color.DarkSlateBlue);
+                    spriteBatch.Draw(menuButton, menuHuman, Color.White);
+                    spriteBatch.DrawString(font1, "Player Main", new Vector2(menuHuman.X + 70, menuHuman.Y + 10), Color.White);
+                    spriteBatch.Draw(menuButton, menuComputer, Color.White);
+                    spriteBatch.DrawString(font1, "Computer Main", new Vector2(menuComputer.X + 70, menuComputer.Y + 10), Color.White);
                     spriteBatch.End();
                     break;
                 }
@@ -154,17 +182,35 @@ namespace HarborMania
                     // Bagian Pilih Level
                     spriteBatch.Begin();
                     spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
+                    spriteBatch.DrawString(font3, "Pilih Level", new Vector2(40, 30), Color.DarkSlateBlue);
+                    for (int j = 0; j < 3; ++j)
+                    {
+                        for (int i = 0; i < 6; ++i)
+                        {
+                            spriteBatch.Draw(levelbox, new Rectangle(60 + i * 115, 110 + j * 110, 100, 100), Color.White);
+                            int digit = 0;
+                            int temp = ((j * 6) + (i + 1));
+                            while (temp >= 10)
+                            {
+                                temp /= 10;
+                                digit++;
+                            }
+                            spriteBatch.DrawString(font2, ((j * 6) + (i + 1)).ToString(), new Vector2(98 - (digit * 14) + i * 115, 135 + j * 110), Color.White);
+                        }
+                    }
                     spriteBatch.End();
                     break;
                 }
                 case GameState.HumanPlay:
                 {
                     // Bagian Player
+                    GraphicsDevice.Clear(Color.AliceBlue);
                     break;
                 }
                 case GameState.ComputerPlay:
                 {
                     // Bagian Computer
+                    GraphicsDevice.Clear(Color.BurlyWood);
                     break;
                 }
                 default: break;
@@ -240,14 +286,14 @@ namespace HarborMania
                             touchTimer = 5;
                             foreach (TouchLocation t in touchStateMain)
                             {
-                                if (((t.Position.X >= 50) && ((t.Position.X <= 350))) &&
-                                    ((t.Position.Y >= 50) && ((t.Position.Y <= 111))))
+                                if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuPlay.X) && ((t.Position.X <= menuPlay.X + menuPlay.Width))) &&
+                                    ((t.Position.Y >= menuPlay.Y) && ((t.Position.Y <= menuPlay.Y + menuPlay.Height))))
                                 {
                                     // Jika menyentuh menu tertentu
                                     _GameState = GameState.ChoosePlay;
                                 }
-                                else if (((t.Position.X >= 50) && ((t.Position.X <= 350))) &&
-                                     ((t.Position.Y >= 128) && ((t.Position.Y <= 189))))
+                                else if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuHelp.X) && ((t.Position.X <= menuHelp.X + menuHelp.Width))) &&
+                                     ((t.Position.Y >= menuHelp.Y) && ((t.Position.Y <= menuHelp.Y + menuHelp.Height))))
                                 {
                                     // Jika menyentuh menu tertentu
                                     _GameState = GameState.Help;
@@ -276,27 +322,28 @@ namespace HarborMania
                     {
                         // Bagian Pilih jenis permainan
                         TouchCollection touchStateMain = TouchPanel.GetState();
-                        if ((!touchflag) && (touchStateMain.Count > 0))
+                        if ((!touchflag)&&(touchStateMain.Count > 0))
                         {
                             // Kalau ditouch
                             touchflag = true;
                             touchTimer = 5;
                             foreach (TouchLocation t in touchStateMain)
                             {
-                                if (((t.Position.X >= 50) && ((t.Position.X <= 350))) &&
-                                    ((t.Position.Y >= 50) && ((t.Position.Y <= 111))))
+                                if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuHuman.X) && ((t.Position.X <= menuHuman.X + menuHuman.Width))) &&
+                                    ((t.Position.Y >= menuHuman.Y) && ((t.Position.Y <= menuHuman.Y + menuHuman.Height))))
                                 {
                                     // Jika menyentuh menu tertentu
                                     play = GameType.Human;
+                                    _GameState = GameState.ChooseLevel;
                                 }
-                                else if (((t.Position.X >= 50) && ((t.Position.X <= 350))) &&
-                                     ((t.Position.Y >= 128) && ((t.Position.Y <= 189))))
+                                else if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuComputer.X) && ((t.Position.X <= menuComputer.X + menuComputer.Width))) &&
+                                     ((t.Position.Y >= menuComputer.Y) && ((t.Position.Y <= menuComputer.Y + menuComputer.Height))))
                                 {
                                     // Jika menyentuh menu tertentu
                                     play = GameType.Computer;
+                                    _GameState = GameState.ChooseLevel;
                                 }
                             }
-                            _GameState = GameState.ChooseLevel;
                         }
                         else
                         {
@@ -314,6 +361,41 @@ namespace HarborMania
                     case GameState.ChooseLevel:
                     {
                         // Bagian Pilih Level
+                        TouchCollection touchStateMain = TouchPanel.GetState();
+                        if ((!touchflag) && (touchStateMain.Count > 0))
+                        {
+                            foreach (TouchLocation t in touchStateMain)
+                            {
+                                for (int j = 0; j < 3; ++j)
+                                {
+                                    for (int i = 0; i < 6; ++i)
+                                    {
+                                        if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= 60 + i * 115) && ((t.Position.X <= 60 + i * 115 + 100))) &&
+                                        ((t.Position.Y >= 110 + j * 110) && ((t.Position.Y <= 110 + j * 110 + 100))))
+                                        {
+                                            // Jika menyentuh menu tertentu
+                                            level = j * 6 + i;
+                                            if (play == GameType.Human)
+                                                _GameState = GameState.HumanPlay;
+                                            else if (play == GameType.Computer)
+                                                _GameState = GameState.ComputerPlay;
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (touchTimer == 0)
+                            {
+                                touchflag = false;
+                            }
+                            else
+                            {
+                                touchTimer--;
+                            }
+                        }
                         break;
                     }
                     case GameState.HumanPlay:

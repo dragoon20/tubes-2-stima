@@ -28,6 +28,33 @@
       <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont1.xnb</Output>
       <Time>2012-11-04T15:51:59.2012641+07:00</Time>
     </Item>
+    <Item>
+      <Source>Rect.png</Source>
+      <Name>Rect</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Rect.xnb</Output>
+      <Time>2012-11-05T16:30:45.4870106+07:00</Time>
+    </Item>
+    <Item>
+      <Source>SpriteFont2.spritefont</Source>
+      <Name>SpriteFont2</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont2.xnb</Output>
+      <Time>2012-11-05T10:40:20.999818+07:00</Time>
+    </Item>
+    <Item>
+      <Source>SpriteFont3.spritefont</Source>
+      <Name>SpriteFont3</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont3.xnb</Output>
+      <Time>2012-11-05T10:40:56.8320134+07:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{1B7A025A-7906-4948-8CDF-BF1ABE208F92}</ContentProjectGUID>

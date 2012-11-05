@@ -13,9 +13,6 @@ D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\obj\Windows Phon
 D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\MainScreen.xnb
 D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\menu_button.xnb
 D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont1.xnb
-D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\HarborMania.xap
-D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\obj\Windows Phone\Debug\XapCacheFile.xml
-D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\AppManifest.xaml
-D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\obj\Windows Phone\Debug\WMAppManifest.xml.g
-D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\obj\Windows Phone\Debug\WMAppManifest.xml
-bin\Windows Phone\Debug\
+D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Rect.xnb
+D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont2.xnb
+D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont3.xnb
