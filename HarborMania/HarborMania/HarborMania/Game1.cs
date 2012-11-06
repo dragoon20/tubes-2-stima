@@ -37,10 +37,13 @@ namespace HarborMania
         GameType play;
         bool touchflag;
         int touchTimer;
+        int moveCount = 0;
         TimeSpan timeSpan = TimeSpan.FromMilliseconds(0);
 
         Sea map;
         List<Boat> boats;
+        List<Array> DFSpath;
+
         Texture2D mainMenu;
         Texture2D menuButton;
         Texture2D levelbox;
@@ -69,6 +72,7 @@ namespace HarborMania
         int helpCount = 0;
         int level;
         string displayTime = "";
+        Boolean startCoutingTime = false;
 
         public Game1()
         {
@@ -142,7 +146,7 @@ namespace HarborMania
 
         public void LoadLevel()
         {
-            Stream streampath = TitleContainer.OpenStream("level.txt");
+            Stream streampath = TitleContainer.OpenStream("Level.txt");
             StreamReader loadpath = new StreamReader(streampath);
 
             mapLevel = new Dictionary<int,string>();
@@ -167,6 +171,17 @@ namespace HarborMania
             // TODO: Unload any non ContentManager content here
         }
 
+
+        public void getDFSPath()
+        {
+            foreach (Boat boat in boats)
+            {
+                //Debug.WriteLine("position = " + boat.Position);
+                //Debug.WriteLine("size = " + boat.Size);
+                
+            }
+        }
+        
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -215,7 +230,9 @@ namespace HarborMania
                     spriteBatch.Draw(nextButton, new Vector2(720, 400), Color.White);
                     spriteBatch.Draw(prevButton, new Vector2(640, 400), Color.White);
                     spriteBatch.Draw(boat13, new Vector2(0, 0), Color.White);
+
                     spriteBatch.DrawString(font1, "Boat moved", new Vector2(600, 180), Color.BurlyWood);
+
                     spriteBatch.DrawString(font1, "Time", new Vector2(600, 280), Color.BurlyWood);
                     displayTime = String.Format("{0}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
                     spriteBatch.DrawString(font1, "" + displayTime, new Vector2(600, 320), Color.Tomato);
@@ -235,21 +252,26 @@ namespace HarborMania
                         spriteBatch.DrawString(font1, "boat to the harbor!", new Vector2(560, 120), Color.Chocolate);
                     }
                     else
-                        if (helpCount == 1)
-                        {
-                            spriteBatch.DrawString(font4, "Oops! This ship is", new Vector2(200, 300), Color.Black);
-                            spriteBatch.DrawString(font4, "blocking your way", new Vector2(200, 320), Color.Black);
-                            spriteBatch.DrawString(font4, "Why don't you move it?", new Vector2(200, 340), Color.Black);
-                        }
-                        else
-                            if (helpCount == 2)
-                            {
-                                spriteBatch.DrawString(font4, "But before that, ", new Vector2(140, 160), Color.Black);
-                                spriteBatch.DrawString(font4, "you've got to move", new Vector2(140, 180), Color.Black);
-                                spriteBatch.DrawString(font4, "this ship first.", new Vector2(140, 200), Color.Black);
-                            }
-                            else if (helpCount == 3) spriteBatch.DrawString(font1, "1", new Vector2(600, 220), Color.Tomato);
-                            else if (helpCount == 4) spriteBatch.DrawString(font1, "2", new Vector2(600, 220), Color.Tomato);
+                    if (helpCount == 1)
+                    {
+                        spriteBatch.DrawString(font4, "Oops! This ship is", new Vector2(200, 300), Color.Black);
+                        spriteBatch.DrawString(font4, "blocking your way", new Vector2(200, 320), Color.Black);
+                        spriteBatch.DrawString(font4, "Why don't you move it?", new Vector2(200, 340), Color.Black);
+                    }
+                    else
+                    if (helpCount == 2)
+                    {
+                        spriteBatch.DrawString(font4, "But before that, ", new Vector2(140, 160), Color.Black);
+                        spriteBatch.DrawString(font4, "you've got to move", new Vector2(140, 180), Color.Black);
+                        spriteBatch.DrawString(font4, "this ship first.", new Vector2(140, 200), Color.Black);
+                    }
+                    else if (helpCount == 3) {
+                        spriteBatch.DrawString(font1, "1", new Vector2(600, 220), Color.Tomato);
+                    }
+                    else if (helpCount == 4)
+                    {
+                        spriteBatch.DrawString(font1, "2", new Vector2(600, 220), Color.Tomato);
+                    }
 
                     if (helpCount >= 3) spriteBatch.Draw(boat21, new Vector2(160, 160), Color.White);
                     if (helpCount >= 4) spriteBatch.Draw(boat12, new Vector2(400, 80), Color.White);
@@ -356,8 +378,9 @@ namespace HarborMania
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            timeSpan += gameTime.ElapsedGameTime; //update timer
-
+//            if (startCoutingTime == true)
+                timeSpan += gameTime.ElapsedGameTime; //update timer
+            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
             {
                 switch (_GameState)
@@ -409,6 +432,8 @@ namespace HarborMania
                     case GameState.MainMenu:
                     {
                         // Bagian Menu Utama
+                        startCoutingTime = false;
+
                         TouchCollection touchStateMain = TouchPanel.GetState();
                         if ((!touchflag) && (touchStateMain.Count > 0))
                         {
@@ -452,6 +477,11 @@ namespace HarborMania
                         if ((!touchflag) && (touchStateMain.Count > 0))
                         {
                             // Kalau di-touch
+                            if (startCoutingTime == false)
+                            {
+                                startCoutingTime = true;
+                                timeSpan = TimeSpan.FromMilliseconds(1000);
+                            }
                             touchflag = true;
                             touchTimer = 5;
                             foreach (TouchLocation t in touchStateMain)
@@ -461,12 +491,12 @@ namespace HarborMania
                                     helpCount++;
                                     if (helpCount == 7)
                                         _GameState = GameState.MainMenu; 
-                                    else
-                                    if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 640) && (t.Position.X <= 720) && (t.Position.Y >= 400) && (t.Position.Y <= 480))
-                                    {
-                                        if (helpCount > 0) 
-                                            helpCount--;
-                                    }
+                                }
+                                else
+                                if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 640) && (t.Position.X <= 720) && (t.Position.Y >= 400) && (t.Position.Y <= 480))
+                                {
+                                    if (helpCount > 0)
+                                        helpCount--;
                                 }
                             }
                         }
@@ -486,6 +516,7 @@ namespace HarborMania
                     case GameState.ChoosePlay:
                     {
                         // Bagian Pilih jenis permainan
+                        startCoutingTime = false;
                         TouchCollection touchStateMain = TouchPanel.GetState();
                         if ((!touchflag) && (touchStateMain.Count > 0))
                         {
@@ -526,6 +557,7 @@ namespace HarborMania
                     case GameState.ChooseLevel:
                     {
                         // Bagian Pilih Level
+                        startCoutingTime = false;
                         TouchCollection touchStateMain = TouchPanel.GetState();
                         if ((!touchflag) && (touchStateMain.Count > 0))
                         {
@@ -570,11 +602,24 @@ namespace HarborMania
                     case GameState.HumanPlay:
                     {
                         // Bagian Player
+                        getDFSPath();
+                        if (startCoutingTime == false)
+                        {
+                            startCoutingTime = true;
+                            timeSpan = TimeSpan.FromMilliseconds(1000);
+                        }
+
                         break;
                     }
                     case GameState.ComputerPlay:
                     {
                         // Bagian Computer
+                        if (startCoutingTime == false)
+                        {
+                            startCoutingTime = true;
+                            timeSpan = TimeSpan.FromMilliseconds(1000);
+                        }
+
                         break;
                     }
                     default: break;
