@@ -10,7 +10,8 @@ namespace HarborMania
 {
     class Node : Microsoft.Xna.Framework.GameComponent
     {
-        int status; //0 kosong, 1 isi, 2 dll
+        int status; //gambar
+        int statussebenarnya; //0 kosong, 1 isi, 2 dll
         Vector2 size;
         Vector2 position;
         //GraphicsDevice gd;
@@ -19,6 +20,12 @@ namespace HarborMania
         {
             get { return status; }
             set { status = value; }
+        }
+
+        public int StatusSebenarnya
+        {
+            get { return statussebenarnya; }
+            set { statussebenarnya = value; }
         }
 
         public Vector2 Size
