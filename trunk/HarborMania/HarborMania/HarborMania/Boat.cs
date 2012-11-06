@@ -36,8 +36,9 @@ namespace HarborMania
             size = new Vector2();
         }
 
-        public Boat(Game game, Vector2 Position, Vector2 Size) : base(game)
+        public Boat(Game game, Vector2 Position, Vector2 Size, Texture2D Texture) : base(game)
         {
+            texture = Texture;
             position = Position;
             size = Size;
         }
@@ -45,7 +46,7 @@ namespace HarborMania
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            //spriteBatch.Draw(texture, position, color);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X * 80, (int)position.Y * 80, (int)size.X * 80, (int)size.Y * 80), Color.White);
             spriteBatch.End();
         }
 
@@ -66,11 +67,6 @@ namespace HarborMania
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
         }
 
         /*

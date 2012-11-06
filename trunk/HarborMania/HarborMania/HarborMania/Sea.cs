@@ -71,6 +71,8 @@ namespace HarborMania
 
         public void LoadContent(out List<Boat> boats)
         {
+            List<Boat> localboats = new List<Boat>();
+
             seaTile = Game.Content.Load<Texture2D>("Tile/Sea");
             woodTile = Game.Content.Load<Texture2D>("Tile/Wood");
 
@@ -93,16 +95,28 @@ namespace HarborMania
             outPosY = Convert.ToInt32(templine);
 
             templine = loadpath.ReadLine();
+            int totalcar = Convert.ToInt32(templine);
+
+            for (int i = 0; i < totalcar; ++i)
+            {
+                templine = loadpath.ReadLine();
+                String[] splitline = templine.Split(' ');
+                localboats.Add(new Boat(Game, new Vector2(Convert.ToInt32(splitline[0]), Convert.ToInt32(splitline[1])), 
+                                new Vector2(Convert.ToInt32(splitline[2]), Convert.ToInt32(splitline[3])), 
+                                Game.Content.Load<Texture2D>(splitline[4])));
+                localboats.ElementAt(i).Initialize();
+            }
+
+            templine = loadpath.ReadLine();
             while (templine != null)
             {
                 String[] splitline = templine.Split(' ');
-                Debug.WriteLine(splitline[1]);
                 if (splitline.Count() > 1)
                     mapstatus.Add(Convert.ToInt32(splitline[0]), Game.Content.Load<Texture2D>(splitline[1]));
                 templine = loadpath.ReadLine();
             }
 
-            boats = null;
+            boats = localboats;
         }
 
         public override void Update(GameTime gameTime)
