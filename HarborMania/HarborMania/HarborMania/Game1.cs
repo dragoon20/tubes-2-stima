@@ -320,6 +320,12 @@ namespace HarborMania
                     spriteBatch.End();
 
                     map.Draw(spriteBatch);
+
+                    foreach(Boat boat in boats)
+                    {
+                        boat.Draw(spriteBatch);
+                    }
+
                     break;
                 }
                 case GameState.ComputerPlay:
