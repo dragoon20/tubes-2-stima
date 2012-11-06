@@ -69,6 +69,16 @@ namespace HarborMania
             base.LoadContent();
         }
 
+        public int GetStatus(int i, int j)
+        {
+            return Tile[j][i].StatusSebenarnya;
+        }
+
+        public void SetStatus(int i, int j, int status)
+        {
+            Tile[j][i].StatusSebenarnya = status;
+        }
+
         public void LoadContent(out List<Boat> boats)
         {
             List<Boat> localboats = new List<Boat>();

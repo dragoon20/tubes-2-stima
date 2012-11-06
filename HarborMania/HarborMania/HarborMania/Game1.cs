@@ -37,9 +37,11 @@ namespace HarborMania
         GameType play;
         bool touchflag;
         int touchTimer;
-		int moveCount = 0;        int lockboat;
+        int moveCount = 0;     
+        int lockboat;
         int offx;
         int offy;
+        Vector2 posawal;
         TimeSpan timeSpan = TimeSpan.FromMilliseconds(0);
 
         Sea map;
@@ -643,13 +645,22 @@ namespace HarborMania
                                     }
                                     else
                                     {
+                                        int max = 480;
+                                        if (lockboat == 0)
+                                            max += 60;
                                         if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
                                         {
-                                            boats.ElementAt(lockboat).Position = new Vector2(t.Position.X + offx, boats.ElementAt(lockboat).Position.Y);
+                                            if ((t.Position.X + offx >= 0) && (t.Position.X + offx <= (max - boats.ElementAt(lockboat).Size.X)))
+                                            {
+                                                boats.ElementAt(lockboat).Position = new Vector2(t.Position.X + offx, boats.ElementAt(lockboat).Position.Y);
+                                            }
                                         }
                                         else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
                                         {
-                                            boats.ElementAt(lockboat).Position = new Vector2(boats.ElementAt(lockboat).Position.X, t.Position.Y + offy);
+                                            if ((t.Position.Y + offy >= 0) && (t.Position.Y + offy <= (max - boats.ElementAt(lockboat).Size.Y)))
+                                            {
+                                                boats.ElementAt(lockboat).Position = new Vector2(boats.ElementAt(lockboat).Position.X, t.Position.Y + offy);
+                                            }
                                         }
                                     }
                                 }
