@@ -41,6 +41,8 @@ namespace HarborMania
         int lockboat;
         int offx;
         int offy;
+        int minscroll;
+        int maxscroll;
         Vector2 posawal;
         TimeSpan timeSpan = TimeSpan.FromMilliseconds(0);
 
@@ -87,7 +89,7 @@ namespace HarborMania
             Content.RootDirectory = "Content";
 
             // Frame rate is 30 fps by default for Windows Phone.
-            TargetElapsedTime = TimeSpan.FromTicks(333333);
+            TargetElapsedTime = TimeSpan.FromTicks(250000);
 
             // Extend battery life under lock.
             InactiveSleepTime = TimeSpan.FromSeconds(1);
@@ -634,6 +636,17 @@ namespace HarborMania
                                             map = new Sea(this, 80, 80, 6, 6, mapLevel[level]);
                                             map.Initialize();
                                             map.LoadContent(out boats);
+
+                                            for (int k = 0; k < 6; ++k)
+                                            {
+                                                String s = "";
+                                                for (int l = 0; l < 6; ++l)
+                                                {
+                                                    s += map.GetStatus(l, k)+ " ";
+                                                }
+                                                Debug.WriteLine(s);
+                                            }
+
                                             lockboat = -1;
 
                                             if (play == GameType.Human)
@@ -675,6 +688,20 @@ namespace HarborMania
                                     if (lockboat != -1)
                                     {
                                         boats.ElementAt(lockboat).Position = new Vector2((int)((boats.ElementAt(lockboat).Position.X + 40) / 80) * 80, (int)((boats.ElementAt(lockboat).Position.Y + 40) / 80) * 80);
+                                        if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
+                                        {
+                                            for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / 80); ++k)
+                                            {
+                                                map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80) + k, (int)(boats.ElementAt(lockboat).Position.Y / 80), 1);
+                                            }
+                                        }
+                                        else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
+                                        {
+                                            for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / 80); ++k)
+                                            {
+                                                map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80) + k, 1);
+                                            }
+                                        }
                                         lockboat = -1;
                                     }
                                 }
@@ -693,6 +720,22 @@ namespace HarborMania
                                                 lockboat = count;
                                                 offx = (int) (boat.Position.X - t.Position.X);
                                                 offy = (int) (boat.Position.Y - t.Position.Y);
+                                                minscroll = -1;
+                                                maxscroll = 6;
+                                                if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
+                                                {
+                                                    for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / 80); ++k)
+                                                    {
+                                                        map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80) + k, (int)(boats.ElementAt(lockboat).Position.Y / 80), 0);
+                                                    }
+                                                }
+                                                else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
+                                                {
+                                                    for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / 80); ++k)
+                                                    {
+                                                        map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80) + k, 0);
+                                                    }
+                                                }
                                             }
                                             count++;
                                         }
@@ -700,20 +743,38 @@ namespace HarborMania
                                     else
                                     {
                                         int max = 480;
-                                        if (lockboat == 0)
-                                            max += 60;
                                         if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
                                         {
                                             if ((t.Position.X + offx >= 0) && (t.Position.X + offx <= (max - boats.ElementAt(lockboat).Size.X)))
                                             {
-                                                boats.ElementAt(lockboat).Position = new Vector2(t.Position.X + offx, boats.ElementAt(lockboat).Position.Y);
+                                                if (((int)((t.Position.X + offx + 40) / 80) > minscroll) && ((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - 40) / 80) < maxscroll) &&
+                                                    (map.GetStatus((int)((t.Position.X + offx + 40) / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80)) == 0) &&
+                                                    (map.GetStatus((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - 40) / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80)) == 0))
+                                                    boats.ElementAt(lockboat).Position = new Vector2(t.Position.X + offx, boats.ElementAt(lockboat).Position.Y);
+                                                else if (t.Position.X + offx < boats.ElementAt(lockboat).Position.X)
+                                                {
+                                                    minscroll = (int)((t.Position.X + offx + 40) / 80);
+                                                    Debug.WriteLine(minscroll+ " " + maxscroll);
+                                                }
+                                                else if (t.Position.X + offx > boats.ElementAt(lockboat).Position.X)
+                                                {
+                                                    maxscroll = (int)((t.Position.X + offx + 40) / 80);
+                                                    Debug.WriteLine(minscroll + " " + maxscroll);
+                                                }
                                             }
                                         }
                                         else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
                                         {
                                             if ((t.Position.Y + offy >= 0) && (t.Position.Y + offy <= (max - boats.ElementAt(lockboat).Size.Y)))
                                             {
-                                                boats.ElementAt(lockboat).Position = new Vector2(boats.ElementAt(lockboat).Position.X, t.Position.Y + offy);
+                                                if (((int)((t.Position.Y + offy + 40) / 80) > minscroll) && ((int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80) < maxscroll) && 
+                                                    (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(t.Position.Y + offy + 40) / 80) == 0) &&
+                                                    (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80) == 0))
+                                                    boats.ElementAt(lockboat).Position = new Vector2(boats.ElementAt(lockboat).Position.X, t.Position.Y + offy);
+                                                else if (t.Position.Y + offy < boats.ElementAt(lockboat).Position.Y)
+                                                    minscroll = (int)((t.Position.Y + offy + 40) / 80);
+                                                else if (t.Position.Y + offy > boats.ElementAt(lockboat).Position.Y)
+                                                    maxscroll = (int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80);
                                             }
                                         }
                                     }
