@@ -116,7 +116,8 @@ namespace HarborMania
                 int x = Convert.ToInt32(splitline[0]), y = Convert.ToInt32(splitline[1]);
                 int w = Convert.ToInt32(splitline[2]), h = Convert.ToInt32(splitline[3]);
 
-                Tile[y][x].StatusSebenarnya = 1;
+                Debug.WriteLine(y + " " + x + " " + w + " " + h);
+
                 if (w == 1)
                 {
                     for (int j = 0; j < h; ++j)
