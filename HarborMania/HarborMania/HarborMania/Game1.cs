@@ -51,13 +51,14 @@ namespace HarborMania
         Texture2D boat31;
         Texture2D boatPlayer;
         Texture2D nextButton;
-        Texture2D clue;
+        Texture2D prevButton;
         Texture2D seaTile;
         Texture2D woodTile;
 
         SpriteFont font1;
         SpriteFont font2;
         SpriteFont font3;
+        SpriteFont font4;
         Dictionary<int, string> mapLevel;
         
         Rectangle menuPlay;
@@ -127,13 +128,14 @@ namespace HarborMania
             boat31 = Content.Load<Texture2D>("boat31");
             boatPlayer = Content.Load<Texture2D>("BoatPlayer");
             nextButton = Content.Load<Texture2D>("Next");
+            prevButton = Content.Load<Texture2D>("Previous");
             seaTile = Content.Load<Texture2D>("Sea");
             woodTile = Content.Load<Texture2D>("Wood");
-            clue = Content.Load<Texture2D>("");
 
             font1 = Content.Load<SpriteFont>("SpriteFont1");
             font2 = Content.Load<SpriteFont>("SpriteFont2");
             font3 = Content.Load<SpriteFont>("SpriteFont3");
+            font4 = Content.Load<SpriteFont>("SpriteFont4");
             //LoadLevel();
         }
 
@@ -199,8 +201,9 @@ namespace HarborMania
                                     spriteBatch.Draw(seaTile, new Vector2(i*80, j*80), Color.White);
                             }
                         }
-                        spriteBatch.DrawString(font1, "harbor mania", new Vector2(600,10), Color.BurlyWood);
+                        spriteBatch.DrawString(font1, "HARBOR MANIA", new Vector2(600,10), Color.BurlyWood);
                         spriteBatch.Draw(nextButton, new Vector2(720, 400), Color.White);
+                        spriteBatch.Draw(prevButton, new Vector2(640, 400), Color.White);
                         spriteBatch.Draw(boat13, new Vector2(0, 0), Color.White);
                         spriteBatch.DrawString(font1, "Boat moved", new Vector2(600, 180), Color.BurlyWood);
                         spriteBatch.DrawString(font1, "Time", new Vector2(600, 280), Color.BurlyWood);
@@ -224,14 +227,16 @@ namespace HarborMania
                         else
                         if (helpCount == 1)
                         {
-                            clue = Content.Load<Texture2D>("Clue_2");
-                            spriteBatch.Draw(clue, new Vector2(240,320), Color.White);
+                            spriteBatch.DrawString(font4, "Oops! This ship is", new Vector2(200, 300), Color.Black);
+                            spriteBatch.DrawString(font4, "blocking your way", new Vector2(200, 320), Color.Black);
+                            spriteBatch.DrawString(font4, "Why don't you move it?", new Vector2(200, 340), Color.Black);
                         }
                         else
                         if (helpCount == 2)
                         {
-                            clue = Content.Load<Texture2D>("Clue_3");
-                            spriteBatch.Draw(clue, new Vector2(160,160), Color.White);
+                            spriteBatch.DrawString(font4, "But before that, ", new Vector2(140, 160), Color.Black);
+                            spriteBatch.DrawString(font4, "you've got to move", new Vector2(140, 180), Color.Black);
+                            spriteBatch.DrawString(font4, "this ship first.", new Vector2(140, 200), Color.Black);
                         }
                         else if (helpCount == 3) spriteBatch.DrawString(font1, "1", new Vector2(600, 220), Color.Tomato);
                         else if (helpCount == 4) spriteBatch.DrawString(font1, "2", new Vector2(600, 220), Color.Tomato);
@@ -245,8 +250,10 @@ namespace HarborMania
                         }
                         if (helpCount == 6)
                         {
-                            clue = Content.Load<Texture2D>("Clue_4");
-                            spriteBatch.Draw(clue, new Vector2(80, 320), Color.White);
+                            spriteBatch.DrawString(font4, "There you go..., ", new Vector2(80, 320), Color.Black);
+                            spriteBatch.DrawString(font4, "Now that you've understand", new Vector2(80, 340), Color.Black);
+                            spriteBatch.DrawString(font4, "how to play this game.", new Vector2(80, 360), Color.Black);
+                            spriteBatch.DrawString(font4, "Let's start now!", new Vector2(80, 380), Color.Black);
                         }
                         spriteBatch.End();
                         break;
@@ -293,16 +300,26 @@ namespace HarborMania
                         // Bagian Player
                         GraphicsDevice.Clear(Color.AliceBlue);
                         spriteBatch.Begin();
-                        spriteBatch.DrawString(font1, "Level" + level, new Vector2(580, 30), Color.DarkBlue);
+
+                        spriteBatch.DrawString(font1, "Level" + level, new Vector2(600, 20), Color.DarkBlue);
+                        spriteBatch.DrawString(font1, "Time", new Vector2(600, 280), Color.BurlyWood);
+                        displayTime = String.Format("{0}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
+                        spriteBatch.DrawString(font1, "" + displayTime, new Vector2(600, 320), Color.Tomato);
+
                         spriteBatch.End();
                         break;
                     }
                 case GameState.ComputerPlay:
                     {
                         // Bagian Computer
-                        GraphicsDevice.Clear(Color.BurlyWood);
+                        GraphicsDevice.Clear(Color.FloralWhite);
                         spriteBatch.Begin();
-                        spriteBatch.DrawString(font1, "Level" + level, new Vector2(580, 30), Color.DarkBlue);
+
+                        spriteBatch.DrawString(font1, "Level" + level, new Vector2(600, 20), Color.DarkBlue);
+                        spriteBatch.DrawString(font1, "Time", new Vector2(600, 280), Color.BurlyWood);
+                        displayTime = String.Format("{0}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
+                        spriteBatch.DrawString(font1, "" + displayTime, new Vector2(600, 320), Color.Tomato);
+
                         spriteBatch.End();
                         break;
                     }
@@ -424,6 +441,12 @@ namespace HarborMania
                                         helpCount++;
                                         if (helpCount == 7)
                                             _GameState = GameState.MainMenu; 
+                                    }
+                                    else
+                                    if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 640) && (t.Position.X <= 720) && (t.Position.Y >= 400) && (t.Position.Y <= 480))
+                                    {
+                                        if (helpCount > 0) 
+                                            helpCount--;
                                     }
                                 }
                             }
