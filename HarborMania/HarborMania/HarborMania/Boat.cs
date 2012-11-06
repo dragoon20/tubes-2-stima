@@ -9,6 +9,11 @@ namespace HarborMania
 {
     class Boat : Microsoft.Xna.Framework.DrawableGameComponent
     {
+        public enum Orientation
+        {
+            Top, Right, Bottom, Left
+        };
+
         //int height;
         //int width;
         //int posX; //posX adalah posisi X dari boat head
@@ -16,7 +21,14 @@ namespace HarborMania
         //int arah; //arah adalah arah dari boat head
         Vector2 position;
         Vector2 size;
+        Orientation arah;
         Texture2D texture; //masih blm tau ini utk apa
+
+        public Orientation Arah
+        {
+            get { return arah; }
+            set { arah = value; }
+        }
 
         public Vector2 Size
         {
@@ -39,14 +51,25 @@ namespace HarborMania
         public Boat(Game game, Vector2 Position, Vector2 Size, Texture2D Texture) : base(game)
         {
             texture = Texture;
-            position = Position;
-            size = Size;
+            position = new Vector2 (Position.X * 80, Position.Y * 80);
+            size = new Vector2(Size.X * 80, Size.Y * 80);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(texture, new Rectangle((int)position.X * 80, (int)position.Y * 80, (int)size.X * 80, (int)size.Y * 80), Color.White);
+            if (arah == Orientation.Left)
+            {
+                spriteBatch.Draw(texture, new Rectangle((int)position.X+160, (int)position.Y+80, (int)size.X, (int)size.Y), null, Color.White, (float)3.14159265358979323846264338327950288, new Vector2(), new SpriteEffects(), 0);
+            }
+            else if (arah == Orientation.Bottom)
+            {
+                spriteBatch.Draw(texture, new Rectangle((int)position.X+80, (int)position.Y+160, (int)size.X, (int)size.Y), null, Color.White, (float)3.14159265358979323846264338327950288, new Vector2(), new SpriteEffects(), 0);
+            }
+            else
+            {
+                spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), Color.White);
+            }
             spriteBatch.End();
         }
 

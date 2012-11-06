@@ -37,7 +37,9 @@ namespace HarborMania
         GameType play;
         bool touchflag;
         int touchTimer;
-        int moveCount = 0;
+		int moveCount = 0;        int lockboat;
+        int offx;
+        int offy;
         TimeSpan timeSpan = TimeSpan.FromMilliseconds(0);
 
         Sea map;
@@ -576,6 +578,7 @@ namespace HarborMania
                                             map = new Sea(this, 80, 80, 6, 6, mapLevel[level]);
                                             map.Initialize();
                                             map.LoadContent(out boats);
+                                            lockboat = -1;
 
                                             if (play == GameType.Human)
                                                 _GameState = GameState.HumanPlay;
@@ -602,13 +605,67 @@ namespace HarborMania
                     case GameState.HumanPlay:
                     {
                         // Bagian Player
-                        getDFSPath();
-                        if (startCoutingTime == false)
+						if (startCoutingTime == false)
                         {
                             startCoutingTime = true;
                             timeSpan = TimeSpan.FromMilliseconds(1000);
+                        }                        TouchCollection touchStateMain = TouchPanel.GetState();
+                        if ((!touchflag) && (touchStateMain.Count > 0))
+                        {
+                            foreach (TouchLocation t in touchStateMain)
+                            {
+                                if (t.State == TouchLocationState.Released)
+                                {
+                                    if (lockboat != -1)
+                                    {
+                                        boats.ElementAt(lockboat).Position = new Vector2((int)((boats.ElementAt(lockboat).Position.X + 40) / 80) * 80, (int)((boats.ElementAt(lockboat).Position.Y + 40) / 80) * 80);
+                                        lockboat = -1;
+                                    }
+                                }
+                                else if (t.State == TouchLocationState.Moved)
+                                {
+                                    if (lockboat == -1)
+                                    {
+                                        bool cek = true;
+                                        int count = 0;
+                                        foreach (Boat boat in boats)
+                                        {
+                                            if ((cek) && ((t.Position.X >= boat.Position.X) && (t.Position.X <= boat.Position.X + boat.Size.X)) &&
+                                                ((t.Position.Y >= boat.Position.Y) && (t.Position.Y <= boat.Position.Y + boat.Size.Y)))
+                                            {
+                                                cek = false;
+                                                lockboat = count;
+                                                offx = (int) (boat.Position.X - t.Position.X);
+                                                offy = (int) (boat.Position.Y - t.Position.Y);
+                                            }
+                                            count++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
+                                        {
+                                            boats.ElementAt(lockboat).Position = new Vector2(t.Position.X + offx, boats.ElementAt(lockboat).Position.Y);
+                                        }
+                                        else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
+                                        {
+                                            boats.ElementAt(lockboat).Position = new Vector2(boats.ElementAt(lockboat).Position.X, t.Position.Y + offy);
+                                        }
+                                    }
+                                }
+                            }
                         }
-
+                        else
+                        {
+                            if (touchTimer == 0)
+                            {
+                                touchflag = false;
+                            }
+                            else
+                            {
+                                touchTimer--;
+                            }
+                        }
                         break;
                     }
                     case GameState.ComputerPlay:

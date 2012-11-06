@@ -88,6 +88,7 @@ namespace HarborMania
                 for (int j = 0; j < totalNodeX; ++j)
                 {
                     Tile[i][j].Status = Convert.ToInt16(splitline[j]);
+                    Tile[i][j].StatusSebenarnya = 0;
                 }
             }
 
@@ -101,9 +102,48 @@ namespace HarborMania
             {
                 templine = loadpath.ReadLine();
                 String[] splitline = templine.Split(' ');
-                localboats.Add(new Boat(Game, new Vector2(Convert.ToInt32(splitline[0]), Convert.ToInt32(splitline[1])), 
-                                new Vector2(Convert.ToInt32(splitline[2]), Convert.ToInt32(splitline[3])), 
-                                Game.Content.Load<Texture2D>(splitline[4])));
+
+                int x = Convert.ToInt32(splitline[0]), y = Convert.ToInt32(splitline[1]);
+                int w = Convert.ToInt32(splitline[2]), h = Convert.ToInt32(splitline[3]);
+
+                Tile[y][x].StatusSebenarnya = 1;
+                if (w == 1)
+                {
+                    for (int j = 0; j < h; ++j)
+                        Tile[y + j][x].StatusSebenarnya = 1;
+                }
+                else if (h == 1)
+                {
+                    for (int j = 0; j < w; ++j)
+                        Tile[y][x + j].StatusSebenarnya = 1;
+                }
+                localboats.Add(new Boat(Game, new Vector2(x, y), 
+                                new Vector2(w, h), 
+                                Game.Content.Load<Texture2D>(splitline[5])));
+                switch (splitline[4])
+                {
+                    case "Top":
+                    {
+                        localboats.ElementAt(i).Arah = Boat.Orientation.Top;
+                        break;
+                    }
+                    case "Right":
+                    {
+                        localboats.ElementAt(i).Arah = Boat.Orientation.Right;
+                        break;
+                    }
+                    case "Bottom":
+                    {
+                        localboats.ElementAt(i).Arah = Boat.Orientation.Bottom;
+                        break;
+                    }
+                    case "Left":
+                    {
+                        localboats.ElementAt(i).Arah = Boat.Orientation.Left;
+                        break;
+                    }
+                    default: break;
+                }
                 localboats.ElementAt(i).Initialize();
             }
 
