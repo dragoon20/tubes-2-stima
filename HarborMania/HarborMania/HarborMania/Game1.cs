@@ -46,7 +46,7 @@ namespace HarborMania
 
         Sea map;
         List<Boat> boats;
-        List<Array> DFSpath;
+        List<BoatPath> DFSpath;
 
         Texture2D mainMenu;
         Texture2D menuButton;
@@ -77,6 +77,8 @@ namespace HarborMania
         int level;
         string displayTime = "";
         Boolean startCoutingTime = false;
+        Boolean dfsPathFound = false;
+        bool[][] Visited;
 
         public Game1()
         {
@@ -104,22 +106,18 @@ namespace HarborMania
             menuComputer = new Rectangle(30, 173, 300, 61);
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            //Inisialisasi table of boolean yang berisi penanda path DFS
+            Visited = new bool[6][];
+            for (int x = 0; x < 6; x++)
+            {
+                Visited[x] = new bool[6];
+            }
+
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -166,23 +164,79 @@ namespace HarborMania
             }
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
+        public void isFinish() {
+            //cek jika posisi awal boatPlayer sampai posisiAkhir boatPlayer kosong
+        }
+
+        int s = 0;
+        private void DFS(Sea map, Boat b, Vector2 posisi_sekarang, bool[][] Visited)
+        {
+                Visited[((int) posisi_sekarang.X) /80][((int) posisi_sekarang.Y) /80] = true;
+                Debug.WriteLine("#" + s + " : (" + (int) posisi_sekarang.X/80 + "," + (int)posisi_sekarang.Y/80 + ")");
+                s++;
+                //To Do : simpan posisi_sekarang di path 
+
+                //Jika boat bisa gerak ke kiri & kanan
+                if (b.Size.X/80 > 1 ) {
+                    //pencarian ke kanan 
+                    if ((((int)posisi_sekarang.X / 80 + 1) + (b.Size.X/80-1) <= 5) && (Visited[(int)posisi_sekarang.X / 80 + 1][(int)posisi_sekarang.Y / 80] == false))
+                    {
+                        //if (map.GetStatus((int)posisi_sekarang.X / 80 + 1, (int)posisi_sekarang.Y / 80) == 0)
+                            DFS(map, b, new Vector2(posisi_sekarang.X + 80, posisi_sekarang.Y), Visited);        
+                    }
+
+                    //pencarian ke kiri
+                    if ((((int)posisi_sekarang.X/80 - 1) >= 0) && (Visited[(int)posisi_sekarang.X/80-1][(int)posisi_sekarang.Y/80] == false))
+                    {
+                        //if (map.GetStatus((int)posisi_sekarang.X/80 - 1, (int)posisi_sekarang.Y/80) == 0)
+                            DFS(map, b, new Vector2(posisi_sekarang.X - 80, posisi_sekarang.Y), Visited);
+                    }
+                    Debug.WriteLine("finish");
+                }
+                
+                //Jika boat bisa gerak ke atas & bawah 
+                if (b.Size.Y/80 > 1) {
+                    //pencarian ke bawah
+                    if ((((int)posisi_sekarang.Y / 80 + 1) + (b.Size.Y/80-1) <= 5) && (Visited[(int)posisi_sekarang.X / 80][(int)posisi_sekarang.Y / 80 + 1] == false))
+                    {
+                        //if (map.GetStatus((int)posisi_sekarang.X / 80, (int)posisi_sekarang.Y / 80 + 1) == 0)
+                            DFS(map, b, new Vector2(posisi_sekarang.X, posisi_sekarang.Y + 80), Visited);
+                    }
+                
+                    //pencarian ke atas
+                    if ((((int)posisi_sekarang.Y / 80 - 1) >= 0) && (Visited[(int)posisi_sekarang.X / 80][(int)posisi_sekarang.Y / 80 - 1] == false))
+                    {
+                        //if (map.GetStatus((int)posisi_sekarang.X/80, (int)posisi_sekarang.Y/80-1) == 0)
+                            DFS(map, b, new Vector2(posisi_sekarang.X, posisi_sekarang.Y-80), Visited);
+                    }
+                }
+        }
 
         public void getDFSPath()
         {
+            // DFSpath.Add();
+            int ctr = 0;
             foreach (Boat boat in boats)
             {
-                //Debug.WriteLine("position = " + boat.Position);
-                //Debug.WriteLine("size = " + boat.Size);
-                
+                ctr++;
+                for (int i = 0; i < 6; i++)
+                {
+                    for (int j = 0; j < 6; j++)
+                    {
+                        Visited[i][j] = false;
+                    }
+                }
+                Debug.WriteLine("");
+                Debug.WriteLine("Boat #"+ctr);
+                Debug.WriteLine("position = " + boat.Position);
+                Debug.WriteLine("size = " + boat.Size);
+                Vector2 v = new Vector2(boat.Position.X,boat.Position.Y);
+                DFS(map, boat, v, Visited);
             }
         }
         
@@ -686,6 +740,11 @@ namespace HarborMania
                         {
                             startCoutingTime = true;
                             timeSpan = TimeSpan.FromMilliseconds(1000);
+                        }
+                        if (dfsPathFound == false) 
+                        {
+                            getDFSPath();
+                            dfsPathFound = true;
                         }
 
                         break;
