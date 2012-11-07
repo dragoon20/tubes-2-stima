@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -44,6 +45,8 @@ namespace HarborMania
         int offy;
         int minscroll;
         int maxscroll;
+        int countLoader;
+        //TimeSpan timeSpan = TimeSpan.FromMilliseconds(0);
 
         TimeSpan timeSpan = TimeSpan.FromMilliseconds(180000);
 
@@ -87,6 +90,12 @@ namespace HarborMania
         Dictionary<String, bool> mapboat;
         List<BoatPath> bestpath;
         int bestmove;
+        int state;
+        int speed;
+        Vector2 posiawal;
+        Vector2 posiakhir;
+        int moveTimer;
+        Thread loading;
 
         public Game1()
         {
@@ -193,121 +202,10 @@ namespace HarborMania
             }
             return s;
         }
-        
-        /*private bool DFS(List<Boat> listboat, List<BoatPath> listpath, int move)
-        {
-            if ((int)(listboat.ElementAt(0).Position.X / 80) + (int)(listboat.ElementAt(0).Size.X / 80) == 6)
-            {
-                bestmove = move;
-                bestpath = listpath;
-                return true;
-            }
-            for (int i = 0; i < listboat.Count(); ++i)
-            {
-                Boat tempboat = listboat.ElementAt(i);
-                if ((tempboat.Arah == Boat.Orientation.Left) || (tempboat.Arah == Boat.Orientation.Right))
-                {
-                    int x = (int)(tempboat.Position.X / 80);
-                    int y = (int)(tempboat.Position.Y / 80);
-                    int sizex = (int)(tempboat.Size.X / 80);
-                    if ((x > 0) && (map.GetStatus(x - 1, y) == 0))
-                    {
-                        listboat.ElementAt(i).Position = new Vector2((x - 1) * 80, y * 80);
-                        bool tempbool = false;
-                        if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
-                        {
-                            if (!tempbool)
-                                mapboat.Add(ListBoatToString(listboat), false);
-                            else
-                                mapboat[ListBoatToString(listboat)] = false;
-                            map.SetStatus(x - 1, y, 1);
-                            map.SetStatus(x + sizex - 1, y, 0);
-                            List<BoatPath> templistpath = listpath.ToList();
-                            templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x - 1) * 80, y * 80)));
-                            if (DFS(listboat, templistpath, move + 1))
-                                return true;
-                        }
-                        listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
-                        map.SetStatus(x - 1, y, 0);
-                        map.SetStatus(x + sizex - 1, y, 1);
-                    }
-                    if ((x + sizex - 1 < 5) && (map.GetStatus(x + sizex, y) == 0))
-                    {
-                        listboat.ElementAt(i).Position = new Vector2((x + 1) * 80, y * 80);
-                        bool tempbool = false;
-                        if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
-                        {
-                            if (!tempbool)
-                                mapboat.Add(ListBoatToString(listboat), false);
-                            else
-                                mapboat[ListBoatToString(listboat)] = false;
-                            map.SetStatus(x + sizex, y, 1);
-                            map.SetStatus(x, y, 0);
-                            List<BoatPath> templistpath = listpath.ToList();
-                            templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x + 1) * 80, y * 80)));
-                            if (DFS(listboat, templistpath, move + 1))
-                                return true;
-                        }
-                        listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
-                        map.SetStatus(x + sizex, y, 0);
-                        map.SetStatus(x, y, 1);
-                    }
-                }
-                else if ((tempboat.Arah == Boat.Orientation.Top) || (tempboat.Arah == Boat.Orientation.Bottom))
-                {
-                    int x = (int)(tempboat.Position.X / 80);
-                    int y = (int)(tempboat.Position.Y / 80);
-                    int sizey = (int)(tempboat.Size.Y / 80);
-                    if ((y > 0) && (map.GetStatus(x, y - 1) == 0))
-                    {
-                        listboat.ElementAt(i).Position = new Vector2(x * 80, (y - 1) * 80);
-                        bool tempbool = false;
-                        if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
-                        {
-                            if (!tempbool)
-                                mapboat.Add(ListBoatToString(listboat), false);
-                            else
-                                mapboat[ListBoatToString(listboat)] = false;
-                            map.SetStatus(x, y - 1, 1);
-                            map.SetStatus(x, y + sizey - 1, 0);
-                            List<BoatPath> templistpath = listpath.ToList();
-                            templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y - 1) * 80)));
-                            if (DFS(listboat, templistpath, move + 1))
-                                return true;
-                        }
-                        listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
-                        map.SetStatus(x, y - 1, 0);
-                        map.SetStatus(x, y + sizey - 1, 1);
-                    }
-                    if ((y + sizey -1 < 5) && (map.GetStatus(x, y + sizey) == 0))
-                    {
-                        listboat.ElementAt(i).Position = new Vector2(x * 80, (y + 1) * 80);
-                        bool tempbool = false;
-                        if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
-                        {
-                            if (!tempbool)
-                                mapboat.Add(ListBoatToString(listboat), false);
-                            else
-                                mapboat[ListBoatToString(listboat)] = false;
 
-                            map.SetStatus(x, y + sizey, 1);
-                            map.SetStatus(x, y, 0);
-                            List<BoatPath> templistpath = listpath.ToList();
-                            templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y + 1) * 80)));
-                            if (DFS(listboat, templistpath, move + 1))
-                                return true;
-                        }
-                        listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
-                        map.SetStatus(x, y + sizey, 0);
-                        map.SetStatus(x, y, 1);
-                    }
-                }
-            }
-            return false;
-        }*/
-
-        public void getPath(int flag)
+        public void getPath(Object flagpass)
         {
+            int flag = (int)flagpass;
             mapboat = new Dictionary<String, bool>();
             List<Boat> listboatf = new List<Boat>();
             foreach (Boat boat in boats)
@@ -757,6 +655,24 @@ namespace HarborMania
                             spriteBatch.DrawString(font2, ((j * 6) + (i + 1)).ToString(), new Vector2(98 - (digit * 14) + i * 115, 135 + j * 110), Color.White);
                         }
                     }
+                    if (loading != null)
+                    {
+                        Texture2D rect = new Texture2D(graphics.GraphicsDevice, 240, 80);
+                        Color[] data = new Color[240 * 80];
+                        for (int i = 0; i < data.Length; ++i) data[i] = Color.DarkSlateBlue;
+                        rect.SetData(data);
+
+                        spriteBatch.Draw(rect, new Vector2(300, 200), Color.DarkSlateBlue);
+                        String loader = "Loading ";
+                        for (int l = 0; l < countLoader/5; ++l)
+                        {
+                            loader += ".";
+                        }
+                        countLoader++;
+                        if (countLoader > 19)
+                            countLoader = 0;
+                        spriteBatch.DrawString(font3, loader, new Vector2(330, 213), Color.White);
+                    }
                     spriteBatch.End();
                     moveCount = 0;
                     break;
@@ -1035,48 +951,70 @@ namespace HarborMania
                     case GameState.ChooseLevel:
                     {
                         // Bagian Pilih Level
-                        startCoutingTime = false;
-                        TouchCollection touchStateMain = TouchPanel.GetState();
-                        if ((!touchflag) && (touchStateMain.Count > 0))
+                        if (loading != null)
                         {
-                            foreach (TouchLocation t in touchStateMain)
+                            if (loading.ThreadState == ThreadState.Stopped)
                             {
-                                for (int j = 0; j <= mapLevel.Count/6; ++j)
-                                {
-                                    int tempbatas = (j == (mapLevel.Count/6)) ? mapLevel.Count % 6 : 6;
-                                    for (int i = 0; i < tempbatas; ++i)
-                                    {
-                                        if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= 60 + i * 115) && ((t.Position.X <= 60 + i * 115 + 100))) &&
-                                        ((t.Position.Y >= 110 + j * 110) && ((t.Position.Y <= 110 + j * 110 + 100))))
-                                        {
-                                            // Jika menyentuh menu tertentu
-                                            level = j * 6 + i + 1; //ditambah 1 karena level mulai dari 1, bukan dari 0
-                                            map = new Sea(this, 80, 80, 6, 6, mapLevel[level]);
-                                            map.Initialize();
-                                            map.LoadContent(out boats);
-
-                                            lockboat = -1;
-                                            timeSpan = TimeSpan.FromMilliseconds(1000);
-                                            getPath(1);
-                                            
-                                            if (play == GameType.Human)
-                                                _GameState = GameState.HumanPlay;
-                                            else if (play == GameType.Computer)
-                                                _GameState = GameState.ComputerPlay;
-                                        }
-                                    }
-                                }
+                                state = 0;
+                                moveTimer = 0;
+                                speed = 10;
+                                posiawal = bestpath.ElementAt(state).PosisiAwal;
+                                posiakhir = bestpath.ElementAt(state).PosisiAkhir;
+                                _GameState = GameState.ComputerPlay;
+                                loading = null;
                             }
                         }
                         else
                         {
-                            if (touchTimer == 0)
+                            startCoutingTime = false;
+                            TouchCollection touchStateMain = TouchPanel.GetState();
+                            if ((!touchflag) && (touchStateMain.Count > 0))
                             {
-                                touchflag = false;
+                                foreach (TouchLocation t in touchStateMain)
+                                {
+                                    for (int j = 0; j <= mapLevel.Count / 6; ++j)
+                                    {
+                                        int tempbatas = (j == (mapLevel.Count / 6)) ? mapLevel.Count % 6 : 6;
+                                        for (int i = 0; i < tempbatas; ++i)
+                                        {
+                                            if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= 60 + i * 115) && ((t.Position.X <= 60 + i * 115 + 100))) &&
+                                            ((t.Position.Y >= 110 + j * 110) && ((t.Position.Y <= 110 + j * 110 + 100))))
+                                            {
+                                                // Jika menyentuh menu tertentu
+                                                level = j * 6 + i + 1; //ditambah 1 karena level mulai dari 1, bukan dari 0
+                                                map = new Sea(this, 80, 80, 6, 6, mapLevel[level]);
+                                                map.Initialize();
+                                                map.LoadContent(out boats);
+
+                                                timeSpan = TimeSpan.FromMilliseconds(1000);
+
+                                                if (play == GameType.Human)
+                                                {
+                                                    lockboat = -1;
+                                                    _GameState = GameState.HumanPlay;
+                                                }
+                                                else if (play == GameType.Computer)
+                                                {
+                                                    loading = new Thread(new ParameterizedThreadStart(getPath));
+                                                    loading.Start(1);
+
+                                                    countLoader = 0;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
-                                touchTimer--;
+                                if (touchTimer == 0)
+                                {
+                                    touchflag = false;
+                                }
+                                else
+                                {
+                                    touchTimer--;
+                                }
                             }
                         }
                         break;
@@ -1235,10 +1173,39 @@ namespace HarborMania
                     case GameState.ComputerPlay:
                     {
                         // Bagian Computer
-                        if (startCoutingTime == false)
+                        if (state < bestpath.Count())
                         {
-                            startCoutingTime = true;
-                            timeSpan = TimeSpan.FromMilliseconds(180000);
+                            moveTimer++;
+                            if (moveTimer == 1)
+                            {
+                                moveTimer = 0;
+                                if (posiawal == posiakhir)
+                                {
+                                    state++;
+                                    if (state < bestpath.Count())
+                                    {
+                                        posiawal = bestpath.ElementAt(state).PosisiAwal;
+                                        posiakhir = bestpath.ElementAt(state).PosisiAkhir;
+                                    }
+                                }
+                                else if (posiawal.Y == posiakhir.Y)
+                                {
+                                    if (posiawal.X < posiakhir.X)
+                                        posiawal.X = (posiawal.X + speed > posiakhir.X)? posiakhir.X : posiawal.X + speed;
+                                    else
+                                        posiawal.X = (posiawal.X - speed < posiakhir.X) ? posiakhir.X : posiawal.X - speed;
+                                }
+                                else if (posiawal.X == posiakhir.X)
+                                {
+                                    if (posiawal.Y < posiakhir.Y)
+                                        posiawal.Y = (posiawal.Y + speed > posiakhir.Y) ? posiakhir.Y : posiawal.Y + speed;
+                                    else
+                                        posiawal.Y = (posiawal.Y - speed < posiakhir.Y) ? posiakhir.Y : posiawal.Y - speed;
+                                }
+                                
+                                if (state < bestpath.Count())
+                                    boats.ElementAt(bestpath.ElementAt(state).Boat).Position = posiawal;
+                            }
                         }
                         break;
                     }
