@@ -67,11 +67,11 @@ namespace HarborMania
             spriteBatch.Begin();
             if (arah == Orientation.Left)
             {
-                spriteBatch.Draw(texture, new Rectangle((int)position.X+160, (int)position.Y+80, (int)size.X, (int)size.Y), null, Color.White, (float)3.14159265358979323846264338327950288, new Vector2(), new SpriteEffects(), 0);
+                spriteBatch.Draw(texture, new Rectangle((int)(position.X+size.X), (int)(position.Y+size.Y), (int)size.X, (int)size.Y), null, Color.White, (float)3.14159265358979323846264338327950288, new Vector2(), new SpriteEffects(), 0);
             }
             else if (arah == Orientation.Bottom)
             {
-                spriteBatch.Draw(texture, new Rectangle((int)position.X+80, (int)position.Y+160, (int)size.X, (int)size.Y), null, Color.White, (float)3.14159265358979323846264338327950288, new Vector2(), new SpriteEffects(), 0);
+                spriteBatch.Draw(texture, new Rectangle((int)(position.X+size.X), (int)(position.Y+size.Y), (int)size.X, (int)size.Y), null, Color.White, (float)3.14159265358979323846264338327950288, new Vector2(), new SpriteEffects(), 0);
             }
             else
             {

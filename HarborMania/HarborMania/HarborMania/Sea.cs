@@ -31,7 +31,7 @@ namespace HarborMania
 
         public Vector2 outPos
         {
-            get { return new Vector2(5, outPosY); }
+            get { return new Vector2(6, outPosY); }
         }
 
         public Node getNode(int i, int j)
