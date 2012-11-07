@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HarborMania
 {
-    class Node : Microsoft.Xna.Framework.GameComponent
+    class Node
     {
         int status; //gambar
         int statussebenarnya; //0 kosong, 1 isi, 2 dll
@@ -40,17 +40,18 @@ namespace HarborMania
             set { position = value; }
         }
 
-        public Node(Game game)
-            : base(game)
+        public Node()
         {
             position = new Vector2();
             size = new Vector2();
         }
 
-        public override void Initialize()
+        public Node(Node n)
         {
-            base.Initialize();
+            status = n.status;
+            statussebenarnya = n.statussebenarnya;
+            size = n.size;
+            position = n.position;
         }
-
     }
 }

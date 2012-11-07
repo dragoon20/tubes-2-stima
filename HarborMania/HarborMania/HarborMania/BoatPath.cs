@@ -8,11 +8,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HarborMania
 {
-    class BoatPath : Microsoft.Xna.Framework.GameComponent
+    class BoatPath
     {
+        int boat;
         Vector2 posisi_awal;
         Vector2 posisi_akhir;
-        
+
+        public int Boat
+        {
+            get { return boat; }
+            set { boat = value; }
+        }
+
         public Vector2 PosisiAwal 
         {
             get { return posisi_awal; }
@@ -25,15 +32,17 @@ namespace HarborMania
             set { posisi_akhir = value; }
         }
         
-        public BoatPath (Game game) : base(game) {
+        public BoatPath () 
+        {
             posisi_awal = new Vector2();
             posisi_akhir = new Vector2();
         }
 
-        public override void Initialize()
+        public BoatPath(int posboat, Vector2 awal, Vector2 akhir)
         {
-            base.Initialize();
+            boat = posboat;
+            posisi_awal = awal;
+            posisi_akhir = akhir;
         }
-
     }
 }
