@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -43,7 +44,6 @@ namespace HarborMania
         int offy;
         int minscroll;
         int maxscroll;
-        Vector2 posawal;
         TimeSpan timeSpan = TimeSpan.FromMilliseconds(0);
 
         Sea map;
@@ -81,6 +81,11 @@ namespace HarborMania
         Boolean startCoutingTime = false;
         Boolean dfsPathFound = false;
         bool[][] Visited;
+
+        // DFS dan BFS structure
+        Dictionary<String, bool> mapboat;
+        List<BoatPath> bestpath;
+        int bestmove;
 
         public Game1()
         {
@@ -175,70 +180,433 @@ namespace HarborMania
             //cek jika posisi awal boatPlayer sampai posisiAkhir boatPlayer kosong
         }
 
-        int s = 0;
-        private void DFS(Sea map, Boat b, Vector2 posisi_sekarang, bool[][] Visited)
+        private String ListBoatToString(List<Boat> listboat)
         {
-                Visited[((int) posisi_sekarang.X) /80][((int) posisi_sekarang.Y) /80] = true;
-                Debug.WriteLine("#" + s + " : (" + (int) posisi_sekarang.X/80 + "," + (int)posisi_sekarang.Y/80 + ")");
-                s++;
-                //To Do : simpan posisi_sekarang di path 
-
-                //Jika boat bisa gerak ke kiri & kanan
-                if (b.Size.X/80 > 1 ) {
-                    //pencarian ke kanan 
-                    if ((((int)posisi_sekarang.X / 80 + 1) + (b.Size.X/80-1) <= 5) && (Visited[(int)posisi_sekarang.X / 80 + 1][(int)posisi_sekarang.Y / 80] == false))
-                    {
-                        //if (map.GetStatus((int)posisi_sekarang.X / 80 + 1, (int)posisi_sekarang.Y / 80) == 0)
-                            DFS(map, b, new Vector2(posisi_sekarang.X + 80, posisi_sekarang.Y), Visited);        
-                    }
-
-                    //pencarian ke kiri
-                    if ((((int)posisi_sekarang.X/80 - 1) >= 0) && (Visited[(int)posisi_sekarang.X/80-1][(int)posisi_sekarang.Y/80] == false))
-                    {
-                        //if (map.GetStatus((int)posisi_sekarang.X/80 - 1, (int)posisi_sekarang.Y/80) == 0)
-                            DFS(map, b, new Vector2(posisi_sekarang.X - 80, posisi_sekarang.Y), Visited);
-                    }
-                    Debug.WriteLine("finish");
-                }
-                
-                //Jika boat bisa gerak ke atas & bawah 
-                if (b.Size.Y/80 > 1) {
-                    //pencarian ke bawah
-                    if ((((int)posisi_sekarang.Y / 80 + 1) + (b.Size.Y/80-1) <= 5) && (Visited[(int)posisi_sekarang.X / 80][(int)posisi_sekarang.Y / 80 + 1] == false))
-                    {
-                        //if (map.GetStatus((int)posisi_sekarang.X / 80, (int)posisi_sekarang.Y / 80 + 1) == 0)
-                            DFS(map, b, new Vector2(posisi_sekarang.X, posisi_sekarang.Y + 80), Visited);
-                    }
-                
-                    //pencarian ke atas
-                    if ((((int)posisi_sekarang.Y / 80 - 1) >= 0) && (Visited[(int)posisi_sekarang.X / 80][(int)posisi_sekarang.Y / 80 - 1] == false))
-                    {
-                        //if (map.GetStatus((int)posisi_sekarang.X/80, (int)posisi_sekarang.Y/80-1) == 0)
-                            DFS(map, b, new Vector2(posisi_sekarang.X, posisi_sekarang.Y-80), Visited);
-                    }
-                }
+            String s = "";
+            foreach (Boat b in listboat)
+            {
+                s += b.ToString();
+            }
+            return s;
         }
-
-        public void getDFSPath()
+        
+        /*private bool DFS(List<Boat> listboat, List<BoatPath> listpath, int move)
         {
-            // DFSpath.Add();
-            int ctr = 0;
+            if ((int)(listboat.ElementAt(0).Position.X / 80) + (int)(listboat.ElementAt(0).Size.X / 80) == 6)
+            {
+                bestmove = move;
+                bestpath = listpath;
+                return true;
+            }
+            for (int i = 0; i < listboat.Count(); ++i)
+            {
+                Boat tempboat = listboat.ElementAt(i);
+                if ((tempboat.Arah == Boat.Orientation.Left) || (tempboat.Arah == Boat.Orientation.Right))
+                {
+                    int x = (int)(tempboat.Position.X / 80);
+                    int y = (int)(tempboat.Position.Y / 80);
+                    int sizex = (int)(tempboat.Size.X / 80);
+                    if ((x > 0) && (map.GetStatus(x - 1, y) == 0))
+                    {
+                        listboat.ElementAt(i).Position = new Vector2((x - 1) * 80, y * 80);
+                        bool tempbool = false;
+                        if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                        {
+                            if (!tempbool)
+                                mapboat.Add(ListBoatToString(listboat), false);
+                            else
+                                mapboat[ListBoatToString(listboat)] = false;
+                            map.SetStatus(x - 1, y, 1);
+                            map.SetStatus(x + sizex - 1, y, 0);
+                            List<BoatPath> templistpath = listpath.ToList();
+                            templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x - 1) * 80, y * 80)));
+                            if (DFS(listboat, templistpath, move + 1))
+                                return true;
+                        }
+                        listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                        map.SetStatus(x - 1, y, 0);
+                        map.SetStatus(x + sizex - 1, y, 1);
+                    }
+                    if ((x + sizex - 1 < 5) && (map.GetStatus(x + sizex, y) == 0))
+                    {
+                        listboat.ElementAt(i).Position = new Vector2((x + 1) * 80, y * 80);
+                        bool tempbool = false;
+                        if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                        {
+                            if (!tempbool)
+                                mapboat.Add(ListBoatToString(listboat), false);
+                            else
+                                mapboat[ListBoatToString(listboat)] = false;
+                            map.SetStatus(x + sizex, y, 1);
+                            map.SetStatus(x, y, 0);
+                            List<BoatPath> templistpath = listpath.ToList();
+                            templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x + 1) * 80, y * 80)));
+                            if (DFS(listboat, templistpath, move + 1))
+                                return true;
+                        }
+                        listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                        map.SetStatus(x + sizex, y, 0);
+                        map.SetStatus(x, y, 1);
+                    }
+                }
+                else if ((tempboat.Arah == Boat.Orientation.Top) || (tempboat.Arah == Boat.Orientation.Bottom))
+                {
+                    int x = (int)(tempboat.Position.X / 80);
+                    int y = (int)(tempboat.Position.Y / 80);
+                    int sizey = (int)(tempboat.Size.Y / 80);
+                    if ((y > 0) && (map.GetStatus(x, y - 1) == 0))
+                    {
+                        listboat.ElementAt(i).Position = new Vector2(x * 80, (y - 1) * 80);
+                        bool tempbool = false;
+                        if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                        {
+                            if (!tempbool)
+                                mapboat.Add(ListBoatToString(listboat), false);
+                            else
+                                mapboat[ListBoatToString(listboat)] = false;
+                            map.SetStatus(x, y - 1, 1);
+                            map.SetStatus(x, y + sizey - 1, 0);
+                            List<BoatPath> templistpath = listpath.ToList();
+                            templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y - 1) * 80)));
+                            if (DFS(listboat, templistpath, move + 1))
+                                return true;
+                        }
+                        listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                        map.SetStatus(x, y - 1, 0);
+                        map.SetStatus(x, y + sizey - 1, 1);
+                    }
+                    if ((y + sizey -1 < 5) && (map.GetStatus(x, y + sizey) == 0))
+                    {
+                        listboat.ElementAt(i).Position = new Vector2(x * 80, (y + 1) * 80);
+                        bool tempbool = false;
+                        if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                        {
+                            if (!tempbool)
+                                mapboat.Add(ListBoatToString(listboat), false);
+                            else
+                                mapboat[ListBoatToString(listboat)] = false;
+
+                            map.SetStatus(x, y + sizey, 1);
+                            map.SetStatus(x, y, 0);
+                            List<BoatPath> templistpath = listpath.ToList();
+                            templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y + 1) * 80)));
+                            if (DFS(listboat, templistpath, move + 1))
+                                return true;
+                        }
+                        listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                        map.SetStatus(x, y + sizey, 0);
+                        map.SetStatus(x, y, 1);
+                    }
+                }
+            }
+            return false;
+        }*/
+
+        public void getPath(int flag)
+        {
+            mapboat = new Dictionary<String, bool>();
+            List<Boat> listboatf = new List<Boat>();
             foreach (Boat boat in boats)
             {
-                ctr++;
-                for (int i = 0; i < 6; i++)
+                listboatf.Add(new Boat(this,boat));
+            }
+            List<BoatPath> boatpath = new List<BoatPath>();
+            mapboat.Add(ListBoatToString(listboatf), false);
+            bestmove = -1;
+
+            if (flag == 0)
+            {
+                bool cek = true;
+                Stack<KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>> stackDFS = new Stack<KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>>();
+                stackDFS.Push(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(new KeyValuePair<List<Boat>, List<BoatPath>>(listboatf, boatpath), new Sea(this, map)));
+
+                while ((cek)&&(stackDFS.Count() > 0))
                 {
-                    for (int j = 0; j < 6; j++)
+                    KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea> pair = stackDFS.Pop();
+                    List<Boat> listboat = pair.Key.Key;
+                    List<BoatPath> listpath = pair.Key.Value;
+                    Sea localmap = pair.Value;
+
+                    if ((int)(listboat.ElementAt(0).Position.X / 80) + (int)(listboat.ElementAt(0).Size.X / 80) == map.outPos.X)
                     {
-                        Visited[i][j] = false;
+                        bestmove = listpath.Count();
+                        bestpath = listpath;
+                        cek = false;
+                    }
+                    if (cek)
+                    {
+                        for (int i = 0; i < listboat.Count(); ++i)
+                        {
+                            Boat tempboat = listboat.ElementAt(i);
+                            if ((tempboat.Arah == Boat.Orientation.Left) || (tempboat.Arah == Boat.Orientation.Right))
+                            {
+                                int x = (int)(tempboat.Position.X / 80);
+                                int y = (int)(tempboat.Position.Y / 80);
+                                int sizex = (int)(tempboat.Size.X / 80);
+                                if ((x > 0) && (localmap.GetStatus(x - 1, y) == 0))
+                                {
+                                    listboat.ElementAt(i).Position = new Vector2((x - 1) * 80, y * 80);
+                                    bool tempbool = false;
+                                    if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                                    {
+                                        if (!tempbool)
+                                            mapboat.Add(ListBoatToString(listboat), false);
+                                        else
+                                            mapboat[ListBoatToString(listboat)] = false;
+                                        localmap.SetStatus(x - 1, y, 1);
+                                        localmap.SetStatus(x + sizex - 1, y, 0);
+                                        List<BoatPath> templistpath = listpath.ToList();
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x - 1) * 80, y * 80)));
+                                        List<Boat> templistboat = new List<Boat>();
+                                        foreach (Boat boat in listboat)
+                                        {
+                                            templistboat.Add(new Boat(this, boat));
+                                        }
+                                        stackDFS.Push(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
+                                                        new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this,localmap)));
+                                    }
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    localmap.SetStatus(x - 1, y, 0);
+                                    localmap.SetStatus(x + sizex - 1, y, 1);
+                                }
+                                if ((x + sizex - 1 < 5) && (localmap.GetStatus(x + sizex, y) == 0))
+                                {
+                                    listboat.ElementAt(i).Position = new Vector2((x + 1) * 80, y * 80);
+                                    bool tempbool = false;
+                                    if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                                    {
+                                        if (!tempbool)
+                                            mapboat.Add(ListBoatToString(listboat), false);
+                                        else
+                                            mapboat[ListBoatToString(listboat)] = false;
+                                        localmap.SetStatus(x + sizex, y, 1);
+                                        localmap.SetStatus(x, y, 0);
+                                        List<BoatPath> templistpath = listpath.ToList();
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x + 1) * 80, y * 80)));
+                                        List<Boat> templistboat = new List<Boat>();
+                                        foreach (Boat boat in listboat)
+                                        {
+                                            templistboat.Add(new Boat(this, boat));
+                                        }
+                                        stackDFS.Push(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
+                                            new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
+                                    }
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    localmap.SetStatus(x + sizex, y, 0);
+                                    localmap.SetStatus(x, y, 1);
+                                }
+                            }
+                            else if ((tempboat.Arah == Boat.Orientation.Top) || (tempboat.Arah == Boat.Orientation.Bottom))
+                            {
+                                int x = (int)(tempboat.Position.X / 80);
+                                int y = (int)(tempboat.Position.Y / 80);
+                                int sizey = (int)(tempboat.Size.Y / 80);
+                                if ((y > 0) && (localmap.GetStatus(x, y - 1) == 0))
+                                {
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, (y - 1) * 80);
+                                    bool tempbool = false;
+                                    if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                                    {
+                                        if (!tempbool)
+                                            mapboat.Add(ListBoatToString(listboat), false);
+                                        else
+                                            mapboat[ListBoatToString(listboat)] = false;
+                                        localmap.SetStatus(x, y - 1, 1);
+                                        localmap.SetStatus(x, y + sizey - 1, 0);
+                                        List<BoatPath> templistpath = listpath.ToList();
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y - 1) * 80)));
+                                        List<Boat> templistboat = new List<Boat>();
+                                        foreach (Boat boat in listboat)
+                                        {
+                                            templistboat.Add(new Boat(this, boat));
+                                        }
+                                        stackDFS.Push(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
+                                            new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
+                                    }
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    localmap.SetStatus(x, y - 1, 0);
+                                    localmap.SetStatus(x, y + sizey - 1, 1);
+                                }
+                                if ((y + sizey - 1 < 5) && (localmap.GetStatus(x, y + sizey) == 0))
+                                {
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, (y + 1) * 80);
+                                    bool tempbool = false;
+                                    if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                                    {
+                                        if (!tempbool)
+                                            mapboat.Add(ListBoatToString(listboat), false);
+                                        else
+                                            mapboat[ListBoatToString(listboat)] = false;
+                                        localmap.SetStatus(x, y + sizey, 1);
+                                        localmap.SetStatus(x, y, 0);
+                                        List<BoatPath> templistpath = listpath.ToList();
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y + 1) * 80)));
+                                        List<Boat> templistboat = new List<Boat>();
+                                        foreach (Boat boat in listboat)
+                                        {
+                                            templistboat.Add(new Boat(this, boat));
+                                        }
+                                        stackDFS.Push(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
+                                            new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
+                                    }
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    localmap.SetStatus(x, y + sizey, 0);
+                                    localmap.SetStatus(x, y, 1);
+                                }
+                            }
+                        }
                     }
                 }
-                Debug.WriteLine("");
-                Debug.WriteLine("Boat #"+ctr);
-                Debug.WriteLine("position = " + boat.Position);
-                Debug.WriteLine("size = " + boat.Size);
-                Vector2 v = new Vector2(boat.Position.X,boat.Position.Y);
-                DFS(map, boat, v, Visited);
+            }
+            else if (flag == 1)
+            {
+                bool cek = true;
+                Queue<KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>> queueBFS = new Queue<KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>>();
+                queueBFS.Enqueue(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(new KeyValuePair<List<Boat>, List<BoatPath>>(listboatf, boatpath), new Sea(this, map)));
+
+                while ((cek) && (queueBFS.Count() > 0))
+                {
+                    KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea> pair = queueBFS.Dequeue();
+                    List<Boat> listboat = pair.Key.Key;
+                    List<BoatPath> listpath = pair.Key.Value;
+                    Sea localmap = pair.Value;
+
+                    if ((int)(listboat.ElementAt(0).Position.X / 80) + (int)(listboat.ElementAt(0).Size.X / 80) == map.outPos.X)
+                    {
+                        bestmove = listpath.Count();
+                        bestpath = listpath;
+                        cek = false;
+                    }
+                    if (cek)
+                    {
+                        for (int i = 0; i < listboat.Count(); ++i)
+                        {
+                            Boat tempboat = listboat.ElementAt(i);
+                            if ((tempboat.Arah == Boat.Orientation.Left) || (tempboat.Arah == Boat.Orientation.Right))
+                            {
+                                int x = (int)(tempboat.Position.X / 80);
+                                int y = (int)(tempboat.Position.Y / 80);
+                                int sizex = (int)(tempboat.Size.X / 80);
+                                if ((x > 0) && (localmap.GetStatus(x - 1, y) == 0))
+                                {
+                                    listboat.ElementAt(i).Position = new Vector2((x - 1) * 80, y * 80);
+                                    bool tempbool = false;
+                                    if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                                    {
+                                        if (!tempbool)
+                                            mapboat.Add(ListBoatToString(listboat), false);
+                                        else
+                                            mapboat[ListBoatToString(listboat)] = false;
+                                        localmap.SetStatus(x - 1, y, 1);
+                                        localmap.SetStatus(x + sizex - 1, y, 0);
+                                        List<BoatPath> templistpath = listpath.ToList();
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x - 1) * 80, y * 80)));
+                                        List<Boat> templistboat = new List<Boat>();
+                                        foreach (Boat boat in listboat)
+                                        {
+                                            templistboat.Add(new Boat(this, boat));
+                                        }
+                                        queueBFS.Enqueue(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
+                                                        new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
+                                    }
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    localmap.SetStatus(x - 1, y, 0);
+                                    localmap.SetStatus(x + sizex - 1, y, 1);
+                                }
+                                if ((x + sizex - 1 < 5) && (localmap.GetStatus(x + sizex, y) == 0))
+                                {
+                                    listboat.ElementAt(i).Position = new Vector2((x + 1) * 80, y * 80);
+                                    bool tempbool = false;
+                                    if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                                    {
+                                        if (!tempbool)
+                                            mapboat.Add(ListBoatToString(listboat), false);
+                                        else
+                                            mapboat[ListBoatToString(listboat)] = false;
+                                        localmap.SetStatus(x + sizex, y, 1);
+                                        localmap.SetStatus(x, y, 0);
+                                        List<BoatPath> templistpath = listpath.ToList();
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x + 1) * 80, y * 80)));
+                                        List<Boat> templistboat = new List<Boat>();
+                                        foreach (Boat boat in listboat)
+                                        {
+                                            templistboat.Add(new Boat(this, boat));
+                                        }
+                                        queueBFS.Enqueue(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
+                                            new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
+                                    }
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    localmap.SetStatus(x + sizex, y, 0);
+                                    localmap.SetStatus(x, y, 1);
+                                }
+                            }
+                            else if ((tempboat.Arah == Boat.Orientation.Top) || (tempboat.Arah == Boat.Orientation.Bottom))
+                            {
+                                int x = (int)(tempboat.Position.X / 80);
+                                int y = (int)(tempboat.Position.Y / 80);
+                                int sizey = (int)(tempboat.Size.Y / 80);
+                                if ((y > 0) && (localmap.GetStatus(x, y - 1) == 0))
+                                {
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, (y - 1) * 80);
+                                    bool tempbool = false;
+                                    if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                                    {
+                                        if (!tempbool)
+                                            mapboat.Add(ListBoatToString(listboat), false);
+                                        else
+                                            mapboat[ListBoatToString(listboat)] = false;
+                                        localmap.SetStatus(x, y - 1, 1);
+                                        localmap.SetStatus(x, y + sizey - 1, 0);
+                                        List<BoatPath> templistpath = listpath.ToList();
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y - 1) * 80)));
+                                        List<Boat> templistboat = new List<Boat>();
+                                        foreach (Boat boat in listboat)
+                                        {
+                                            templistboat.Add(new Boat(this, boat));
+                                        }
+                                        queueBFS.Enqueue(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
+                                            new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
+                                    }
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    localmap.SetStatus(x, y - 1, 0);
+                                    localmap.SetStatus(x, y + sizey - 1, 1);
+                                }
+                                if ((y + sizey - 1 < 5) && (localmap.GetStatus(x, y + sizey) == 0))
+                                {
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, (y + 1) * 80);
+                                    bool tempbool = false;
+                                    if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
+                                    {
+                                        if (!tempbool)
+                                            mapboat.Add(ListBoatToString(listboat), false);
+                                        else
+                                            mapboat[ListBoatToString(listboat)] = false;
+                                        localmap.SetStatus(x, y + sizey, 1);
+                                        localmap.SetStatus(x, y, 0);
+                                        List<BoatPath> templistpath = listpath.ToList();
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y + 1) * 80)));
+                                        List<Boat> templistboat = new List<Boat>();
+                                        foreach (Boat boat in listboat)
+                                        {
+                                            templistboat.Add(new Boat(this, boat));
+                                        }
+                                        queueBFS.Enqueue(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
+                                            new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
+                                    }
+                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    localmap.SetStatus(x, y + sizey, 0);
+                                    localmap.SetStatus(x, y, 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Debug.WriteLine("Hasil: ");
+            foreach(BoatPath path in bestpath)
+            {
+                Debug.WriteLine(path.Boat + ", (" + path.PosisiAwal.X + "," + path.PosisiAwal.Y + "), (" + path.PosisiAkhir.X + "," + path.PosisiAkhir.Y + ")"); 
             }
         }
         
@@ -422,6 +790,13 @@ namespace HarborMania
                     spriteBatch.DrawString(font1, "" + displayTime, new Vector2(600, 320), Color.Tomato);
 
                     spriteBatch.End();
+
+                    map.Draw(spriteBatch);
+
+                    foreach (Boat boat in boats)
+                    {
+                        boat.Draw(spriteBatch);
+                    }
                     break;
                 }
                 default: break;
@@ -637,18 +1012,10 @@ namespace HarborMania
                                             map.Initialize();
                                             map.LoadContent(out boats);
 
-                                            for (int k = 0; k < 6; ++k)
-                                            {
-                                                String s = "";
-                                                for (int l = 0; l < 6; ++l)
-                                                {
-                                                    s += map.GetStatus(l, k)+ " ";
-                                                }
-                                                Debug.WriteLine(s);
-                                            }
-
                                             lockboat = -1;
-
+                                            timeSpan = TimeSpan.FromMilliseconds(1000);
+                                            getPath(1);
+                                            
                                             if (play == GameType.Human)
                                                 _GameState = GameState.HumanPlay;
                                             else if (play == GameType.Computer)
@@ -754,12 +1121,10 @@ namespace HarborMania
                                                 else if (t.Position.X + offx < boats.ElementAt(lockboat).Position.X)
                                                 {
                                                     minscroll = (int)((t.Position.X + offx + 40) / 80);
-                                                    Debug.WriteLine(minscroll+ " " + maxscroll);
                                                 }
                                                 else if (t.Position.X + offx > boats.ElementAt(lockboat).Position.X)
                                                 {
                                                     maxscroll = (int)((t.Position.X + offx + 40) / 80);
-                                                    Debug.WriteLine(minscroll + " " + maxscroll);
                                                 }
                                             }
                                         }
@@ -797,17 +1162,6 @@ namespace HarborMania
                     case GameState.ComputerPlay:
                     {
                         // Bagian Computer
-                        if (startCoutingTime == false)
-                        {
-                            startCoutingTime = true;
-                            timeSpan = TimeSpan.FromMilliseconds(1000);
-                        }
-                        if (dfsPathFound == false) 
-                        {
-                            getDFSPath();
-                            dfsPathFound = true;
-                        }
-
                         break;
                     }
                     default: break;

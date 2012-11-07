@@ -42,6 +42,13 @@ namespace HarborMania
             set { position = value; }
         }
 
+        public Boat(Game game, Boat boat): base(game)
+        {
+            position = boat.position;
+            size = boat.size;
+            arah = boat.arah;
+        }
+
         public Boat(Game game) : base(game)
         {
             position = new Vector2();
@@ -78,43 +85,23 @@ namespace HarborMania
             base.Initialize();
         }
 
-        public void LoadContent()
+        /*public void LoadContent()
         {
             if ((size.X == 1) && (size.Y == 1))
             {
                 texture = Game.Content.Load<Texture2D>("");
             }
             base.LoadContent();
-        }
+        }*/
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
         }
 
-        /*
-        public void Move(int jarak)
+        public override string ToString()
         {
-            if (arah == 0) //atas 
-            {
-                posY -= jarak;
-            }
-            else
-                if (arah == 1) //kanan
-                {
-                    posX = +jarak;
-                }
-                else
-                    if (arah == 2) //bawah
-                    {
-                        posY = +jarak;
-                    }
-                    else
-                        if (arah == 3) //kiri
-                        {
-                            posX -= jarak;
-                        }
-        } */
-
+            return "((" + position.X + "," + position.Y + "),(" + size.X + "," + size.Y + "))";
+        }
     }
 }

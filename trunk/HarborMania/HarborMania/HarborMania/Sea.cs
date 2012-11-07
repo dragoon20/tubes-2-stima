@@ -29,6 +29,16 @@ namespace HarborMania
             base.Initialize();
         }
 
+        public Vector2 outPos
+        {
+            get { return new Vector2(5, outPosY); }
+        }
+
+        public Node getNode(int i, int j)
+        {
+            return Tile[i][j];
+        }
+
         public Sea(Game game) : base(game)
         {
             WidthPerTile = 80;
@@ -41,7 +51,26 @@ namespace HarborMania
                 Tile[i] = new Node[totalNodeX];
                 for (int j = 0; j < totalNodeX; j++)
                 {
-                    Tile[i][j] = new Node(game);
+                    Tile[i][j] = new Node();
+                }
+            }
+        }
+
+        public Sea(Game game, Sea map)
+            : base(game)
+        {
+            path = map.path;
+            WidthPerTile = map.WidthPerTile;
+            HeightPerTile = map.HeightPerTile;
+            totalNodeX = map.totalNodeX;
+            totalNodeY = map.totalNodeY;
+            Tile = new Node[totalNodeY][];
+            for (int i = 0; i < totalNodeY; i++)
+            {
+                Tile[i] = new Node[totalNodeX];
+                for (int j = 0; j < totalNodeX; j++)
+                {
+                    Tile[i][j] = new Node(map.getNode(i,j));
                 }
             }
         }
@@ -59,7 +88,7 @@ namespace HarborMania
                 Tile[i] = new Node[totalNodeX];
                 for (int j = 0; j < totalNodeX; j++)
                 {
-                    Tile[i][j] = new Node(game);
+                    Tile[i][j] = new Node();
                 }
             }
         }
@@ -115,8 +144,6 @@ namespace HarborMania
 
                 int x = Convert.ToInt32(splitline[0]), y = Convert.ToInt32(splitline[1]);
                 int w = Convert.ToInt32(splitline[2]), h = Convert.ToInt32(splitline[3]);
-
-                Debug.WriteLine(y + " " + x + " " + w + " " + h);
 
                 if (w == 1)
                 {
