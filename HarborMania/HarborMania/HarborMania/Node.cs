@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace HarborMania
 {
     /// <summary>
-        /// Class Node is used for saving node status, tiles, position and size.
+        /// Class Node is used for saving node status and tiles.
         /// <list type="Properties">
             /// <item>
                 /// <description>Status is an int for describing the tile texture.</description>
@@ -24,22 +24,35 @@ namespace HarborMania
         int status; //gambar
         int statussebenarnya; //0 kosong, 1 isi
 
+        /// <summary>
+            /// Getter and Setter for element status.
+        /// </summary>
         public int Status
         {
             get { return status; }
             set { status = value; }
         }
 
+        /// <summary>
+            /// Getter and Setter for element statussebenarnya.
+        /// </summary>
         public int StatusSebenarnya
         {
             get { return statussebenarnya; }
             set { statussebenarnya = value; }
         }
 
+        /// <summary>
+            /// Constructor for Node Class.
+        /// </summary>
         public Node()
         {
         }
 
+        /// <summary>
+            /// Constructor for Node Class.
+        /// </summary>
+        /// <param name="n">Node to be copied.</param>
         public Node(Node n)
         {
             status = n.status;

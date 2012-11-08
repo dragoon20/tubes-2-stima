@@ -104,7 +104,10 @@ namespace HarborMania
         int speed;
         int flagpath;
         int level;
-        
+        int widthPerTile;
+        int heightPerTile;
+        int sizeX;
+        int sizeY;
 
         /// <summary>
             /// This is constructor for Game1 class.
@@ -135,7 +138,11 @@ namespace HarborMania
             menuComputer = new Rectangle(30, 173, 300, 61);
 
             // Setting
-            flagpath = 0;
+            flagpath = 1;
+            widthPerTile = 80;
+            heightPerTile = 80;
+            sizeX = 6;
+            sizeY = 6;
         }
 
         /// <summary>
@@ -249,7 +256,7 @@ namespace HarborMania
                     List<BoatPath> listpath = pair.Key.Value;
                     Sea localmap = pair.Value;
 
-                    if ((int)(listboat.ElementAt(0).Position.X / 80) + (int)(listboat.ElementAt(0).Size.X / 80) == map.outPos.X)
+                    if ((int)(listboat.ElementAt(0).Position.X / widthPerTile) + (int)(listboat.ElementAt(0).Size.X / widthPerTile) == map.outPos.X)
                     {
                         bestmove = listpath.Count();
                         bestpath = listpath;
@@ -262,12 +269,12 @@ namespace HarborMania
                             Boat tempboat = listboat.ElementAt(i);
                             if ((tempboat.Arah == Boat.Orientation.Left) || (tempboat.Arah == Boat.Orientation.Right))
                             {
-                                int x = (int)(tempboat.Position.X / 80);
-                                int y = (int)(tempboat.Position.Y / 80);
-                                int sizex = (int)(tempboat.Size.X / 80);
+                                int x = (int)(tempboat.Position.X / widthPerTile);
+                                int y = (int)(tempboat.Position.Y / heightPerTile);
+                                int sizex = (int)(tempboat.Size.X / widthPerTile);
                                 if ((x > 0) && (localmap.GetStatus(x - 1, y) == 0))
                                 {
-                                    listboat.ElementAt(i).Position = new Vector2((x - 1) * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2((x - 1) * widthPerTile, y * heightPerTile);
                                     bool tempbool = false;
                                     if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
                                     {
@@ -278,7 +285,7 @@ namespace HarborMania
                                         localmap.SetStatus(x - 1, y, 1);
                                         localmap.SetStatus(x + sizex - 1, y, 0);
                                         List<BoatPath> templistpath = listpath.ToList();
-                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x - 1) * 80, y * 80)));
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * widthPerTile, y * heightPerTile), new Vector2((x - 1) * widthPerTile, y * heightPerTile)));
                                         List<Boat> templistboat = new List<Boat>();
                                         foreach (Boat boat in listboat)
                                         {
@@ -287,13 +294,13 @@ namespace HarborMania
                                         stackDFS.Push(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
                                                         new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this,localmap)));
                                     }
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, y * heightPerTile);
                                     localmap.SetStatus(x - 1, y, 0);
                                     localmap.SetStatus(x + sizex - 1, y, 1);
                                 }
-                                if ((x + sizex - 1 < 5) && (localmap.GetStatus(x + sizex, y) == 0))
+                                if ((x + sizex < sizeX) && (localmap.GetStatus(x + sizex, y) == 0))
                                 {
-                                    listboat.ElementAt(i).Position = new Vector2((x + 1) * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2((x + 1) * widthPerTile, y * heightPerTile);
                                     bool tempbool = false;
                                     if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
                                     {
@@ -304,7 +311,7 @@ namespace HarborMania
                                         localmap.SetStatus(x + sizex, y, 1);
                                         localmap.SetStatus(x, y, 0);
                                         List<BoatPath> templistpath = listpath.ToList();
-                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x + 1) * 80, y * 80)));
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * widthPerTile, y * heightPerTile), new Vector2((x + 1) * widthPerTile, y * heightPerTile)));
                                         List<Boat> templistboat = new List<Boat>();
                                         foreach (Boat boat in listboat)
                                         {
@@ -313,19 +320,19 @@ namespace HarborMania
                                         stackDFS.Push(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
                                             new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
                                     }
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, y * heightPerTile);
                                     localmap.SetStatus(x + sizex, y, 0);
                                     localmap.SetStatus(x, y, 1);
                                 }
                             }
                             else if ((tempboat.Arah == Boat.Orientation.Top) || (tempboat.Arah == Boat.Orientation.Bottom))
                             {
-                                int x = (int)(tempboat.Position.X / 80);
-                                int y = (int)(tempboat.Position.Y / 80);
-                                int sizey = (int)(tempboat.Size.Y / 80);
+                                int x = (int)(tempboat.Position.X / widthPerTile);
+                                int y = (int)(tempboat.Position.Y / heightPerTile);
+                                int sizey = (int)(tempboat.Size.Y / heightPerTile);
                                 if ((y > 0) && (localmap.GetStatus(x, y - 1) == 0))
                                 {
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, (y - 1) * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, (y - 1) * heightPerTile);
                                     bool tempbool = false;
                                     if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
                                     {
@@ -336,7 +343,7 @@ namespace HarborMania
                                         localmap.SetStatus(x, y - 1, 1);
                                         localmap.SetStatus(x, y + sizey - 1, 0);
                                         List<BoatPath> templistpath = listpath.ToList();
-                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y - 1) * 80)));
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * widthPerTile, y * heightPerTile), new Vector2(x * widthPerTile, (y - 1) * heightPerTile)));
                                         List<Boat> templistboat = new List<Boat>();
                                         foreach (Boat boat in listboat)
                                         {
@@ -345,13 +352,13 @@ namespace HarborMania
                                         stackDFS.Push(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
                                             new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
                                     }
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, y * heightPerTile);
                                     localmap.SetStatus(x, y - 1, 0);
                                     localmap.SetStatus(x, y + sizey - 1, 1);
                                 }
-                                if ((y + sizey - 1 < 5) && (localmap.GetStatus(x, y + sizey) == 0))
+                                if ((y + sizey < sizeY) && (localmap.GetStatus(x, y + sizey) == 0))
                                 {
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, (y + 1) * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, (y + 1) * heightPerTile);
                                     bool tempbool = false;
                                     if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
                                     {
@@ -362,7 +369,7 @@ namespace HarborMania
                                         localmap.SetStatus(x, y + sizey, 1);
                                         localmap.SetStatus(x, y, 0);
                                         List<BoatPath> templistpath = listpath.ToList();
-                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y + 1) * 80)));
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * widthPerTile, y * heightPerTile), new Vector2(x * widthPerTile, (y + 1) * heightPerTile)));
                                         List<Boat> templistboat = new List<Boat>();
                                         foreach (Boat boat in listboat)
                                         {
@@ -371,7 +378,7 @@ namespace HarborMania
                                         stackDFS.Push(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
                                             new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
                                     }
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, y * heightPerTile);
                                     localmap.SetStatus(x, y + sizey, 0);
                                     localmap.SetStatus(x, y, 1);
                                 }
@@ -393,7 +400,7 @@ namespace HarborMania
                     List<BoatPath> listpath = pair.Key.Value;
                     Sea localmap = pair.Value;
 
-                    if ((int)(listboat.ElementAt(0).Position.X / 80) + (int)(listboat.ElementAt(0).Size.X / 80) == map.outPos.X)
+                    if ((int)(listboat.ElementAt(0).Position.X / widthPerTile) + (int)(listboat.ElementAt(0).Size.X / widthPerTile) == map.outPos.X)
                     {
                         bestmove = listpath.Count();
                         bestpath = listpath;
@@ -406,12 +413,12 @@ namespace HarborMania
                             Boat tempboat = listboat.ElementAt(i);
                             if ((tempboat.Arah == Boat.Orientation.Left) || (tempboat.Arah == Boat.Orientation.Right))
                             {
-                                int x = (int)(tempboat.Position.X / 80);
-                                int y = (int)(tempboat.Position.Y / 80);
-                                int sizex = (int)(tempboat.Size.X / 80);
+                                int x = (int)(tempboat.Position.X / widthPerTile);
+                                int y = (int)(tempboat.Position.Y / heightPerTile);
+                                int sizex = (int)(tempboat.Size.X / widthPerTile);
                                 if ((x > 0) && (localmap.GetStatus(x - 1, y) == 0))
                                 {
-                                    listboat.ElementAt(i).Position = new Vector2((x - 1) * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2((x - 1) * widthPerTile, y * heightPerTile);
                                     bool tempbool = false;
                                     if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
                                     {
@@ -422,7 +429,7 @@ namespace HarborMania
                                         localmap.SetStatus(x - 1, y, 1);
                                         localmap.SetStatus(x + sizex - 1, y, 0);
                                         List<BoatPath> templistpath = listpath.ToList();
-                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x - 1) * 80, y * 80)));
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * widthPerTile, y * heightPerTile), new Vector2((x - 1) * widthPerTile, y * heightPerTile)));
                                         List<Boat> templistboat = new List<Boat>();
                                         foreach (Boat boat in listboat)
                                         {
@@ -431,13 +438,13 @@ namespace HarborMania
                                         queueBFS.Enqueue(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
                                                         new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
                                     }
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, y * heightPerTile);
                                     localmap.SetStatus(x - 1, y, 0);
                                     localmap.SetStatus(x + sizex - 1, y, 1);
                                 }
-                                if ((x + sizex - 1 < 5) && (localmap.GetStatus(x + sizex, y) == 0))
+                                if ((x + sizex < sizeX) && (localmap.GetStatus(x + sizex, y) == 0))
                                 {
-                                    listboat.ElementAt(i).Position = new Vector2((x + 1) * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2((x + 1) * widthPerTile, y * heightPerTile);
                                     bool tempbool = false;
                                     if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
                                     {
@@ -448,7 +455,7 @@ namespace HarborMania
                                         localmap.SetStatus(x + sizex, y, 1);
                                         localmap.SetStatus(x, y, 0);
                                         List<BoatPath> templistpath = listpath.ToList();
-                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2((x + 1) * 80, y * 80)));
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * widthPerTile, y * heightPerTile), new Vector2((x + 1) * widthPerTile, y * heightPerTile)));
                                         List<Boat> templistboat = new List<Boat>();
                                         foreach (Boat boat in listboat)
                                         {
@@ -457,19 +464,19 @@ namespace HarborMania
                                         queueBFS.Enqueue(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
                                             new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
                                     }
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, y * heightPerTile);
                                     localmap.SetStatus(x + sizex, y, 0);
                                     localmap.SetStatus(x, y, 1);
                                 }
                             }
                             else if ((tempboat.Arah == Boat.Orientation.Top) || (tempboat.Arah == Boat.Orientation.Bottom))
                             {
-                                int x = (int)(tempboat.Position.X / 80);
-                                int y = (int)(tempboat.Position.Y / 80);
-                                int sizey = (int)(tempboat.Size.Y / 80);
+                                int x = (int)(tempboat.Position.X / widthPerTile);
+                                int y = (int)(tempboat.Position.Y / heightPerTile);
+                                int sizey = (int)(tempboat.Size.Y / heightPerTile);
                                 if ((y > 0) && (localmap.GetStatus(x, y - 1) == 0))
                                 {
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, (y - 1) * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, (y - 1) * heightPerTile);
                                     bool tempbool = false;
                                     if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
                                     {
@@ -480,7 +487,7 @@ namespace HarborMania
                                         localmap.SetStatus(x, y - 1, 1);
                                         localmap.SetStatus(x, y + sizey - 1, 0);
                                         List<BoatPath> templistpath = listpath.ToList();
-                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y - 1) * 80)));
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * widthPerTile, y * heightPerTile), new Vector2(x * widthPerTile, (y - 1) * heightPerTile)));
                                         List<Boat> templistboat = new List<Boat>();
                                         foreach (Boat boat in listboat)
                                         {
@@ -489,13 +496,13 @@ namespace HarborMania
                                         queueBFS.Enqueue(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
                                             new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
                                     }
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, y * heightPerTile);
                                     localmap.SetStatus(x, y - 1, 0);
                                     localmap.SetStatus(x, y + sizey - 1, 1);
                                 }
-                                if ((y + sizey - 1 < 5) && (localmap.GetStatus(x, y + sizey) == 0))
+                                if ((y + sizey < sizeY) && (localmap.GetStatus(x, y + sizey) == 0))
                                 {
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, (y + 1) * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, (y + 1) * heightPerTile);
                                     bool tempbool = false;
                                     if ((!(mapboat.TryGetValue(ListBoatToString(listboat), out tempbool))) || (tempbool))
                                     {
@@ -506,7 +513,7 @@ namespace HarborMania
                                         localmap.SetStatus(x, y + sizey, 1);
                                         localmap.SetStatus(x, y, 0);
                                         List<BoatPath> templistpath = listpath.ToList();
-                                        templistpath.Add(new BoatPath(i, new Vector2(x * 80, y * 80), new Vector2(x * 80, (y + 1) * 80)));
+                                        templistpath.Add(new BoatPath(i, new Vector2(x * widthPerTile, y * heightPerTile), new Vector2(x * widthPerTile, (y + 1) * heightPerTile)));
                                         List<Boat> templistboat = new List<Boat>();
                                         foreach (Boat boat in listboat)
                                         {
@@ -515,7 +522,7 @@ namespace HarborMania
                                         queueBFS.Enqueue(new KeyValuePair<KeyValuePair<List<Boat>, List<BoatPath>>, Sea>(
                                             new KeyValuePair<List<Boat>, List<BoatPath>>(templistboat, templistpath), new Sea(this, localmap)));
                                     }
-                                    listboat.ElementAt(i).Position = new Vector2(x * 80, y * 80);
+                                    listboat.ElementAt(i).Position = new Vector2(x * widthPerTile, y * heightPerTile);
                                     localmap.SetStatus(x, y + sizey, 0);
                                     localmap.SetStatus(x, y, 1);
                                 }
@@ -572,7 +579,7 @@ namespace HarborMania
 
                     spriteBatch.DrawString(font1, "HARBOR MANIA", new Vector2(600, 10), Color.BurlyWood);
                     spriteBatch.Draw(nextButton, new Vector2(720, 400), Color.White);
-                    spriteBatch.Draw(prevButton, new Vector2(640, 400), Color.White);
+                    spriteBatch.Draw(prevButton, new Vector2(560, 400), Color.White);
                     spriteBatch.Draw(boat13, new Vector2(0, 0), Color.White);
 
                     spriteBatch.DrawString(font1, "Boat moved", new Vector2(600, 180), Color.BurlyWood);
@@ -922,7 +929,7 @@ namespace HarborMania
                                         _GameState = GameState.MainMenu; 
                                 }
                                 else
-                                if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 640) && (t.Position.X <= 720) && (t.Position.Y >= 400) && (t.Position.Y <= 480))
+                                if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 560) && (t.Position.X <= 640) && (t.Position.Y >= 400) && (t.Position.Y <= 480))
                                 {
                                     if (helpCount > 0)
                                         helpCount--;
@@ -1017,7 +1024,7 @@ namespace HarborMania
                                             {
                                                 // Jika menyentuh menu tertentu
                                                 level = j * 6 + i + 1; //ditambah 1 karena level mulai dari 1, bukan dari 0
-                                                map = new Sea(this, 80, 80, 6, 6, mapLevel[level]);
+                                                map = new Sea(this, widthPerTile, heightPerTile, 6, 6, mapLevel[level]);
                                                 map.Initialize();
                                                 map.LoadContent(out boats);
 
@@ -1064,7 +1071,6 @@ namespace HarborMania
                         }
                         if (timeSpan.TotalSeconds == 0) {
                             _GameState = GameState.GameOver;
-                            //Debug.WriteLine("game over!");  
                         }
 
                         if (finishFlag == 1)
@@ -1091,46 +1097,43 @@ namespace HarborMania
                                 {
                                     if (t.State == TouchLocationState.Released)
                                     {
-                                        if (lockboat != -1)
+                                        boats.ElementAt(lockboat).Position = new Vector2((int)((boats.ElementAt(lockboat).Position.X + (widthPerTile / 2)) / widthPerTile) * widthPerTile, (int)((boats.ElementAt(lockboat).Position.Y + (heightPerTile / 2)) / heightPerTile) * heightPerTile);
+                                        
+                                        if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
                                         {
-                                            boats.ElementAt(lockboat).Position = new Vector2((int)((boats.ElementAt(lockboat).Position.X + 40) / 80) * 80, (int)((boats.ElementAt(lockboat).Position.Y + 40) / 80) * 80);
-
-                                            if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
+                                            for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / widthPerTile); ++k)
                                             {
-                                                for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / 80); ++k)
-                                                {
-                                                    map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80) + k, (int)(boats.ElementAt(lockboat).Position.Y / 80), 1);
-                                                }
+                                                map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / widthPerTile) + k, (int)(boats.ElementAt(lockboat).Position.Y / heightPerTile), 1);
+                                            }
 
-                                                posAkhirX = (int)(boats.ElementAt(lockboat).Position.X / 80);
-                                                int temp = Math.Abs(posAkhirX - posAwalX);
-                                                moveCount += temp;
-                                            }
-                                            else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
-                                            {
-                                                for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / 80); ++k)
-                                                {
-                                                    map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80) + k, 1);
-                                                }
-
-                                                posAkhirY = (int)(boats.ElementAt(lockboat).Position.Y / 80);
-                                                int temp = Math.Abs(posAkhirY - posAwalY);
-                                                moveCount += temp;
-                                            }
-                                            if (lockboat == 0)
-                                            {
-                                                posAkhirX += (int)(boats.ElementAt(lockboat).Size.Y / 80);
-                                                if (posAkhirX == 5)
-                                                {
-                                                    //Debug.WriteLine("finish");
-                                                    TimeSpan waktuAwal = TimeSpan.FromMilliseconds(180000);
-                                                    waktuAwal = waktuAwal - timeSpan;
-                                                    finishTime = String.Format("{0}:{1:D2}", waktuAwal.Minutes, waktuAwal.Seconds);
-                                                    finishFlag = 1;
-                                                }
-                                            }
-                                            lockboat = -1;
+                                            posAkhirX = (int)(boats.ElementAt(lockboat).Position.X / widthPerTile);
+                                            int temp = Math.Abs(posAkhirX - posAwalX);
+                                            moveCount += temp;
                                         }
+                                        else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
+                                        {
+                                            for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / heightPerTile); ++k)
+                                            {
+                                                map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / widthPerTile), (int)(boats.ElementAt(lockboat).Position.Y / heightPerTile) + k, 1);
+                                            }
+
+                                            posAkhirY = (int)(boats.ElementAt(lockboat).Position.Y / heightPerTile);
+                                            int temp = Math.Abs(posAkhirY - posAwalY);
+                                            moveCount += temp;
+                                        }
+                                        if (lockboat == 0)
+                                        {
+                                            posAkhirX += (int)(boats.ElementAt(lockboat).Size.X / widthPerTile);
+                                            if (posAkhirX == sizeX)
+                                            {
+                                                //Debug.WriteLine("finish");
+                                                TimeSpan waktuAwal = TimeSpan.FromMilliseconds(180000);
+                                                waktuAwal = waktuAwal - timeSpan;
+                                                finishTime = String.Format("{0}:{1:D2}", waktuAwal.Minutes, waktuAwal.Seconds);
+                                                finishFlag = 1;
+                                            }
+                                        }
+                                        lockboat = -1;
                                     }
                                     else if (t.State == TouchLocationState.Moved)
                                     {
@@ -1143,27 +1146,27 @@ namespace HarborMania
                                                 if ((cek) && ((t.Position.X >= boat.Position.X) && (t.Position.X <= boat.Position.X + boat.Size.X)) &&
                                                     ((t.Position.Y >= boat.Position.Y) && (t.Position.Y <= boat.Position.Y + boat.Size.Y)))
                                                 {
-                                                    posAwalX = (int)(boat.Position.X) / 80;
-                                                    posAwalY = (int)(boat.Position.Y) / 80;
-
+                                                    posAwalX = (int)(boat.Position.X) / widthPerTile;
+                                                    posAwalY = (int)(boat.Position.Y) / widthPerTile;
                                                     cek = false;
                                                     lockboat = count;
                                                     offx = (int)(boat.Position.X - t.Position.X);
                                                     offy = (int)(boat.Position.Y - t.Position.Y);
                                                     minscroll = -1;
                                                     maxscroll = 6;
+
                                                     if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
                                                     {
-                                                        for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / 80); ++k)
+                                                        for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / widthPerTile); ++k)
                                                         {
-                                                            map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80) + k, (int)(boats.ElementAt(lockboat).Position.Y / 80), 0);
+                                                            map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / widthPerTile) + k, (int)(boats.ElementAt(lockboat).Position.Y / heightPerTile), 0);
                                                         }
                                                     }
                                                     else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
                                                     {
-                                                        for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / 80); ++k)
+                                                        for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / heightPerTile); ++k)
                                                         {
-                                                            map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80) + k, 0);
+                                                            map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / widthPerTile), (int)(boats.ElementAt(lockboat).Position.Y / heightPerTile) + k, 0);
                                                         }
                                                     }
                                                 }
@@ -1172,37 +1175,33 @@ namespace HarborMania
                                         }
                                         else
                                         {
-                                            int max = 480;
+                                            int max = sizeX * widthPerTile;
                                             if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
                                             {
                                                 if ((t.Position.X + offx >= 0) && (t.Position.X + offx <= (max - boats.ElementAt(lockboat).Size.X)))
                                                 {
-                                                    if (((int)((t.Position.X + offx + 40) / 80) > minscroll) && ((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - 40) / 80) < maxscroll) &&
-                                                        (map.GetStatus((int)((t.Position.X + offx + 40) / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80)) == 0) &&
-                                                        (map.GetStatus((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - 40) / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80)) == 0))
+                                                    if (((int)((t.Position.X + offx + (widthPerTile / 2)) / widthPerTile) > minscroll) && ((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - (widthPerTile / 2)) / widthPerTile) < maxscroll) &&
+                                                        (map.GetStatus((int)((t.Position.X + offx + (widthPerTile / 2)) / widthPerTile), (int)(boats.ElementAt(lockboat).Position.Y / heightPerTile)) == 0) &&
+                                                        (map.GetStatus((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - (widthPerTile / 2)) / widthPerTile), (int)(boats.ElementAt(lockboat).Position.Y / heightPerTile)) == 0))
                                                         boats.ElementAt(lockboat).Position = new Vector2(t.Position.X + offx, boats.ElementAt(lockboat).Position.Y);
                                                     else if (t.Position.X + offx < boats.ElementAt(lockboat).Position.X)
-                                                    {
-                                                        minscroll = (int)((t.Position.X + offx + 40) / 80);
-                                                    }
+                                                        minscroll = (int)((t.Position.X + offx + (widthPerTile / 2)) / widthPerTile);
                                                     else if (t.Position.X + offx > boats.ElementAt(lockboat).Position.X)
-                                                    {
-                                                        maxscroll = (int)((t.Position.X + offx + 40) / 80);
-                                                    }
+                                                        maxscroll = (int)((t.Position.X + offx + (widthPerTile / 2)) / widthPerTile);
                                                 }
                                             }
                                             else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
                                             {
                                                 if ((t.Position.Y + offy >= 0) && (t.Position.Y + offy <= (max - boats.ElementAt(lockboat).Size.Y)))
                                                 {
-                                                    if (((int)((t.Position.Y + offy + 40) / 80) > minscroll) && ((int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80) < maxscroll) &&
-                                                        (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(t.Position.Y + offy + 40) / 80) == 0) &&
-                                                        (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80) == 0))
+                                                    if (((int)((t.Position.Y + offy + (heightPerTile / 2)) / heightPerTile) > minscroll) && ((int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - (heightPerTile / 2)) / heightPerTile) < maxscroll) &&
+                                                        (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / widthPerTile), (int)(t.Position.Y + offy + (heightPerTile / 2)) / heightPerTile) == 0) &&
+                                                        (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / widthPerTile), (int)(t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - (heightPerTile / 2)) / heightPerTile) == 0))
                                                         boats.ElementAt(lockboat).Position = new Vector2(boats.ElementAt(lockboat).Position.X, t.Position.Y + offy);
                                                     else if (t.Position.Y + offy < boats.ElementAt(lockboat).Position.Y)
-                                                        minscroll = (int)((t.Position.Y + offy + 40) / 80);
+                                                        minscroll = (int)((t.Position.Y + offy + (heightPerTile / 2)) / heightPerTile);
                                                     else if (t.Position.Y + offy > boats.ElementAt(lockboat).Position.Y)
-                                                        maxscroll = (int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80);
+                                                        maxscroll = (int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - (heightPerTile / 2)) / heightPerTile);
                                                 }
                                             }
                                         }
