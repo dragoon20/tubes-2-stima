@@ -88,6 +88,7 @@ namespace HarborMania
         Boolean startCoutingTime = false;
         int posAwalX, posAkhirX, posAwalY, posAkhirY;
         int finishFlag = 0;
+        int finishPopUp = 0;
 
         // DFS dan BFS structure
         Dictionary<String, bool> mapboat;
@@ -689,6 +690,7 @@ namespace HarborMania
                     spriteBatch.End();
                     moveCount = 0;
                     finishFlag = 0;
+                    finishPopUp = 0;
                     break;
                 }
                 case GameState.HumanPlay:
@@ -712,6 +714,25 @@ namespace HarborMania
                     foreach(Boat boat in boats)
                     {
                         boat.Draw(spriteBatch);
+                    }
+
+                    if (finishPopUp == 1)
+                    {
+                        Texture2D rect = new Texture2D(graphics.GraphicsDevice, 420, 240);
+                        Color[] data = new Color[420 * 240];
+                        for (int i = 0; i < data.Length; ++i) data[i] = Color.AntiqueWhite;
+                        rect.SetData(data);
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(rect, new Vector2(50, 120), Color.AntiqueWhite);
+                        spriteBatch.DrawString(font1, "Congrats! You've finished level " + level, new Vector2(60, 140), Color.Tomato);
+                        spriteBatch.DrawString(font1, "Move       : " + moveCount, new Vector2(60, 170), Color.Tomato);
+                        spriteBatch.DrawString(font1, "Time spent : " + finishTime, new Vector2(60, 200), Color.Tomato);
+                        //hitung score disini
+                        spriteBatch.Draw(nextButton, new Vector2(60, 270), Color.White);
+                        //draw pilih level
+                        //draw back
+                        //draw next level
+                        spriteBatch.End();
                     }
 
                     break;
@@ -774,7 +795,7 @@ namespace HarborMania
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if ((startCoutingTime == true) && (timeSpan.TotalSeconds > 0))
+            if ((startCoutingTime == true) && (timeSpan.TotalSeconds > 0) && (finishFlag != 1))
                 timeSpan -= gameTime.ElapsedGameTime; //update timer
             
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
@@ -1055,7 +1076,11 @@ namespace HarborMania
                                 x++;
                                 boats.ElementAt(0).Position = new Vector2(x, y);
                             }
-                            else _GameState = GameState.Finish;
+                            else
+                            {
+                                //_GameState = GameState.Finish;
+                                finishPopUp = 1;
+                            }
                         }
                         else
                         {
