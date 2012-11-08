@@ -10,6 +10,32 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HarborMania
 {
+    /// <summary>
+        /// Class Sea is used for saving node nodes, width per tile, and finish position.
+        /// <list type="Properties">
+            /// <item>
+                /// <description>Tile is a matrix to contain all the nodes status.</description>
+            /// </item>
+            /// <item>
+                /// <description>WidthPerTile is used to limit the width per tile.</description>
+            /// </item>
+            /// <item>
+                /// <description>HeightPerTile is used to limit the heigth per tile.</description>
+            /// </item>
+            /// <item>
+                /// <description>totalNodeX is used to describe total X axis Node.</description>
+            /// </item>
+            /// <item>
+                /// <description>totalNodeY is used to describe total Y axis Node.</description>
+            /// </item>
+            ///  <item>
+                /// <description>mapstatus is used to map tile status to texture2D.</description>
+            /// </item>
+            /// <item>
+                /// <description>path is the file location of the map.</description>
+            /// </item>
+        /// </list>
+    /// </summary>
     class Sea : Microsoft.Xna.Framework.DrawableGameComponent
     {
         Node[][] Tile;
@@ -24,21 +50,37 @@ namespace HarborMania
         Dictionary<int, Texture2D> mapstatus;
         String path;
 
+        /// <summary>
+            /// A method overriden to initialize.
+        /// </summary>
         public override void Initialize()
         {
             base.Initialize();
         }
 
+        /// <summary>
+            /// Getter and Setter for element outPos.
+        /// </summary>
         public Vector2 outPos
         {
-            get { return new Vector2(6, outPosY); }
+            get { return new Vector2(totalNodeX, outPosY); }
         }
 
+        /// <summary>
+            /// Getter Node at x = i, y = j.
+        /// </summary>
+        /// <param name="i">The absis.</param>
+        /// <param name="j">The ordinat.</param>
+        /// <returns>Node at x = i, y = j.</returns>
         public Node getNode(int i, int j)
         {
             return Tile[i][j];
         }
 
+        /// <summary>
+            /// Constructor for Class Sea.
+        /// </summary>
+        /// <param name="game">The Game class for DrawableGameComponent.</param>
         public Sea(Game game) : base(game)
         {
             WidthPerTile = 80;
@@ -56,6 +98,11 @@ namespace HarborMania
             }
         }
 
+        /// <summary>
+            /// Constructor for Class Sea.
+        /// </summary>
+        /// <param name="game">The Game class for DrawableGameComponent.</param>
+        /// <param name="map">The Sea to be copied.</param>
         public Sea(Game game, Sea map)
             : base(game)
         {
@@ -75,6 +122,15 @@ namespace HarborMania
             }
         }
 
+        /// <summary>
+            /// Constructor for Class Sea.
+        /// </summary>
+        /// <param name="game">The Game class for DrawableGameComponent.</param>
+        /// <param name="W">The width per tile for the map.</param>
+        /// <param name="H">The heigth per tile for the map.</param>
+        /// <param name="totalNodeX_">Total absis x for the map.</param>
+        /// <param name="totalNodeY_">Total ordinat y for the map.</param>
+        /// <param name="Path">The path to load the level.</param>
         public Sea(Game game, int W, int H, int totalNodeX_, int totalNodeY_, String Path) : base(game)
         {
             path = Path;
@@ -93,21 +149,32 @@ namespace HarborMania
             }
         }
 
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-        }
-
+        /// <summary>
+            /// Getter for Status of Node at x = j and y = i.
+        /// </summary>
+        /// <param name="i">The absis of the node.</param>
+        /// <param name="j">The ordinat of the node.</param>
+        /// <returns></returns>
         public int GetStatus(int i, int j)
         {
             return Tile[j][i].StatusSebenarnya;
         }
 
+        /// <summary>
+            /// Setter for Status of Node at x = j and y = i to status.
+        /// </summary>
+        /// <param name="i">The absis of the node.</param>
+        /// <param name="j">The ordinat of the node.</param>
+        /// <param name="status">The status to be set.</param>
         public void SetStatus(int i, int j, int status)
         {
             Tile[j][i].StatusSebenarnya = status;
         }
 
+        /// <summary>
+            /// Load Content of the map with the boat.
+        /// </summary>
+        /// <param name="boats">List of boats to be returned.</param>
         public void LoadContent(out List<Boat> boats)
         {
             List<Boat> localboats = new List<Boat>();
@@ -156,7 +223,7 @@ namespace HarborMania
                         Tile[y][x + j].StatusSebenarnya = 1;
                 }
                 localboats.Add(new Boat(Game, new Vector2(x, y), 
-                                new Vector2(w, h), 
+                                new Vector2(w, h), WidthPerTile, HeightPerTile,
                                 Game.Content.Load<Texture2D>(splitline[5])));
                 switch (splitline[4])
                 {
@@ -197,11 +264,19 @@ namespace HarborMania
             boats = localboats;
         }
 
+        /// <summary>
+            /// A method overriden to update the DrawableGameComponent.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Method for drawing the sea to the screen.
+        /// </summary>
+        /// <param name="spriteBatch">A SpriteBatch to be used for Drawing.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
@@ -209,16 +284,16 @@ namespace HarborMania
             {
                 for (int j = 0; j < totalNodeX; ++j)
                 {
-                    spriteBatch.Draw(mapstatus[Tile[i][j].Status],new Rectangle(j*80, i*80, 80, 80),Color.White);
+                    spriteBatch.Draw(mapstatus[Tile[i][j].Status], new Rectangle(j * WidthPerTile, i * HeightPerTile, WidthPerTile, HeightPerTile), Color.White);
                 }
             }
 
             for (int i = 0; i < totalNodeY; ++i)
             {
                 if (i==outPosY)
-                    spriteBatch.Draw(seaTile, new Rectangle(6 * 80, i * 80, 80, 80), Color.White);
+                    spriteBatch.Draw(seaTile, new Rectangle(totalNodeX * WidthPerTile, i * HeightPerTile, WidthPerTile, HeightPerTile), Color.White);
                 else
-                    spriteBatch.Draw(woodTile, new Rectangle(6 * 80, i * 80, 80, 80), Color.White);
+                    spriteBatch.Draw(woodTile, new Rectangle(totalNodeX * WidthPerTile, i * HeightPerTile, WidthPerTile, HeightPerTile), Color.White);
             }
             spriteBatch.End();
         }

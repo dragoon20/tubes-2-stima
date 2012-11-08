@@ -92,11 +92,13 @@ namespace HarborMania
         /// <param name="Position">Position of the boat.</param>
         /// <param name="Size">Size of the boat.</param>
         /// <param name="Texture">Texture of the boat.</param>
-        public Boat(Game game, Vector2 Position, Vector2 Size, Texture2D Texture) : base(game)
+        /// <param name="w">The width per tile.</param>
+        /// <param name="h">The height per tile.</param>
+        public Boat(Game game, Vector2 Position, Vector2 Size, int w, int h, Texture2D Texture) : base(game)
         {
             texture = Texture;
-            position = new Vector2 (Position.X * 80, Position.Y * 80);
-            size = new Vector2(Size.X * 80, Size.Y * 80);
+            position = new Vector2 (Position.X * w, Position.Y * h);
+            size = new Vector2(Size.X * w, Size.Y * h);
         }
 
         /// <summary>
