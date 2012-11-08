@@ -8,13 +8,21 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HarborMania
 {
+    /// <summary>
+        /// Class Node is used for saving node status, tiles, position and size.
+        /// <list type="Properties">
+            /// <item>
+                /// <description>Status is an int for describing the tile texture.</description>
+            /// </item>
+            /// <item>
+                /// <description>StatusSebenarnya is used for describing the tile availability.</description>
+            /// </item>
+        /// </list>
+    /// </summary>
     class Node
     {
         int status; //gambar
-        int statussebenarnya; //0 kosong, 1 isi, 2 dll
-        Vector2 size;
-        Vector2 position;
-        //GraphicsDevice gd;
+        int statussebenarnya; //0 kosong, 1 isi
 
         public int Status
         {
@@ -28,30 +36,14 @@ namespace HarborMania
             set { statussebenarnya = value; }
         }
 
-        public Vector2 Size
-        {
-            get { return size; }
-            set { size = value; }
-        }
-
-        public Vector2 Position
-        {
-            get { return position; }
-            set { position = value; }
-        }
-
         public Node()
         {
-            position = new Vector2();
-            size = new Vector2();
         }
 
         public Node(Node n)
         {
             status = n.status;
             statussebenarnya = n.statussebenarnya;
-            size = n.size;
-            position = n.position;
         }
     }
 }
