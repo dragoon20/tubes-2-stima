@@ -18,7 +18,7 @@ namespace HarborMania
 {
     enum GameState
     {
-        MainMenu, ChooseLevel, ChoosePlay, HumanPlay, ComputerPlay, Help, Finish, GameOver
+        MainMenu, ChooseLevel, ChoosePlay, HumanPlay, ComputerPlay, Help, GameOver
     };
 
     enum GameType
@@ -70,10 +70,9 @@ namespace HarborMania
         Texture2D boat13;
         Texture2D boat31;
         Texture2D boatPlayer;
-        Texture2D nextButton;
-        Texture2D prevButton;
-        Texture2D seaTile;
-        Texture2D woodTile;
+        Texture2D nextButton, prevButton;
+        Texture2D seaTile, woodTile;
+        Texture2D nextLevelButton, chooseLevelButton, replayButton;
 
         // Font
         SpriteFont font1;
@@ -175,6 +174,10 @@ namespace HarborMania
             prevButton = Content.Load<Texture2D>("Previous");
             seaTile = Content.Load<Texture2D>("Tile/Sea");
             woodTile = Content.Load<Texture2D>("Tile/Wood");
+
+            nextLevelButton = Content.Load<Texture2D>("next_level");
+            chooseLevelButton = Content.Load<Texture2D>("choose_level");
+            replayButton = Content.Load<Texture2D>("replay_level");
 
             font1 = Content.Load<SpriteFont>("Font/SpriteFont1");
             font2 = Content.Load<SpriteFont>("Font/SpriteFont2");
@@ -732,13 +735,12 @@ namespace HarborMania
                         spriteBatch.Begin();
                         spriteBatch.Draw(rect, new Vector2(50, 120), Color.AntiqueWhite);
                         spriteBatch.DrawString(font1, "Congrats! You've finished level " + level, new Vector2(60, 140), Color.Tomato);
-                        spriteBatch.DrawString(font1, "Move       : " + moveCount, new Vector2(60, 170), Color.Tomato);
+                        spriteBatch.DrawString(font1, "Move          : " + moveCount, new Vector2(60, 170), Color.Tomato);
                         spriteBatch.DrawString(font1, "Time spent : " + finishTime, new Vector2(60, 200), Color.Tomato);
                         //hitung score disini
-                        spriteBatch.Draw(nextButton, new Vector2(60, 270), Color.White);
-                        //draw pilih level
-                        //draw back
-                        //draw next level
+                        spriteBatch.Draw(replayButton, new Vector2(120, 270), Color.White);
+                        spriteBatch.Draw(chooseLevelButton, new Vector2(220, 270), Color.White);
+                        spriteBatch.Draw(nextLevelButton, new Vector2(320, 270), Color.White);
                         spriteBatch.End();
                     }
 
@@ -763,18 +765,6 @@ namespace HarborMania
                     {
                         boat.Draw(spriteBatch);
                     }
-                    break;
-                }
-
-                case GameState.Finish:
-                {
-                    GraphicsDevice.Clear(Color.FloralWhite);
-                    spriteBatch.Begin();
-                    spriteBatch.DrawString(font1, "Congrats! You've finished Level " + level, new Vector2(40, 20), Color.DarkBlue);
-                    spriteBatch.DrawString(font1, "Move : " + moveCount, new Vector2(40, 50), Color.DarkBlue);
-                    spriteBatch.DrawString(font1, "Time : " + finishTime, new Vector2(40, 80), Color.DarkBlue);
-                    spriteBatch.Draw(nextButton, new Vector2(720, 400), Color.White);
-                    spriteBatch.End();
                     break;
                 }
 
@@ -842,12 +832,6 @@ namespace HarborMania
                     case GameState.ComputerPlay:
                     {
                         // Bagian Computer
-                        _GameState = GameState.ChooseLevel;
-                        break;
-                    }
-                    case GameState.Finish:
-                    {
-                        // Bagian Finish sebuah level
                         _GameState = GameState.ChooseLevel;
                         break;
                     }
@@ -1084,8 +1068,56 @@ namespace HarborMania
                             }
                             else
                             {
-                                //_GameState = GameState.Finish;
                                 finishPopUp = 1;
+                                //Finish touch listener
+                                TouchCollection touchStateMain = TouchPanel.GetState();
+                                if ((!touchflag) && (touchStateMain.Count > 0))
+                                {
+                                    touchflag = true;
+                                    touchTimer = 5;
+                                    foreach (TouchLocation t in touchStateMain)
+                                    {
+                                        if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 120) && (t.Position.X <= 200) && (t.Position.Y >= 270) && (t.Position.Y <= 350))
+                                        {
+                                            //replay
+                                            finishFlag = 0;
+                                            finishPopUp = 0;
+                                            moveCount = 0;
+                                            moveTimer = 0;
+                                            startCoutingTime = false;
+                                            map = new Sea(this, widthPerTile, heightPerTile, 6, 6, mapLevel[level]);
+                                            map.Initialize();
+                                            map.LoadContent(out boats);
+
+                                        }
+                                        if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 220) && (t.Position.X <= 300) && (t.Position.Y >= 270) && (t.Position.Y <= 350))
+                                        {
+                                            //choose level
+                                            _GameState = GameState.ChooseLevel;
+                                        }
+                                        if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 320) && (t.Position.X <= 400) && (t.Position.Y >= 270) && (t.Position.Y <= 350))
+                                        {
+                                            //next level 
+                                            if (level != 8) //8 diganti dg level maksimum
+                                            {
+                                                level++;
+                                                finishFlag = 0;
+                                                finishPopUp = 0;
+                                                moveCount = 0;
+                                                moveTimer = 0;
+                                                startCoutingTime = false;
+                                                map = new Sea(this, widthPerTile, heightPerTile, 6, 6, mapLevel[level]);
+                                                map.Initialize();
+                                                map.LoadContent(out boats);
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (touchTimer == 0) touchflag = false;
+                                    else touchTimer--;
+                                }
                             }
                         }
                         else
@@ -1258,29 +1290,6 @@ namespace HarborMania
                                 if (state < bestpath.Count())
                                     boats.ElementAt(bestpath.ElementAt(state).Boat).Position = posiawal;
                             }
-                        }
-                        break;
-                    }
-                    case GameState.Finish:
-                    {
-                        TouchCollection touchStateMain = TouchPanel.GetState();
-                        if ((!touchflag) && (touchStateMain.Count > 0))
-                        {
-                            // Kalau di-touch
-                            touchflag = true;
-                            touchTimer = 5;
-                            foreach (TouchLocation t in touchStateMain)
-                            {
-                                if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 720) && (t.Position.X <= 800) && (t.Position.Y >= 400) && (t.Position.Y <= 480))
-                                {
-                                    _GameState = GameState.ChooseLevel;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (touchTimer == 0) touchflag = false;
-                            else touchTimer--;
                         }
                         break;
                     }
