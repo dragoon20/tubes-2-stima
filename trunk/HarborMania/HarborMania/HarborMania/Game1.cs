@@ -87,6 +87,7 @@ namespace HarborMania
         string finishTime = "";
         Boolean startCoutingTime = false;
         int posAwalX, posAkhirX, posAwalY, posAkhirY;
+        int finishFlag = 0;
 
         // DFS dan BFS structure
         Dictionary<String, bool> mapboat;
@@ -102,6 +103,7 @@ namespace HarborMania
         int speed;
         int flagpath;
         int level;
+        
 
         /// <summary>
             /// This is constructor for Game1 class.
@@ -686,6 +688,7 @@ namespace HarborMania
                     }
                     spriteBatch.End();
                     moveCount = 0;
+                    finishFlag = 0;
                     break;
                 }
                 case GameState.HumanPlay:
@@ -1042,141 +1045,155 @@ namespace HarborMania
                             _GameState = GameState.GameOver;
                             //Debug.WriteLine("game over!");  
                         }
-                        TouchCollection touchStateMain = TouchPanel.GetState();
-                        if ((!touchflag) && (touchStateMain.Count > 0))
+
+                        if (finishFlag == 1)
                         {
-                            foreach (TouchLocation t in touchStateMain)
+                            int x = (int)boats.ElementAt(0).Position.X;
+                            int y = (int)boats.ElementAt(0).Position.Y;
+                            if (x != 400) //400 adalah x pintu keluar
                             {
-                                if (t.State == TouchLocationState.Released)
-                                {
-                                    if (lockboat != -1)
-                                    {
-                                        boats.ElementAt(lockboat).Position = new Vector2((int)((boats.ElementAt(lockboat).Position.X + 40) / 80) * 80, (int)((boats.ElementAt(lockboat).Position.Y + 40) / 80) * 80);
-                                        
-                                        if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
-                                        {
-                                            for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / 80); ++k)
-                                            {
-                                                map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80) + k, (int)(boats.ElementAt(lockboat).Position.Y / 80), 1);
-                                            }
-
-                                            posAkhirX = (int)(boats.ElementAt(lockboat).Position.X / 80);
-                                            int temp = Math.Abs(posAkhirX - posAwalX);
-                                            moveCount += temp;
-                                        }
-                                        else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
-                                        {
-                                            for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / 80); ++k)
-                                            {
-                                                map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80) + k, 1);
-                                            }
-
-                                            posAkhirY = (int)(boats.ElementAt(lockboat).Position.Y / 80);
-                                            int temp = Math.Abs(posAkhirY - posAwalY);
-                                            moveCount += temp;
-                                        }
-                                        if (lockboat == 0)
-                                        {
-                                            posAkhirX += (int)(boats.ElementAt(lockboat).Size.Y / 80);
-                                            if (posAkhirX == 5)
-                                            {
-                                                Debug.WriteLine("finish");
-                                                TimeSpan waktuAwal = TimeSpan.FromMilliseconds(180000);
-                                                waktuAwal = waktuAwal - timeSpan;
-                                                finishTime = String.Format("{0}:{1:D2}", waktuAwal.Minutes, waktuAwal.Seconds);
-                                                for (int i = 0; i < 10000000; i++);
-                                                _GameState = GameState.Finish;
-                                            }
-                                        }
-                                        lockboat = -1;
-                                    }
-                                }
-                                else if (t.State == TouchLocationState.Moved)
-                                {
-                                    if (lockboat == -1)
-                                    {
-                                        bool cek = true;
-                                        int count = 0;
-                                        foreach (Boat boat in boats)
-                                        {
-                                            if ((cek) && ((t.Position.X >= boat.Position.X) && (t.Position.X <= boat.Position.X + boat.Size.X)) &&
-                                                ((t.Position.Y >= boat.Position.Y) && (t.Position.Y <= boat.Position.Y + boat.Size.Y)))
-                                            {
-                                                posAwalX = (int)(boat.Position.X) / 80; 
-                                                posAwalY = (int)(boat.Position.Y) / 80; 
-
-                                                cek = false;
-                                                lockboat = count;
-                                                offx = (int)(boat.Position.X - t.Position.X); 
-                                                offy = (int)(boat.Position.Y - t.Position.Y); 
-                                                minscroll = -1;
-                                                maxscroll = 6;
-                                                if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
-                                                {
-                                                    for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / 80); ++k)
-                                                    {
-                                                        map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80) + k, (int)(boats.ElementAt(lockboat).Position.Y / 80), 0);
-                                                    }
-                                                }
-                                                else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
-                                                {
-                                                    for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / 80); ++k)
-                                                    {
-                                                        map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80) + k, 0);
-                                                    }
-                                                }
-                                            }
-                                            count++;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        int max = 480;
-                                        if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
-                                        {
-                                            if ((t.Position.X + offx >= 0) && (t.Position.X + offx <= (max - boats.ElementAt(lockboat).Size.X)))
-                                            {
-                                                if (((int)((t.Position.X + offx + 40) / 80) > minscroll) && ((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - 40) / 80) < maxscroll) &&
-                                                    (map.GetStatus((int)((t.Position.X + offx + 40) / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80)) == 0) &&
-                                                    (map.GetStatus((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - 40) / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80)) == 0))
-                                                    boats.ElementAt(lockboat).Position = new Vector2(t.Position.X + offx, boats.ElementAt(lockboat).Position.Y);
-                                                else if (t.Position.X + offx < boats.ElementAt(lockboat).Position.X)
-                                                {
-                                                    minscroll = (int)((t.Position.X + offx + 40) / 80);
-                                                }
-                                                else if (t.Position.X + offx > boats.ElementAt(lockboat).Position.X)
-                                                {
-                                                    maxscroll = (int)((t.Position.X + offx + 40) / 80);
-                                                }
-                                            }
-                                        }
-                                        else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
-                                        {
-                                            if ((t.Position.Y + offy >= 0) && (t.Position.Y + offy <= (max - boats.ElementAt(lockboat).Size.Y)))
-                                            {
-                                                if (((int)((t.Position.Y + offy + 40) / 80) > minscroll) && ((int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80) < maxscroll) && 
-                                                    (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(t.Position.Y + offy + 40) / 80) == 0) &&
-                                                    (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80) == 0))
-                                                    boats.ElementAt(lockboat).Position = new Vector2(boats.ElementAt(lockboat).Position.X, t.Position.Y + offy);
-                                                else if (t.Position.Y + offy < boats.ElementAt(lockboat).Position.Y)
-                                                    minscroll = (int)((t.Position.Y + offy + 40) / 80);
-                                                else if (t.Position.Y + offy > boats.ElementAt(lockboat).Position.Y)
-                                                    maxscroll = (int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80);
-                                            }
-                                        }
-                                    }
-                                }
+                                x++;
+                                boats.ElementAt(0).Position = new Vector2(x, y);
                             }
+                            else _GameState = GameState.Finish;
                         }
                         else
                         {
-                            if (touchTimer == 0)
+                            TouchCollection touchStateMain = TouchPanel.GetState();
+                            if ((!touchflag) && (touchStateMain.Count > 0))
                             {
-                                touchflag = false;
+                                foreach (TouchLocation t in touchStateMain)
+                                {
+                                    if (t.State == TouchLocationState.Released)
+                                    {
+                                        if (lockboat != -1)
+                                        {
+                                            boats.ElementAt(lockboat).Position = new Vector2((int)((boats.ElementAt(lockboat).Position.X + 40) / 80) * 80, (int)((boats.ElementAt(lockboat).Position.Y + 40) / 80) * 80);
+
+                                            if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
+                                            {
+                                                for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / 80); ++k)
+                                                {
+                                                    map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80) + k, (int)(boats.ElementAt(lockboat).Position.Y / 80), 1);
+                                                }
+
+                                                posAkhirX = (int)(boats.ElementAt(lockboat).Position.X / 80);
+                                                int temp = Math.Abs(posAkhirX - posAwalX);
+                                                moveCount += temp;
+                                            }
+                                            else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
+                                            {
+                                                for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / 80); ++k)
+                                                {
+                                                    map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80) + k, 1);
+                                                }
+
+                                                posAkhirY = (int)(boats.ElementAt(lockboat).Position.Y / 80);
+                                                int temp = Math.Abs(posAkhirY - posAwalY);
+                                                moveCount += temp;
+                                            }
+                                            if (lockboat == 0)
+                                            {
+                                                posAkhirX += (int)(boats.ElementAt(lockboat).Size.Y / 80);
+                                                if (posAkhirX == 5)
+                                                {
+                                                    //Debug.WriteLine("finish");
+                                                    TimeSpan waktuAwal = TimeSpan.FromMilliseconds(180000);
+                                                    waktuAwal = waktuAwal - timeSpan;
+                                                    finishTime = String.Format("{0}:{1:D2}", waktuAwal.Minutes, waktuAwal.Seconds);
+                                                    finishFlag = 1;
+                                                }
+                                            }
+                                            lockboat = -1;
+                                        }
+                                    }
+                                    else if (t.State == TouchLocationState.Moved)
+                                    {
+                                        if (lockboat == -1)
+                                        {
+                                            bool cek = true;
+                                            int count = 0;
+                                            foreach (Boat boat in boats)
+                                            {
+                                                if ((cek) && ((t.Position.X >= boat.Position.X) && (t.Position.X <= boat.Position.X + boat.Size.X)) &&
+                                                    ((t.Position.Y >= boat.Position.Y) && (t.Position.Y <= boat.Position.Y + boat.Size.Y)))
+                                                {
+                                                    posAwalX = (int)(boat.Position.X) / 80;
+                                                    posAwalY = (int)(boat.Position.Y) / 80;
+
+                                                    cek = false;
+                                                    lockboat = count;
+                                                    offx = (int)(boat.Position.X - t.Position.X);
+                                                    offy = (int)(boat.Position.Y - t.Position.Y);
+                                                    minscroll = -1;
+                                                    maxscroll = 6;
+                                                    if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
+                                                    {
+                                                        for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.X / 80); ++k)
+                                                        {
+                                                            map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80) + k, (int)(boats.ElementAt(lockboat).Position.Y / 80), 0);
+                                                        }
+                                                    }
+                                                    else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
+                                                    {
+                                                        for (int k = 0; k < (int)(boats.ElementAt(lockboat).Size.Y / 80); ++k)
+                                                        {
+                                                            map.SetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80) + k, 0);
+                                                        }
+                                                    }
+                                                }
+                                                count++;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            int max = 480;
+                                            if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Left) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Right))
+                                            {
+                                                if ((t.Position.X + offx >= 0) && (t.Position.X + offx <= (max - boats.ElementAt(lockboat).Size.X)))
+                                                {
+                                                    if (((int)((t.Position.X + offx + 40) / 80) > minscroll) && ((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - 40) / 80) < maxscroll) &&
+                                                        (map.GetStatus((int)((t.Position.X + offx + 40) / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80)) == 0) &&
+                                                        (map.GetStatus((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - 40) / 80), (int)(boats.ElementAt(lockboat).Position.Y / 80)) == 0))
+                                                        boats.ElementAt(lockboat).Position = new Vector2(t.Position.X + offx, boats.ElementAt(lockboat).Position.Y);
+                                                    else if (t.Position.X + offx < boats.ElementAt(lockboat).Position.X)
+                                                    {
+                                                        minscroll = (int)((t.Position.X + offx + 40) / 80);
+                                                    }
+                                                    else if (t.Position.X + offx > boats.ElementAt(lockboat).Position.X)
+                                                    {
+                                                        maxscroll = (int)((t.Position.X + offx + 40) / 80);
+                                                    }
+                                                }
+                                            }
+                                            else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
+                                            {
+                                                if ((t.Position.Y + offy >= 0) && (t.Position.Y + offy <= (max - boats.ElementAt(lockboat).Size.Y)))
+                                                {
+                                                    if (((int)((t.Position.Y + offy + 40) / 80) > minscroll) && ((int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80) < maxscroll) &&
+                                                        (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(t.Position.Y + offy + 40) / 80) == 0) &&
+                                                        (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / 80), (int)(t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80) == 0))
+                                                        boats.ElementAt(lockboat).Position = new Vector2(boats.ElementAt(lockboat).Position.X, t.Position.Y + offy);
+                                                    else if (t.Position.Y + offy < boats.ElementAt(lockboat).Position.Y)
+                                                        minscroll = (int)((t.Position.Y + offy + 40) / 80);
+                                                    else if (t.Position.Y + offy > boats.ElementAt(lockboat).Position.Y)
+                                                        maxscroll = (int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - 40) / 80);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
-                                touchTimer--;
+                                if (touchTimer == 0)
+                                {
+                                    touchflag = false;
+                                }
+                                else
+                                {
+                                    touchTimer--;
+                                }
                             }
                         }
                         break;
