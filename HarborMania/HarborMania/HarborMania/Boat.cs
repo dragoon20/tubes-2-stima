@@ -7,6 +7,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HarborMania
 {
+    /// <summary>
+        /// Class Boat is used for saving boat condition.
+        /// <list type="Properties">
+            /// <item>
+                /// <description>Position is used for marking position of boat from top, left.</description>
+            /// </item>
+            /// <item>
+                /// <description>Size is used for the value of width(X) and height(Y) of boat.</description>
+            /// </item>
+            /// <item>
+                /// <description>Arah is used for saving the orientation of the boat.</description>
+            /// </item>
+            /// <item>
+                /// <description>Texture is used for saving the image for boat.</description>
+            /// </item>
+        /// </list>
+    /// </summary>
     class Boat : Microsoft.Xna.Framework.DrawableGameComponent
     {
         public enum Orientation
@@ -14,34 +31,43 @@ namespace HarborMania
             Top, Right, Bottom, Left
         };
 
-        //int height;
-        //int width;
-        //int posX; //posX adalah posisi X dari boat head
-        //int posY; //posY adalah posisi Y dari boat head
-        //int arah; //arah adalah arah dari boat head
         Vector2 position;
         Vector2 size;
         Orientation arah;
-        Texture2D texture; //masih blm tau ini utk apa
+        Texture2D texture;
 
+        /// <summary>
+            /// Getter and Setter for element arah.
+        /// </summary>
         public Orientation Arah
         {
             get { return arah; }
             set { arah = value; }
         }
 
+        /// <summary>
+            /// Getter and Setter for element size.
+        /// </summary>
         public Vector2 Size
         {
             get { return size; }
             set { size = value; }
         }
 
+        /// <summary>
+            /// Getter and Setter for element position.
+        /// </summary>
         public Vector2 Position
         {
             get { return position; }
             set { position = value; }
         }
 
+        /// <summary>
+            /// Constructor for Boat class.
+        /// </summary>
+        /// <param name="game">Game class for this Drawable Game Component.</param>
+        /// <param name="boat">Boat to be copied.</param>
         public Boat(Game game, Boat boat): base(game)
         {
             position = boat.position;
@@ -49,12 +75,23 @@ namespace HarborMania
             arah = boat.arah;
         }
 
+        /// <summary>
+            /// Constructor for Boat class.
+        /// </summary>
+        /// <param name="game">Game class for this Drawable Game Component.</param>
         public Boat(Game game) : base(game)
         {
             position = new Vector2();
             size = new Vector2();
         }
 
+        /// <summary>
+            /// Constructor for Boat class.
+        /// </summary>
+        /// <param name="game">Game class for this Drawable Game Component.</param>
+        /// <param name="Position">Position of the boat.</param>
+        /// <param name="Size">Size of the boat.</param>
+        /// <param name="Texture">Texture of the boat.</param>
         public Boat(Game game, Vector2 Position, Vector2 Size, Texture2D Texture) : base(game)
         {
             texture = Texture;
@@ -62,6 +99,10 @@ namespace HarborMania
             size = new Vector2(Size.X * 80, Size.Y * 80);
         }
 
+        /// <summary>
+            /// Method for drawing the boat to the screen.
+        /// </summary>
+        /// <param name="spriteBatch">A SpriteBatch to be used for Drawing.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
@@ -80,25 +121,27 @@ namespace HarborMania
             spriteBatch.End();
         }
 
+        /// <summary>
+            /// A method overriden to initialize.
+        /// </summary>
         public override void Initialize()
         {
             base.Initialize();
         }
 
-        /*public void LoadContent()
-        {
-            if ((size.X == 1) && (size.Y == 1))
-            {
-                texture = Game.Content.Load<Texture2D>("");
-            }
-            base.LoadContent();
-        }*/
-
+        /// <summary>
+            /// A method overriden to update the DrawableGameComponent.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
         }
 
+        /// <summary>
+            /// An method overriden to print Boat as String.
+        /// </summary>
+        /// <returns>String of Boat position and size.</returns>
         public override string ToString()
         {
             return "((" + position.X + "," + position.Y + "),(" + size.X + "," + size.Y + "))";

@@ -27,7 +27,7 @@ namespace HarborMania
     };
 
     /// <summary>
-    /// This is the main type for your game
+        /// This is the main type for your game
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
@@ -37,9 +37,11 @@ namespace HarborMania
         SpriteBatch spriteBatch;
         GameState _GameState;
         GameType play;
+        int moveCount = 0;
+
+        // Bantu User Interface Player
         bool touchflag;
         int touchTimer;
-        int moveCount = 0;     
         int lockboat;
         int offx;
         int offy;
@@ -53,10 +55,16 @@ namespace HarborMania
         Sea map;
         List<Boat> boats;
 
+        // Bagian user interface
         Texture2D mainMenu;
         Texture2D menuButton;
         Texture2D levelbox;
+        Rectangle menuPlay;
+        Rectangle menuHelp;
+        Rectangle menuHuman;
+        Rectangle menuComputer;
 
+        // Bantu help
         Texture2D boat12;
         Texture2D boat21;
         Texture2D boat13;
@@ -67,23 +75,17 @@ namespace HarborMania
         Texture2D seaTile;
         Texture2D woodTile;
 
+        // Font
         SpriteFont font1;
         SpriteFont font2;
         SpriteFont font3;
         SpriteFont font4;
-        Dictionary<int, string> mapLevel;
         
-        Rectangle menuPlay;
-        Rectangle menuHelp;
-        Rectangle menuHuman;
-        Rectangle menuComputer;
-
+        Dictionary<int, string> mapLevel;        
         int helpCount = 0;
-        int level;
         string displayTime = "";
         string finishTime = "";
         Boolean startCoutingTime = false;
-        bool[][] Visited;
         int posAwalX, posAkhirX, posAwalY, posAkhirY;
 
         // DFS dan BFS structure
@@ -91,12 +93,19 @@ namespace HarborMania
         List<BoatPath> bestpath;
         int bestmove;
         int state;
-        int speed;
         Vector2 posiawal;
         Vector2 posiakhir;
         int moveTimer;
         Thread loading;
 
+        // Bagian Setting
+        int speed;
+        int flagpath;
+        int level;
+
+        /// <summary>
+            /// This is constructor for Game1 class.
+        /// </summary>
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -121,24 +130,22 @@ namespace HarborMania
             menuHelp = new Rectangle(30, 118, 300, 61);
             menuHuman = new Rectangle(30, 95, 300, 61);
             menuComputer = new Rectangle(30, 173, 300, 61);
+
+            // Setting
+            flagpath = 0;
         }
 
+        /// <summary>
+            /// This is initialize method for class Game1.
+        /// </summary>
         protected override void Initialize()
         {
-            //Inisialisasi table of boolean yang berisi penanda path DFS
-            Visited = new bool[6][];
-            for (int x = 0; x < 6; x++)
-            {
-                Visited[x] = new bool[6];
-            }
-
-            posAwalX = 0;
-            posAkhirX = 0;
-            posAwalY = 0;
-            posAkhirY = 0;
             base.Initialize();
         }
 
+        /// <summary>
+            /// This is used for loading content for class Game1.
+        /// </summary>
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -167,6 +174,9 @@ namespace HarborMania
             LoadLevel();
         }
 
+        /// <summary>
+            /// This is used for loading level and maps for Game1.
+        /// </summary>
         public void LoadLevel()
         {
             Stream streampath = TitleContainer.OpenStream("Level.txt");
@@ -185,14 +195,17 @@ namespace HarborMania
             }
         }
 
+        /// <summary>
+            /// This is called when the game want to unload its content.
+        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
-        public void isFinish() {
-            //cek jika posisi awal boatPlayer sampai posisiAkhir boatPlayer kosong
-        }
 
+        /// <summary>
+            /// This is used for printing listboat.
+        /// </summary>
         private String ListBoatToString(List<Boat> listboat)
         {
             String s = "";
@@ -203,6 +216,10 @@ namespace HarborMania
             return s;
         }
 
+        /// <summary>
+            /// This is called to fill best path for solution.
+        /// </summary>
+        /// <param name="flagpass">A flag, 0 for DFS, 1 for BFS.</param>
         public void getPath(Object flagpass)
         {
             int flag = (int)flagpass;
@@ -504,16 +521,10 @@ namespace HarborMania
                     }
                 }
             }
-
-            Debug.WriteLine("Hasil: ");
-            foreach(BoatPath path in bestpath)
-            {
-                Debug.WriteLine(path.Boat + ", (" + path.PosisiAwal.X + "," + path.PosisiAwal.Y + "), (" + path.PosisiAkhir.X + "," + path.PosisiAkhir.Y + ")"); 
-            }
         }
         
         /// <summary>
-        /// This is called when the game should draw itself.
+            /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
@@ -753,8 +764,8 @@ namespace HarborMania
         }
 
         /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
+            /// Allows the game to run logic such as updating the world,
+            /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
@@ -996,7 +1007,7 @@ namespace HarborMania
                                                 else if (play == GameType.Computer)
                                                 {
                                                     loading = new Thread(new ParameterizedThreadStart(getPath));
-                                                    loading.Start(1);
+                                                    loading.Start(flagpath);
 
                                                     countLoader = 0;
                                                 }
@@ -1258,7 +1269,6 @@ namespace HarborMania
                     default: break;
                 }
             }
-
             base.Update(gameTime);
         }
     }
