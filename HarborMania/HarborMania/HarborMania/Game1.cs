@@ -49,7 +49,7 @@ namespace HarborMania
         int maxscroll;
         int countLoader;
 
-        TimeSpan timeSpan = TimeSpan.FromMilliseconds(180000);
+        TimeSpan timeSpan = TimeSpan.FromMilliseconds(0);
 
         Sea map;
         List<Boat> boats;
@@ -1098,7 +1098,12 @@ namespace HarborMania
 						if (startCoutingTime == false)
                         {
                             startCoutingTime = true;
-                            timeSpan = TimeSpan.FromMilliseconds(180000);
+                            if (level <= 3) 
+                                timeSpan = TimeSpan.FromMilliseconds(180000);
+                            if (level <=6) 
+                                timeSpan = TimeSpan.FromMilliseconds(240000);
+                            if (level <=9)
+                                timeSpan = TimeSpan.FromMilliseconds(300000);
                         }
                         if (timeSpan.TotalSeconds == 0) {
                             _GameState = GameState.GameOver;
@@ -1212,6 +1217,12 @@ namespace HarborMania
                                             if (posAkhirX == sizeX)
                                             {
                                                 TimeSpan waktuAwal = TimeSpan.FromMilliseconds(180000);
+                                                if (level <= 3)
+                                                     waktuAwal = TimeSpan.FromMilliseconds(180000);
+                                                else if (level <= 6)
+                                                     waktuAwal = TimeSpan.FromMilliseconds(240000);
+                                                else if (level <= 9)
+                                                     waktuAwal = TimeSpan.FromMilliseconds(300000);
                                                 waktuAwal = waktuAwal - timeSpan;
                                                 finishTime = String.Format("{0}:{1:D2}", waktuAwal.Minutes, waktuAwal.Seconds + 1);
                                                 finishFlag = 1;
