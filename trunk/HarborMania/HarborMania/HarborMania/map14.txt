@@ -1,0 +1,22 @@
+0 0 0 0 0 0
+0 0 2 0 0 0
+0 0 0 0 0 0
+0 0 2 0 0 0
+0 0 0 0 0 0
+3 0 0 0 0 0
+2
+240000
+9
+0 2 2 1 Right Boat/Boat21
+0 0 1 2 Down Boat/Boat12
+0 2 2 1 Left Boat/Boat21
+0 4 1 2 Top Boat/Boat12
+1 4 1 2 Down Boat/Boat12
+3 1 1 3 Top Boat/Boat13
+4 2 1 3 Down Boat/Boat13
+5 3 1 3 Top Boat/Boat13
+2 4 2 1 Left Boat/Boat21
+0 Tile/Sea
+1 Tile/Wood
+2 Tile/sea_starfish
+3 Tile/sea_lifevest
