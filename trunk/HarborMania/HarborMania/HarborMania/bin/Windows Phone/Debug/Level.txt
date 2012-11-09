@@ -6,3 +6,17 @@
 6 Map6.txt
 7 Map7.txt
 8 Map8.txt
+9 Map9.txt
+10 Map10.txt
+11 Map11.txt
+12 Map12.txt
+13 Map13.txt
+14 Map14.txt
+15 Map15.txt
+16 Map16.txt
+17 Map17.txt
+18 Map18.txt
+19 Map19.txt
+20 Map20.txt
+21 Map21.txt
+22 Map22.txt

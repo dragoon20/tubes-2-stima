@@ -208,6 +208,12 @@ namespace HarborMania
             String templine = loadpath.ReadLine();
             outPosY = Convert.ToInt32(templine);
 
+
+            templine = loadpath.ReadLine();
+            time = Convert.ToDouble(templine);
+            Debug.WriteLine("time = " + time);
+
+
             templine = loadpath.ReadLine();
             int totalcar = Convert.ToInt32(templine);
 
@@ -267,10 +273,6 @@ namespace HarborMania
                     mapstatus.Add(Convert.ToInt32(splitline[0]), Game.Content.Load<Texture2D>(splitline[1]));
                 templine = loadpath.ReadLine();
             }
-
-            String templine2 = loadpath.ReadLine();
-            time = Convert.ToDouble(templine2);
-            Debug.WriteLine("time = " + time);
 
             boats = localboats;
         }
