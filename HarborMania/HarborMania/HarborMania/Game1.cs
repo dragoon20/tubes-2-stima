@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Threading;
 using Microsoft.Xna.Framework;
@@ -58,7 +59,9 @@ namespace HarborMania
         Texture2D mainMenu;
         Texture2D menuButton;
         Texture2D levelbox;
+        Texture2D lockButton;
         Rectangle menuPlay;
+        Rectangle menuSetting;
         Rectangle menuHelp;
         Rectangle menuHuman;
         Rectangle menuComputer;
@@ -99,6 +102,12 @@ namespace HarborMania
         Thread loading;
 
         // Bagian Setting
+        Texture2D DFSbutton;
+        Texture2D BFSbutton;
+        Texture2D defButton;
+        Rectangle pathButton;
+        Rectangle defPos;
+        int screenflag;
         int speed;
         int flagpath;
         int level;
@@ -106,6 +115,7 @@ namespace HarborMania
         int heightPerTile;
         int sizeX;
         int sizeY;
+        int maxLevel;
 
         /// <summary>
             /// This is constructor for Game1 class.
@@ -131,17 +141,87 @@ namespace HarborMania
             _GameState = GameState.MainMenu;
             touchflag = false;
             menuPlay = new Rectangle(30, 40, 300, 61);
-            menuHelp = new Rectangle(30, 118, 300, 61);
+            menuSetting = new Rectangle(30, 118, 300, 61);
+            menuHelp = new Rectangle(30, 196, 300, 61);
             menuHuman = new Rectangle(30, 95, 300, 61);
             menuComputer = new Rectangle(30, 173, 300, 61);
+            pathButton = new Rectangle(650, 170, 80, 80);
+            defPos = new Rectangle(650, 320, 80, 80);
 
             // Setting
-            flagpath = 1;
-            widthPerTile = 80;
-            heightPerTile = 80;
-            sizeX = 6;
-            sizeY = 6;
-            speed = 10;
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (isf.FileExists("SavedState.txt"))
+                {
+                    using (IsolatedStorageFileStream rawStream = isf.OpenFile("SavedState.txt",FileMode.Open))
+                    {
+                        StreamReader reader = new StreamReader(rawStream);
+                        String [] configuration = reader.ReadLine().Split(' ');
+                        flagpath = Convert.ToInt32(configuration[0]);
+                        sizeX = Convert.ToInt32(configuration[1]);
+                        sizeY = Convert.ToInt32(configuration[2]);
+                        speed = Convert.ToInt32(configuration[3]);
+                        screenflag = Convert.ToInt32(configuration[4]);
+                        maxLevel = Convert.ToInt32(configuration[5]);
+                        reader.Close();
+                    }
+                }
+                else
+                {
+                    flagpath = 1;
+                    sizeX = 6;
+                    sizeY = 6;
+                    speed = 10;
+                    screenflag = 3;
+                    maxLevel = 1;
+                    using (IsolatedStorageFileStream rawStream = isf.CreateFile("SavedState.txt")) 
+                    {
+                        StreamWriter writer = new StreamWriter(rawStream);
+                        writer.WriteLine(flagpath + " " + sizeX + " " + sizeY + " " + speed + " " + screenflag + " " + maxLevel);
+                        writer.Close(); 
+                    }
+                }
+                switch (screenflag)
+                {
+                    case 0:
+                        {
+                            widthPerTile = 60;
+                            heightPerTile = 60;
+                            break;
+                        }
+                    case 1:
+                        {
+                            widthPerTile = 80;
+                            heightPerTile = 60;
+                            break;
+                        }
+                    case 2:
+                        {
+                            widthPerTile = 60;
+                            heightPerTile = 80;
+                            break;
+                        }
+                    case 3:
+                        {
+                            widthPerTile = 80;
+                            heightPerTile = 80;
+                            break;
+                        }
+                    case 4:
+                        {
+                            widthPerTile = 100;
+                            heightPerTile = 80;
+                            break;
+                        }
+                    case 5:
+                        {
+                            widthPerTile = 120;
+                            heightPerTile = 80;
+                            break;
+                        }
+                    default: break;
+                }
+            }
         }
 
         /// <summary>
@@ -179,6 +259,10 @@ namespace HarborMania
             nextLevelButton = Content.Load<Texture2D>("Button/next_level");
             chooseLevelButton = Content.Load<Texture2D>("Button/choose_level");
             replayButton = Content.Load<Texture2D>("Button/replay_level");
+            DFSbutton = Content.Load<Texture2D>("Button/dfs_button");
+            BFSbutton = Content.Load<Texture2D>("Button/bfs_button");
+            defButton = Content.Load<Texture2D>("Button/def_button");
+            lockButton = Content.Load<Texture2D>("Button/Lock");
 
             font1 = Content.Load<SpriteFont>("Font/SpriteFont1");
             font2 = Content.Load<SpriteFont>("Font/SpriteFont2");
@@ -555,6 +639,8 @@ namespace HarborMania
                     spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
                     spriteBatch.Draw(menuButton, menuPlay, Color.White);
                     spriteBatch.DrawString(font1, "Mulai Permainan", new Vector2(menuPlay.X + 70, menuPlay.Y + 10), Color.White);
+                    spriteBatch.Draw(menuButton, menuSetting, Color.White);
+                    spriteBatch.DrawString(font1, "Pengaturan", new Vector2(menuSetting.X + 70, menuSetting.Y + 10), Color.White);
                     spriteBatch.Draw(menuButton, menuHelp, Color.White);
                     spriteBatch.DrawString(font1, "Petunjuk", new Vector2(menuHelp.X + 70, menuHelp.Y + 10), Color.White);
                     spriteBatch.End();
@@ -678,6 +764,10 @@ namespace HarborMania
                                 digit++;
                             }
                             spriteBatch.DrawString(font2, ((j * 6) + (i + 1)).ToString(), new Vector2(98 - (digit * 14) + i * 115, 135 + j * 110), Color.White);
+                            if (temp > maxLevel)
+                            {
+                                spriteBatch.Draw(lockButton, new Rectangle(65 + i * 115, 115 + j * 110, 90, 90), Color.White);
+                            }
                         }
                     }
                     spriteBatch.End();
@@ -824,6 +914,42 @@ namespace HarborMania
                     spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
                     spriteBatch.DrawString(font3, "Pengaturan", new Vector2(40, 30), Color.DarkSlateBlue);
 
+                    Texture2D rect = new Texture2D(graphics.GraphicsDevice, 720, 360);
+                    Color[] data = new Color[720 * 360];
+                    for (int i = 0; i < data.Length; ++i) data[i] = Color.AliceBlue;
+                    rect.SetData(data);
+                    spriteBatch.Draw(rect, new Vector2(40, 100), Color.AliceBlue);
+
+                    spriteBatch.DrawString(font1, "Ukuran layar: " + widthPerTile + " x " + heightPerTile, new Vector2(60, 120), Color.BlueViolet);
+                    rect = new Texture2D(graphics.GraphicsDevice, 425, 25);
+                    data = new Color[425 * 25];
+                    for (int i = 0; i < data.Length; ++i) data[i] = Color.DarkSlateBlue;
+                    rect.SetData(data);
+                    spriteBatch.Draw(rect, new Vector2(130, 200), Color.DarkSlateBlue);
+
+                    spriteBatch.DrawString(font1, "Level kecepatan: " + (speed - 3), new Vector2(60, 270), Color.BlueViolet);
+                    spriteBatch.Draw(rect, new Vector2(130, 350), Color.DarkSlateBlue);
+
+                    rect = new Texture2D(graphics.GraphicsDevice, 25, 60);
+                    data = new Color[25 * 60];
+                    for (int i = 0; i < data.Length; ++i) data[i] = Color.Aqua;
+                    rect.SetData(data);
+                    spriteBatch.Draw(rect, new Vector2(130 + (screenflag * 80), 183), Color.Aqua);
+
+                    spriteBatch.Draw(rect, new Vector2(130 + ((speed - 4) * 40), 333), Color.Aqua);
+
+                    spriteBatch.Draw(prevButton, new Rectangle(60, 183, 60, 60), Color.White);
+                    spriteBatch.Draw(nextButton, new Rectangle(565, 183, 60, 60), Color.White);
+
+                    spriteBatch.Draw(prevButton, new Rectangle(60, 333, 60, 60), Color.White);
+                    spriteBatch.Draw(nextButton, new Rectangle(565, 333, 60, 60), Color.White);
+
+                    if (flagpath == 0)
+                        spriteBatch.Draw(DFSbutton, pathButton, Color.White);
+                    else if (flagpath == 1)
+                        spriteBatch.Draw(BFSbutton, pathButton, Color.White);
+                    spriteBatch.Draw(defButton, defPos, Color.White);
+                    spriteBatch.End();
                     break;
                 }
                 default: break;
@@ -851,6 +977,12 @@ namespace HarborMania
                     {
                         // Bagian Menu Utama
                         this.Exit();
+                        break;
+                    }
+                    case GameState.Setting:
+                    {
+                        // Bagian Setting
+                        _GameState = GameState.MainMenu;
                         break;
                     }
                     case GameState.Help:
@@ -915,6 +1047,12 @@ namespace HarborMania
                                 {
                                     // Jika menyentuh menu tertentu
                                     _GameState = GameState.ChoosePlay;
+                                }
+                                if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuSetting.X) && ((t.Position.X <= menuSetting.X + menuSetting.Width))) &&
+                                ((t.Position.Y >= menuSetting.Y) && ((t.Position.Y <= menuSetting.Y + menuSetting.Height))))
+                                {
+                                    // Jika menyentuh menu tertentu
+                                    _GameState = GameState.Setting;
                                 }
                                 else if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= menuHelp.X) && ((t.Position.X <= menuHelp.X + menuHelp.Width))) &&
                                         ((t.Position.Y >= menuHelp.Y) && ((t.Position.Y <= menuHelp.Y + menuHelp.Height))))
@@ -1055,23 +1193,25 @@ namespace HarborMania
                                             {
                                                 // Jika menyentuh menu tertentu
                                                 level = j * 6 + i + 1; //ditambah 1 karena level mulai dari 1, bukan dari 0
-                                                map = new Sea(this, widthPerTile, heightPerTile, sizeX, sizeY, mapLevel[level]);
-                                                map.Initialize();
-                                                map.LoadContent(out boats);
-
-                                                timeSpan = TimeSpan.FromMilliseconds(1000);
-
-                                                if (play == GameType.Human)
+                                                if (level <= maxLevel)
                                                 {
-                                                    lockboat = -1;
-                                                    _GameState = GameState.HumanPlay;
-                                                }
-                                                else if (play == GameType.Computer)
-                                                {
-                                                    loading = new Thread(new ParameterizedThreadStart(getPath));
-                                                    loading.Start(flagpath);
+                                                    map = new Sea(this, widthPerTile, heightPerTile, sizeX, sizeY, mapLevel[level]);
+                                                    map.Initialize();
+                                                    map.LoadContent(out boats);
 
-                                                    countLoader = 0;
+                                                    if (play == GameType.Human)
+                                                    {
+                                                        lockboat = -1;
+                                                        timeSpan = TimeSpan.FromMilliseconds(1000);
+                                                        _GameState = GameState.HumanPlay;
+                                                    }
+                                                    else if (play == GameType.Computer)
+                                                    {
+                                                        loading = new Thread(new ParameterizedThreadStart(getPath));
+                                                        loading.Start(flagpath);
+
+                                                        countLoader = 0;
+                                                    }
                                                 }
                                             }
                                         }
@@ -1116,12 +1256,16 @@ namespace HarborMania
                             if (x != (widthPerTile * (sizeX + 1)) - boats.ElementAt(0).Size.X)
                             {
                                 x += speed;
-                                if (x > (widthPerTile * (sizeX + 1)))
-                                    x = (widthPerTile * (sizeX + 1));
+                                if (x > (widthPerTile * (sizeX + 1)) - (int)boats.ElementAt(0).Size.X)
+                                    x = (widthPerTile * (sizeX + 1)) - (int)boats.ElementAt(0).Size.X;
                                 boats.ElementAt(0).Position = new Vector2(x, y);
                             }
                             else
                             {
+                                if (level == maxLevel)
+                                {
+                                    maxLevel++;
+                                }
                                 finishPopUp = 1;
                                 //Finish touch listener
                                 TouchCollection touchStateMain = TouchPanel.GetState();
@@ -1338,8 +1482,8 @@ namespace HarborMania
                             if (x != (widthPerTile * (sizeX + 1)) - boats.ElementAt(0).Size.X)
                             {
                                 x += speed;
-                                if (x > (widthPerTile * (sizeX + 1)))
-                                    x = (widthPerTile * (sizeX + 1));
+                                if (x > (widthPerTile * (sizeX + 1)) - (int)boats.ElementAt(0).Size.X)
+                                    x = (widthPerTile * (sizeX + 1)) - (int)boats.ElementAt(0).Size.X;
                                 boats.ElementAt(0).Position = new Vector2(x, y);
                             }
                             else
@@ -1376,7 +1520,7 @@ namespace HarborMania
                                         if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 320) && (t.Position.X <= 400) && (t.Position.Y >= 270) && (t.Position.Y <= 350))
                                         {
                                             //next level 
-                                            if (level != mapLevel.Count())
+                                            if (level <= maxLevel)
                                             {
                                                 level++;
                                                 finishFlag = 0;
@@ -1470,10 +1614,270 @@ namespace HarborMania
                         }
                         break;
                     }
+                    case GameState.Setting:
+                    {
+                        TouchCollection touchStateMain = TouchPanel.GetState();
+                        if ((!touchflag) && (touchStateMain.Count > 0))
+                        {
+                            touchflag = true;
+                            touchTimer = 5;
+                            foreach (TouchLocation t in touchStateMain)
+                            {
+                                if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= pathButton.X) && ((t.Position.X <= pathButton.X + pathButton.Width))) &&
+                                            ((t.Position.Y >= pathButton.Y) && ((t.Position.Y <= pathButton.Y + pathButton.Height))))
+                                {
+                                    // Jika menyentuh menu tertentu
+                                    flagpath += 1;
+                                    flagpath %= 2;
+                                }
+                                else if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= defPos.X) && ((t.Position.X <= defPos.X + defPos.Width))) &&
+                                        ((t.Position.Y >= defPos.Y) && ((t.Position.Y <= defPos.Y + defPos.Height))))
+                                {
+                                    // Jika menyentuh menu tertentu
+                                    screenflag = 3;
+                                    speed = 7;
+                                    flagpath = 1;
+                                    switch (screenflag)
+                                    {
+                                        case 0:
+                                            {
+                                                widthPerTile = 60;
+                                                heightPerTile = 60;
+                                                break;
+                                            }
+                                        case 1:
+                                            {
+                                                widthPerTile = 80;
+                                                heightPerTile = 60;
+                                                break;
+                                            }
+                                        case 2:
+                                            {
+                                                widthPerTile = 60;
+                                                heightPerTile = 80;
+                                                break;
+                                            }
+                                        case 3:
+                                            {
+                                                widthPerTile = 80;
+                                                heightPerTile = 80;
+                                                break;
+                                            }
+                                        case 4:
+                                            {
+                                                widthPerTile = 100;
+                                                heightPerTile = 80;
+                                                break;
+                                            }
+                                        case 5:
+                                            {
+                                                widthPerTile = 120;
+                                                heightPerTile = 80;
+                                                break;
+                                            }
+                                        default: break;
+                                    }
+                                }
+                                else if (((t.State == TouchLocationState.Moved) || (t.State == TouchLocationState.Pressed))
+                                        && ((t.Position.X >= 130) && ((t.Position.X <= 130 + 425))) &&
+                                        ((t.Position.Y >= 183) && ((t.Position.Y <= 183 + 60))))
+                                {
+                                    screenflag = ((int)t.Position.X - 100) / 80;
+                                    switch (screenflag)
+                                    {
+                                        case 0:
+                                        {
+                                            widthPerTile = 60;
+                                            heightPerTile = 60;
+                                            break;
+                                        }
+                                        case 1:
+                                        {
+                                            widthPerTile = 80;
+                                            heightPerTile = 60;
+                                            break;
+                                        }
+                                        case 2:
+                                        {
+                                            widthPerTile = 60;
+                                            heightPerTile = 80;
+                                            break;
+                                        }
+                                        case 3:
+                                        {
+                                            widthPerTile = 80;
+                                            heightPerTile = 80;
+                                            break;
+                                        }
+                                        case 4:
+                                        {
+                                            widthPerTile = 100;
+                                            heightPerTile = 80;
+                                            break;
+                                        }
+                                        case 5:
+                                        {
+                                            widthPerTile = 120;
+                                            heightPerTile = 80;
+                                            break;
+                                        }
+                                        default: break;
+                                    }
+                                }
+                                else if (((t.State == TouchLocationState.Moved) || (t.State == TouchLocationState.Pressed))
+                                        && ((t.Position.X >= 130) && ((t.Position.X <= 130 + 425))) &&
+                                        ((t.Position.Y >= 333) && ((t.Position.Y <= 333 + 60))))
+                                {
+                                    speed = (((int)t.Position.X - 120) / 40) + 4;
+                                }
+                                else if ((t.State == TouchLocationState.Pressed)
+                                        && ((t.Position.X >= 60) && ((t.Position.X <= 60 + 60))) &&
+                                        ((t.Position.Y >= 183) && ((t.Position.Y <= 183 + 60))))
+                                {
+                                    if (screenflag > 0)
+                                    {
+                                        screenflag--;
+                                        switch (screenflag)
+                                        {
+                                            case 0:
+                                                {
+                                                    widthPerTile = 60;
+                                                    heightPerTile = 60;
+                                                    break;
+                                                }
+                                            case 1:
+                                                {
+                                                    widthPerTile = 80;
+                                                    heightPerTile = 60;
+                                                    break;
+                                                }
+                                            case 2:
+                                                {
+                                                    widthPerTile = 60;
+                                                    heightPerTile = 80;
+                                                    break;
+                                                }
+                                            case 3:
+                                                {
+                                                    widthPerTile = 80;
+                                                    heightPerTile = 80;
+                                                    break;
+                                                }
+                                            case 4:
+                                                {
+                                                    widthPerTile = 100;
+                                                    heightPerTile = 80;
+                                                    break;
+                                                }
+                                            case 5:
+                                                {
+                                                    widthPerTile = 120;
+                                                    heightPerTile = 80;
+                                                    break;
+                                                }
+                                            default: break;
+                                        }
+                                    }
+                                }
+                                else if ((t.State == TouchLocationState.Pressed)
+                                        && ((t.Position.X >= 565) && ((t.Position.X <= 565 + 60))) &&
+                                        ((t.Position.Y >= 183) && ((t.Position.Y <= 183 + 60))))
+                                {
+                                    if (screenflag < 5)
+                                    {
+                                        screenflag++;
+                                        switch (screenflag)
+                                        {
+                                            case 0:
+                                                {
+                                                    widthPerTile = 60;
+                                                    heightPerTile = 60;
+                                                    break;
+                                                }
+                                            case 1:
+                                                {
+                                                    widthPerTile = 80;
+                                                    heightPerTile = 60;
+                                                    break;
+                                                }
+                                            case 2:
+                                                {
+                                                    widthPerTile = 60;
+                                                    heightPerTile = 80;
+                                                    break;
+                                                }
+                                            case 3:
+                                                {
+                                                    widthPerTile = 80;
+                                                    heightPerTile = 80;
+                                                    break;
+                                                }
+                                            case 4:
+                                                {
+                                                    widthPerTile = 100;
+                                                    heightPerTile = 80;
+                                                    break;
+                                                }
+                                            case 5:
+                                                {
+                                                    widthPerTile = 120;
+                                                    heightPerTile = 80;
+                                                    break;
+                                                }
+                                            default: break;
+                                        }
+                                    }
+                                }
+                                else if ((t.State == TouchLocationState.Pressed)
+                                        && ((t.Position.X >= 60) && ((t.Position.X <= 60 + 60))) &&
+                                        ((t.Position.Y >= 333) && ((t.Position.Y <= 333 + 60))))
+                                {
+                                    if (speed > 4)
+                                    {
+                                        speed--;
+                                    }
+                                }
+                                else if ((t.State == TouchLocationState.Pressed)
+                                        && ((t.Position.X >= 565) && ((t.Position.X <= 565 + 60))) &&
+                                        ((t.Position.Y >= 333) && ((t.Position.Y <= 333 + 60))))
+                                {
+                                    if (speed < 14)
+                                    {
+                                        speed++;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (touchTimer == 0) touchflag = false;
+                            else touchTimer--;
+                        }
+                        break;
+                    }
                     default: break;
                 }
             }
             base.Update(gameTime);
+        }
+
+        /// <summary>
+            /// This is the handle when the Game1 exits.
+        /// </summary>
+        /// <param name="sender">Exit sender.</param>
+        /// <param name="args">Exit arguments.</param>
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (IsolatedStorageFileStream rawStream = isf.CreateFile("SavedState.txt"))
+                {
+                    StreamWriter writer = new StreamWriter(rawStream);
+                    writer.WriteLine(flagpath + " " + sizeX + " " + sizeY + " " + speed + " " + screenflag + " " + maxLevel);
+                    writer.Close();
+                }
+            }
+            base.OnExiting(sender, args);
         }
     }
 }
