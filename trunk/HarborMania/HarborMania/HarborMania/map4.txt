@@ -17,3 +17,5 @@
 3 5 3 1 Left Boat/Boat31 
 0 Tile/Sea
 1 Tile/Wood
+2 Tile/sea_starfish
+3 Tile/sea_lifevest

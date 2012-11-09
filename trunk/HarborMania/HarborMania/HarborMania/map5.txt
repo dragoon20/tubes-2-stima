@@ -22,3 +22,5 @@
 5 0 1 3 Bottom Boat/Boat13
 0 Tile/Sea
 1 Tile/Wood
+2 Tile/sea_starfish
+3 Tile/sea_lifevest
