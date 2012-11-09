@@ -1,0 +1,332 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Harbor Mania</name>
+    </assembly>
+    <members>
+        <member name="T:HarborMania.Boat">
+            <summary>
+            Class Boat is used for saving boat condition.
+            <list type="Properties">
+            <item>
+            <description>Position is used for marking position of boat from top, left.</description>
+            </item>
+            <item>
+            <description>Size is used for the value of width(X) and height(Y) of boat.</description>
+            </item>
+            <item>
+            <description>Arah is used for saving the orientation of the boat.</description>
+            </item>
+            <item>
+            <description>Texture is used for saving the image for boat.</description>
+            </item>
+            </list>
+            </summary>
+        </member>
+        <member name="M:HarborMania.Boat.#ctor(Microsoft.Xna.Framework.Game,HarborMania.Boat)">
+            <summary>
+            Constructor for Boat class.
+            </summary>
+            <param name="game">Game class for this Drawable Game Component.</param>
+            <param name="boat">Boat to be copied.</param>
+        </member>
+        <member name="M:HarborMania.Boat.#ctor(Microsoft.Xna.Framework.Game)">
+            <summary>
+            Constructor for Boat class.
+            </summary>
+            <param name="game">Game class for this Drawable Game Component.</param>
+        </member>
+        <member name="M:HarborMania.Boat.#ctor(Microsoft.Xna.Framework.Game,Microsoft.Xna.Framework.Vector2,Microsoft.Xna.Framework.Vector2,System.Int32,System.Int32,Microsoft.Xna.Framework.Graphics.Texture2D)">
+            <summary>
+            Constructor for Boat class.
+            </summary>
+            <param name="game">Game class for this Drawable Game Component.</param>
+            <param name="Position">Position of the boat.</param>
+            <param name="Size">Size of the boat.</param>
+            <param name="Texture">Texture of the boat.</param>
+            <param name="w">The width per tile.</param>
+            <param name="h">The height per tile.</param>
+        </member>
+        <member name="M:HarborMania.Boat.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
+            <summary>
+            Method for drawing the boat to the screen.
+            </summary>
+            <param name="spriteBatch">A SpriteBatch to be used for Drawing.</param>
+        </member>
+        <member name="M:HarborMania.Boat.Initialize">
+            <summary>
+            A method overriden to initialize.
+            </summary>
+        </member>
+        <member name="M:HarborMania.Boat.Update(Microsoft.Xna.Framework.GameTime)">
+            <summary>
+            A method overriden to update the DrawableGameComponent.
+            </summary>
+            <param name="gameTime">Provides a snapshot of timing values.</param>
+        </member>
+        <member name="M:HarborMania.Boat.ToString">
+            <summary>
+            An method overriden to print Boat as String.
+            </summary>
+            <returns>String of Boat position and size.</returns>
+        </member>
+        <member name="P:HarborMania.Boat.Arah">
+            <summary>
+            Getter and Setter for element arah.
+            </summary>
+        </member>
+        <member name="P:HarborMania.Boat.Size">
+            <summary>
+            Getter and Setter for element size.
+            </summary>
+        </member>
+        <member name="P:HarborMania.Boat.Position">
+            <summary>
+            Getter and Setter for element position.
+            </summary>
+        </member>
+        <member name="T:HarborMania.Game1">
+            <summary>
+            This is the main type for your game
+            </summary>
+        </member>
+        <member name="M:HarborMania.Game1.#ctor">
+            <summary>
+            This is constructor for Game1 class.
+            </summary>
+        </member>
+        <member name="M:HarborMania.Game1.Initialize">
+            <summary>
+            This is initialize method for class Game1.
+            </summary>
+        </member>
+        <member name="M:HarborMania.Game1.LoadContent">
+            <summary>
+            This is used for loading content for class Game1.
+            </summary>
+        </member>
+        <member name="M:HarborMania.Game1.LoadLevel">
+            <summary>
+            This is used for loading level and maps for Game1.
+            </summary>
+        </member>
+        <member name="M:HarborMania.Game1.UnloadContent">
+            <summary>
+            This is called when the game want to unload its content.
+            </summary>
+        </member>
+        <member name="M:HarborMania.Game1.ListBoatToString(System.Collections.Generic.List{HarborMania.Boat})">
+            <summary>
+            This is used for printing listboat.
+            </summary>
+        </member>
+        <member name="M:HarborMania.Game1.getPath(System.Object)">
+            <summary>
+            This is called to fill best path for solution.
+            </summary>
+            <param name="flagpass">A flag, 0 for DFS, 1 for BFS.</param>
+        </member>
+        <member name="M:HarborMania.Game1.Draw(Microsoft.Xna.Framework.GameTime)">
+            <summary>
+            This is called when the game should draw itself.
+            </summary>
+            <param name="gameTime">Provides a snapshot of timing values.</param>
+        </member>
+        <member name="M:HarborMania.Game1.Update(Microsoft.Xna.Framework.GameTime)">
+            <summary>
+            Allows the game to run logic such as updating the world,
+            checking for collisions, gathering input, and playing audio.
+            </summary>
+            <param name="gameTime">Provides a snapshot of timing values.</param>
+        </member>
+        <member name="M:HarborMania.Game1.OnExiting(System.Object,System.EventArgs)">
+            <summary>
+            This is the handle when the Game1 exits.
+            </summary>
+            <param name="sender">Exit sender.</param>
+            <param name="args">Exit arguments.</param>
+        </member>
+        <member name="T:HarborMania.Sea">
+            <summary>
+            Class Sea is used for saving node nodes, width per tile, and finish position.
+            <list type="Properties">
+            <item>
+            <description>Tile is a matrix to contain all the nodes status.</description>
+            </item>
+            <item>
+            <description>WidthPerTile is used to limit the width per tile.</description>
+            </item>
+            <item>
+            <description>HeightPerTile is used to limit the heigth per tile.</description>
+            </item>
+            <item>
+            <description>totalNodeX is used to describe total X axis Node.</description>
+            </item>
+            <item>
+            <description>totalNodeY is used to describe total Y axis Node.</description>
+            </item>
+             <item>
+            <description>mapstatus is used to map tile status to texture2D.</description>
+            </item>
+            <item>
+            <description>path is the file location of the map.</description>
+            </item>
+            </list>
+            </summary>
+        </member>
+        <member name="M:HarborMania.Sea.Initialize">
+            <summary>
+            A method overriden to initialize.
+            </summary>
+        </member>
+        <member name="M:HarborMania.Sea.getNode(System.Int32,System.Int32)">
+            <summary>
+            Getter Node at x = i, y = j.
+            </summary>
+            <param name="i">The absis.</param>
+            <param name="j">The ordinat.</param>
+            <returns>Node at x = i, y = j.</returns>
+        </member>
+        <member name="M:HarborMania.Sea.#ctor(Microsoft.Xna.Framework.Game)">
+            <summary>
+            Constructor for Class Sea.
+            </summary>
+            <param name="game">The Game class for DrawableGameComponent.</param>
+        </member>
+        <member name="M:HarborMania.Sea.#ctor(Microsoft.Xna.Framework.Game,HarborMania.Sea)">
+            <summary>
+            Constructor for Class Sea.
+            </summary>
+            <param name="game">The Game class for DrawableGameComponent.</param>
+            <param name="map">The Sea to be copied.</param>
+        </member>
+        <member name="M:HarborMania.Sea.#ctor(Microsoft.Xna.Framework.Game,System.Int32,System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            Constructor for Class Sea.
+            </summary>
+            <param name="game">The Game class for DrawableGameComponent.</param>
+            <param name="W">The width per tile for the map.</param>
+            <param name="H">The heigth per tile for the map.</param>
+            <param name="totalNodeX_">Total absis x for the map.</param>
+            <param name="totalNodeY_">Total ordinat y for the map.</param>
+            <param name="Path">The path to load the level.</param>
+        </member>
+        <member name="M:HarborMania.Sea.GetStatus(System.Int32,System.Int32)">
+            <summary>
+            Getter for Status of Node at x = j and y = i.
+            </summary>
+            <param name="i">The absis of the node.</param>
+            <param name="j">The ordinat of the node.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HarborMania.Sea.SetStatus(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Setter for Status of Node at x = j and y = i to status.
+            </summary>
+            <param name="i">The absis of the node.</param>
+            <param name="j">The ordinat of the node.</param>
+            <param name="status">The status to be set.</param>
+        </member>
+        <member name="M:HarborMania.Sea.LoadContent(System.Collections.Generic.List{HarborMania.Boat}@)">
+            <summary>
+            Load Content of the map with the boat.
+            </summary>
+            <param name="boats">List of boats to be returned.</param>
+        </member>
+        <member name="M:HarborMania.Sea.Update(Microsoft.Xna.Framework.GameTime)">
+            <summary>
+            A method overriden to update the DrawableGameComponent.
+            </summary>
+            <param name="gameTime">Provides a snapshot of timing values.</param>
+        </member>
+        <member name="M:HarborMania.Sea.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
+            <summary>
+            Method for drawing the sea to the screen.
+            </summary>
+            <param name="spriteBatch">A SpriteBatch to be used for Drawing.</param>
+        </member>
+        <member name="P:HarborMania.Sea.outPos">
+            <summary>
+            Getter and Setter for element outPos.
+            </summary>
+        </member>
+        <member name="T:HarborMania.BoatPath">
+            <summary>
+            Class Boat is used for saving boat movement.
+            <list type="Properties">
+            <item>
+            <description>Boat is used for saving boat position on list.</description>
+            </item>
+            <item>
+            <description>PosisiAwal is used for saving boat position before movement.</description>
+            </item>
+            <item>
+            <description>PosisiAkhir is used for saving boat position after movement.</description>
+            </item>
+            </list>
+            </summary>
+        </member>
+        <member name="M:HarborMania.BoatPath.#ctor">
+            <summary>
+            Constructor untuk BoatPath.
+            </summary>
+        </member>
+        <member name="M:HarborMania.BoatPath.#ctor(System.Int32,Microsoft.Xna.Framework.Vector2,Microsoft.Xna.Framework.Vector2)">
+            <summary>
+            Constructor untuk BoatPath.
+            </summary>
+            <param name="posboat">Posisi Boat di list.</param>
+            <param name="awal">Posisi Awal Boat.</param>
+            <param name="akhir">Posisi Akhir Boat.</param>
+        </member>
+        <member name="P:HarborMania.BoatPath.Boat">
+            <summary>
+            Getter and Setter for element boat yang dipilih.
+            </summary>
+        </member>
+        <member name="P:HarborMania.BoatPath.PosisiAwal">
+            <summary>
+            Getter and Setter for element Posisi Awal.
+            </summary>
+        </member>
+        <member name="P:HarborMania.BoatPath.PosisiAkhir">
+            <summary>
+            Getter and Setter for element Posisi Akhir.
+            </summary>
+        </member>
+        <member name="T:HarborMania.Node">
+            <summary>
+            Class Node is used for saving node status and tiles.
+            <list type="Properties">
+            <item>
+            <description>Status is an int for describing the tile texture.</description>
+            </item>
+            <item>
+            <description>StatusSebenarnya is used for describing the tile availability.</description>
+            </item>
+            </list>
+            </summary>
+        </member>
+        <member name="M:HarborMania.Node.#ctor">
+            <summary>
+            Constructor for Node Class.
+            </summary>
+        </member>
+        <member name="M:HarborMania.Node.#ctor(HarborMania.Node)">
+            <summary>
+            Constructor for Node Class.
+            </summary>
+            <param name="n">Node to be copied.</param>
+        </member>
+        <member name="P:HarborMania.Node.Status">
+            <summary>
+            Getter and Setter for element status.
+            </summary>
+        </member>
+        <member name="P:HarborMania.Node.StatusSebenarnya">
+            <summary>
+            Getter and Setter for element statussebenarnya.
+            </summary>
+        </member>
+    </members>
+</doc>

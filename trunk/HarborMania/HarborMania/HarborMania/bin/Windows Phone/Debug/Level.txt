@@ -19,4 +19,3 @@
 19 Map19.txt
 20 Map20.txt
 21 Map21.txt
-22 Map22.txt

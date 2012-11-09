@@ -1,8 +1,8 @@
-﻿0 0 0 0 0 0
+﻿0 0 0 3 0 0
+0 2 0 0 0 0
+0 2 0 0 0 0
 0 0 0 0 0 0
-0 0 0 0 0 0
-0 0 0 0 0 0
-0 0 0 0 0 0
+0 0 2 2 0 0
 0 0 0 0 0 0
 3
 60000
@@ -13,3 +13,5 @@
 5 3 1 2 Bottom Boat/Boat12
 0 Tile/Sea
 1 Tile/Wood
+2 Tile/sea_starfish
+3 Tile/sea_lifevest

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HarborMania", "HarborMania\HarborMania\HarborMania.csproj", "{3D004063-229C-493A-99F7-2C01151AAE33}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "HarborManiaContent", "HarborMania\HarborManiaContent\HarborManiaContent.contentproj", "{1B7A025A-7906-4948-8CDF-BF1ABE208F92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HarborManiaContent", "HarborMania\HarborManiaContent\HarborManiaContent.contentproj", "{1B7A025A-7906-4948-8CDF-BF1ABE208F92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
