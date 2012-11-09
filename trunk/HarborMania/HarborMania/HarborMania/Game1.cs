@@ -224,6 +224,11 @@ namespace HarborMania
             }
         }
 
+        public void setTimeSpan (Double ms)
+        {
+            timeSpan = TimeSpan.FromMilliseconds(ms);
+        } 
+
         /// <summary>
             /// This is initialize method for class Game1.
         /// </summary>
@@ -1238,12 +1243,14 @@ namespace HarborMania
 						if (startCoutingTime == false)
                         {
                             startCoutingTime = true;
+                            setTimeSpan(map.TIME);
+                            /*
                             if (level <= 3) 
                                 timeSpan = TimeSpan.FromMilliseconds(180000);
                             if (level <=6) 
                                 timeSpan = TimeSpan.FromMilliseconds(240000);
                             if (level <=9)
-                                timeSpan = TimeSpan.FromMilliseconds(300000);
+                                timeSpan = TimeSpan.FromMilliseconds(300000); */
                         }
                         if (timeSpan.TotalSeconds == 0) {
                             _GameState = GameState.GameOver;
@@ -1361,12 +1368,16 @@ namespace HarborMania
                                             if (posAkhirX == sizeX)
                                             {
                                                 TimeSpan waktuAwal = TimeSpan.FromMilliseconds(180000);
+                                                /*
                                                 if (level <= 3)
                                                      waktuAwal = TimeSpan.FromMilliseconds(180000);
                                                 else if (level <= 6)
                                                      waktuAwal = TimeSpan.FromMilliseconds(240000);
                                                 else if (level <= 9)
-                                                     waktuAwal = TimeSpan.FromMilliseconds(300000);
+                                                     waktuAwal = TimeSpan.FromMilliseconds(300000); */
+
+                                                waktuAwal = TimeSpan.FromMilliseconds(map.TIME);
+
                                                 waktuAwal = waktuAwal - timeSpan;
                                                 finishTime = String.Format("{0}:{1:D2}", waktuAwal.Minutes, waktuAwal.Seconds + 1);
                                                 finishFlag = 1;

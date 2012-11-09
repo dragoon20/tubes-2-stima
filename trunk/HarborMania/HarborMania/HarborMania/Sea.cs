@@ -46,6 +46,7 @@ namespace HarborMania
         int outPosY;
         Texture2D seaTile;
         Texture2D woodTile;
+        Double time;
 
         Dictionary<int, Texture2D> mapstatus;
         String path;
@@ -64,6 +65,12 @@ namespace HarborMania
         public Vector2 outPos
         {
             get { return new Vector2(totalNodeX, outPosY); }
+        }
+
+        public Double TIME
+        {
+            get { return time; }
+            set { time = value; }
         }
 
         /// <summary>
@@ -115,7 +122,7 @@ namespace HarborMania
             for (int i = 0; i < totalNodeY; i++)
             {
                 Tile[i] = new Node[totalNodeX];
-                for (int j = 0; j < totalNodeX; j++)
+                for (int j = 0; j < totalNodeX; j++) 
                 {
                     Tile[i][j] = new Node(map.getNode(i,j));
                 }
@@ -260,6 +267,10 @@ namespace HarborMania
                     mapstatus.Add(Convert.ToInt32(splitline[0]), Game.Content.Load<Texture2D>(splitline[1]));
                 templine = loadpath.ReadLine();
             }
+
+            String templine2 = loadpath.ReadLine();
+            time = Convert.ToDouble(templine2);
+            Debug.WriteLine("time = " + time);
 
             boats = localboats;
         }
