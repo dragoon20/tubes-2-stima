@@ -201,7 +201,10 @@ namespace HarborMania
                 for (int j = 0; j < totalNodeX; ++j)
                 {
                     Tile[i][j].Status = Convert.ToInt16(splitline[j]);
-                    Tile[i][j].StatusSebenarnya = 0;
+                    if (Tile[i][j].Status % 2 == 0)
+                        Tile[i][j].StatusSebenarnya = 0;
+                    else
+                        Tile[i][j].StatusSebenarnya = 1;
                 }
             }
 

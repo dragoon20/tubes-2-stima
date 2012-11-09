@@ -11,49 +11,267 @@
       <Time>2012-11-04T17:21:36.1034562+07:00</Time>
     </Item>
     <Item>
-      <Source>menu_button.png</Source>
-      <Name>menu_button</Name>
+      <Source>Boat\Boat12.png</Source>
+      <Name>Boat\Boat12</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\menu_button.xnb</Output>
-      <Time>2012-11-04T15:41:49.618398+07:00</Time>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat12.xnb</Output>
+      <Time>2012-11-06T06:05:07.3832305+07:00</Time>
     </Item>
     <Item>
-      <Source>SpriteFont1.spritefont</Source>
-      <Name>SpriteFont1</Name>
+      <Source>Boat\Boat13.png</Source>
+      <Name>Boat\Boat13</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat13.xnb</Output>
+      <Time>2012-11-06T06:05:07.3832305+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Boat\Boat21.png</Source>
+      <Name>Boat\Boat21</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat21.xnb</Output>
+      <Time>2012-11-06T06:05:07.3676305+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Boat\Boat31.png</Source>
+      <Name>Boat\Boat31</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat31.xnb</Output>
+      <Time>2012-11-06T06:05:07.3832305+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Boat\BoatPlayer.png</Source>
+      <Name>Boat\BoatPlayer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\BoatPlayer.xnb</Output>
+      <Time>2012-11-06T10:05:05.9284407+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Tile\Sea.jpg</Source>
+      <Name>Tile\Sea</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Tile\Sea.xnb</Output>
+      <Time>2012-11-06T10:05:37.7005109+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Tile\Wood.jpg</Source>
+      <Name>Tile\Wood</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Tile\Wood.xnb</Output>
+      <Time>2012-11-06T10:05:45.7033249+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Font\SpriteFont1.spritefont</Source>
+      <Name>Font\SpriteFont1</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont1.xnb</Output>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Font\SpriteFont1.xnb</Output>
       <Time>2012-11-04T15:51:59.2012641+07:00</Time>
     </Item>
     <Item>
-      <Source>Rect.png</Source>
-      <Name>Rect</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Rect.xnb</Output>
-      <Time>2012-11-05T16:30:45.4870106+07:00</Time>
-    </Item>
-    <Item>
-      <Source>SpriteFont2.spritefont</Source>
-      <Name>SpriteFont2</Name>
+      <Source>Font\SpriteFont2.spritefont</Source>
+      <Name>Font\SpriteFont2</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont2.xnb</Output>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Font\SpriteFont2.xnb</Output>
       <Time>2012-11-05T10:40:20.999818+07:00</Time>
     </Item>
     <Item>
-      <Source>SpriteFont3.spritefont</Source>
-      <Name>SpriteFont3</Name>
+      <Source>Font\SpriteFont3.spritefont</Source>
+      <Name>Font\SpriteFont3</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont3.xnb</Output>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Font\SpriteFont3.xnb</Output>
       <Time>2012-11-05T10:40:56.8320134+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Font\SpriteFont4.spritefont</Source>
+      <Name>Font\SpriteFont4</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Font\SpriteFont4.xnb</Output>
+      <Time>2012-11-06T13:22:43.3529828+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Boat\Boat14.png</Source>
+      <Name>Boat\Boat14</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat14.xnb</Output>
+      <Time>2012-11-06T15:23:22.6753912+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Boat\Boat41.png</Source>
+      <Name>Boat\Boat41</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat41.xnb</Output>
+      <Time>2012-11-06T15:23:22.6753912+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\menu_button.png</Source>
+      <Name>Button\menu_button</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\menu_button.xnb</Output>
+      <Time>2012-11-04T15:41:49.618398+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\Previous.png</Source>
+      <Name>Button\Previous</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\Previous.xnb</Output>
+      <Time>2012-11-06T10:57:58.1257873+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\next_level.png</Source>
+      <Name>Button\next_level</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\next_level.xnb</Output>
+      <Time>2012-11-08T21:11:54.786555+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\choose_level.png</Source>
+      <Name>Button\choose_level</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\choose_level.xnb</Output>
+      <Time>2012-11-08T21:11:54.7905552+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\replay_level.png</Source>
+      <Name>Button\replay_level</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\replay_level.xnb</Output>
+      <Time>2012-11-08T21:11:54.7945554+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\Rect.png</Source>
+      <Name>Button\Rect</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\Rect.xnb</Output>
+      <Time>2012-11-08T22:52:41.4454041+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\Next.png</Source>
+      <Name>Button\Next</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\Next.xnb</Output>
+      <Time>2012-11-09T09:48:07.1537047+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\bfs_button.png</Source>
+      <Name>Button\bfs_button</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\bfs_button.xnb</Output>
+      <Time>2012-11-07T17:46:50.6200834+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\dfs_button.png</Source>
+      <Name>Button\dfs_button</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\dfs_button.xnb</Output>
+      <Time>2012-11-07T17:46:50.6250834+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\Lock.png</Source>
+      <Name>Button\Lock</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\Lock.xnb</Output>
+      <Time>2012-11-09T09:11:04.0379954+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Button\def_button.png</Source>
+      <Name>Button\def_button</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\def_button.xnb</Output>
+      <Time>2012-11-09T09:57:56.3141549+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Music\LikeABird.mp3</Source>
+      <Name>Music\LikeABird</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\LikeABird.xnb</Output>
+      <Extra>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\LikeABird.wma</Extra>
+      <Time>2012-11-09T14:28:07.8220084+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Music\GoodIntentions.mp3</Source>
+      <Name>Music\GoodIntentions</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\GoodIntentions.xnb</Output>
+      <Extra>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\GoodIntentions.wma</Extra>
+      <Time>2012-11-09T14:49:05.9649701+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Music\Collision.wav</Source>
+      <Name>Music\Collision</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\Collision.xnb</Output>
+      <Time>2012-11-09T15:28:23.3918072+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Tile\sea_lifevest.png</Source>
+      <Name>Tile\sea_lifevest</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Tile\sea_lifevest.xnb</Output>
+      <Time>2012-11-09T14:28:08.2930354+07:00</Time>
+    </Item>
+    <Item>
+      <Source>Tile\sea_starfish.png</Source>
+      <Name>Tile\sea_starfish</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Tile\sea_starfish.xnb</Output>
+      <Time>2012-11-09T14:28:08.3000358+07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

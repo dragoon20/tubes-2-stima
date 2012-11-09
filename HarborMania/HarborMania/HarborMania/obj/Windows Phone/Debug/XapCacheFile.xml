@@ -1,13 +1,61 @@
-﻿<xapCache source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\HarborMania.xap" wasSigned="False" certificateThumbprint="" TimeStampUrl="" lastWriteTime="11/5/2012 4:33:38 PM">
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\Background.png" archivePath="Background.png" lastWriteTime="10/31/2012 12:14:17 AM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\PhoneGameThumb.png" archivePath="PhoneGameThumb.png" lastWriteTime="10/31/2012 12:14:17 AM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\AppManifest.xaml" archivePath="AppManifest.xaml" lastWriteTime="11/3/2012 3:06:46 PM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\WMAppManifest.xml" archivePath="WMAppManifest.xml" lastWriteTime="11/3/2012 3:06:46 PM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\HarborMania.dll" archivePath="HarborMania.dll" lastWriteTime="11/5/2012 4:33:38 PM" />
+﻿<xapCache source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Harbor Mania.xap" wasSigned="False" certificateThumbprint="" TimeStampUrl="" lastWriteTime="11/9/2012 4:41:18 PM">
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\Background.png" archivePath="Background.png" lastWriteTime="11/9/2012 2:20:08 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\PhoneGameThumb.png" archivePath="PhoneGameThumb.png" lastWriteTime="11/9/2012 2:20:39 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\AppManifest.xaml" archivePath="AppManifest.xaml" lastWriteTime="11/9/2012 2:25:58 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\WMAppManifest.xml" archivePath="WMAppManifest.xml" lastWriteTime="11/9/2012 2:27:30 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Harbor Mania.dll" archivePath="Harbor Mania.dll" lastWriteTime="11/9/2012 4:41:18 PM" />
   <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\MainScreen.xnb" archivePath="Content\MainScreen.xnb" lastWriteTime="11/4/2012 5:22:11 PM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\menu_button.xnb" archivePath="Content\menu_button.xnb" lastWriteTime="11/4/2012 3:42:31 PM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont1.xnb" archivePath="Content\SpriteFont1.xnb" lastWriteTime="11/4/2012 3:52:03 PM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Rect.xnb" archivePath="Content\Rect.xnb" lastWriteTime="11/5/2012 4:33:37 PM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont2.xnb" archivePath="Content\SpriteFont2.xnb" lastWriteTime="11/5/2012 10:44:39 AM" />
-  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\SpriteFont3.xnb" archivePath="Content\SpriteFont3.xnb" lastWriteTime="11/5/2012 10:44:39 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat12.xnb" archivePath="Content\Boat\Boat12.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat13.xnb" archivePath="Content\Boat\Boat13.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat21.xnb" archivePath="Content\Boat\Boat21.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat31.xnb" archivePath="Content\Boat\Boat31.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\BoatPlayer.xnb" archivePath="Content\Boat\BoatPlayer.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Tile\Sea.xnb" archivePath="Content\Tile\Sea.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Tile\Wood.xnb" archivePath="Content\Tile\Wood.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Font\SpriteFont1.xnb" archivePath="Content\Font\SpriteFont1.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Font\SpriteFont2.xnb" archivePath="Content\Font\SpriteFont2.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Font\SpriteFont3.xnb" archivePath="Content\Font\SpriteFont3.xnb" lastWriteTime="11/6/2012 10:06:34 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Font\SpriteFont4.xnb" archivePath="Content\Font\SpriteFont4.xnb" lastWriteTime="11/6/2012 1:22:48 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat14.xnb" archivePath="Content\Boat\Boat14.xnb" lastWriteTime="11/6/2012 3:24:00 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Boat\Boat41.xnb" archivePath="Content\Boat\Boat41.xnb" lastWriteTime="11/6/2012 3:24:00 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\menu_button.xnb" archivePath="Content\Button\menu_button.xnb" lastWriteTime="11/8/2012 11:10:26 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\Previous.xnb" archivePath="Content\Button\Previous.xnb" lastWriteTime="11/8/2012 11:10:26 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\next_level.xnb" archivePath="Content\Button\next_level.xnb" lastWriteTime="11/8/2012 11:10:26 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\choose_level.xnb" archivePath="Content\Button\choose_level.xnb" lastWriteTime="11/8/2012 11:10:26 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\replay_level.xnb" archivePath="Content\Button\replay_level.xnb" lastWriteTime="11/8/2012 11:10:26 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\Rect.xnb" archivePath="Content\Button\Rect.xnb" lastWriteTime="11/8/2012 11:10:26 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\Next.xnb" archivePath="Content\Button\Next.xnb" lastWriteTime="11/9/2012 9:48:14 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\bfs_button.xnb" archivePath="Content\Button\bfs_button.xnb" lastWriteTime="11/8/2012 11:42:48 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\dfs_button.xnb" archivePath="Content\Button\dfs_button.xnb" lastWriteTime="11/8/2012 11:42:48 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\Lock.xnb" archivePath="Content\Button\Lock.xnb" lastWriteTime="11/9/2012 9:14:37 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Button\def_button.xnb" archivePath="Content\Button\def_button.xnb" lastWriteTime="11/9/2012 10:02:41 AM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\LikeABird.xnb" archivePath="Content\Music\LikeABird.xnb" lastWriteTime="11/9/2012 2:40:55 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\GoodIntentions.xnb" archivePath="Content\Music\GoodIntentions.xnb" lastWriteTime="11/9/2012 2:54:47 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\Collision.xnb" archivePath="Content\Music\Collision.xnb" lastWriteTime="11/9/2012 3:36:15 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Tile\sea_lifevest.xnb" archivePath="Content\Tile\sea_lifevest.xnb" lastWriteTime="11/9/2012 3:39:43 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Tile\sea_starfish.xnb" archivePath="Content\Tile\sea_starfish.xnb" lastWriteTime="11/9/2012 3:39:43 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\LikeABird.wma" archivePath="Content\Music\LikeABird.wma" lastWriteTime="11/9/2012 2:40:55 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Content\Music\GoodIntentions.wma" archivePath="Content\Music\GoodIntentions.wma" lastWriteTime="11/9/2012 2:54:47 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map10.txt" archivePath="map10.txt" lastWriteTime="11/9/2012 4:12:51 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map11.txt" archivePath="map11.txt" lastWriteTime="11/9/2012 4:00:56 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map12.txt" archivePath="map12.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map13.txt" archivePath="map13.txt" lastWriteTime="11/9/2012 4:02:01 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map14.txt" archivePath="map14.txt" lastWriteTime="11/9/2012 4:22:06 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map15.txt" archivePath="map15.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map16.txt" archivePath="map16.txt" lastWriteTime="11/9/2012 4:24:55 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map17.txt" archivePath="map17.txt" lastWriteTime="11/9/2012 4:03:53 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map18.txt" archivePath="map18.txt" lastWriteTime="11/9/2012 4:04:25 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map19.txt" archivePath="map19.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map2.txt" archivePath="map2.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map20.txt" archivePath="map20.txt" lastWriteTime="11/9/2012 4:04:54 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map21.txt" archivePath="map21.txt" lastWriteTime="11/9/2012 4:05:14 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map5.txt" archivePath="map5.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map6.txt" archivePath="map6.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map7.txt" archivePath="map7.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map8.txt" archivePath="map8.txt" lastWriteTime="11/9/2012 3:58:45 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map9.txt" archivePath="map9.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\Level.txt" archivePath="Level.txt" lastWriteTime="11/9/2012 3:43:17 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map1.txt" archivePath="map1.txt" lastWriteTime="11/9/2012 3:41:35 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map3.txt" archivePath="map3.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
+  <file source="D:\Subversion\tubes-2-stima\HarborMania\HarborMania\HarborMania\bin\Windows Phone\Debug\map4.txt" archivePath="map4.txt" lastWriteTime="11/9/2012 3:38:04 PM" />
 </xapCache>

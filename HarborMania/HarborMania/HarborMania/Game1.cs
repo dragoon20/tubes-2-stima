@@ -48,11 +48,14 @@ namespace HarborMania
         int offx;
         int offy;
         int statescreen;
+        int statescreenawal;
         int touchxawal;
         int touchxakhir;
+        bool animatescrolling;
         int minscroll;
         int maxscroll;
         int countLoader;
+        int currentscore;
 
         TimeSpan timeSpan = TimeSpan.FromMilliseconds(0);
         TimeSpan waktuAwal = TimeSpan.FromMilliseconds(0);
@@ -121,6 +124,12 @@ namespace HarborMania
         int sizeX;
         int sizeY;
         int maxLevel;
+        int[] highscore;
+
+        // Suara
+        Song mainsound;
+        Song playsound;
+        SoundEffect colsound;
 
         /// <summary>
             /// This is constructor for Game1 class.
@@ -145,7 +154,6 @@ namespace HarborMania
             // Set GameState jadi menu utama
             _GameState = GameState.MainMenu;
             touchflag = false;
-            scrollflag = false;
             statescreen = 0;
             menuPlay = new Rectangle(30, 40, 300, 61);
             menuSetting = new Rectangle(30, 118, 300, 61);
@@ -155,87 +163,8 @@ namespace HarborMania
             pathButton = new Rectangle(650, 170, 80, 80);
             defPos = new Rectangle(650, 320, 80, 80);
 
-            // Setting
-            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                if (isf.FileExists("SavedState.txt"))
-                {
-                    using (IsolatedStorageFileStream rawStream = isf.OpenFile("SavedState.txt",FileMode.Open))
-                    {
-                        StreamReader reader = new StreamReader(rawStream);
-                        String [] configuration = reader.ReadLine().Split(' ');
-                        flagpath = Convert.ToInt32(configuration[0]);
-                        sizeX = Convert.ToInt32(configuration[1]);
-                        sizeY = Convert.ToInt32(configuration[2]);
-                        speed = Convert.ToInt32(configuration[3]);
-                        screenflag = Convert.ToInt32(configuration[4]);
-                        maxLevel = Convert.ToInt32(configuration[5]);
-                        reader.Close();
-                    }
-                }
-                else
-                {
-                    flagpath = 1;
-                    sizeX = 6;
-                    sizeY = 6;
-                    speed = 10;
-                    screenflag = 3;
-                    maxLevel = 1;
-                    using (IsolatedStorageFileStream rawStream = isf.CreateFile("SavedState.txt")) 
-                    {
-                        StreamWriter writer = new StreamWriter(rawStream);
-                        writer.WriteLine(flagpath + " " + sizeX + " " + sizeY + " " + speed + " " + screenflag + " " + maxLevel);
-                        writer.Close(); 
-                    }
-                }
-                switch (screenflag)
-                {
-                    case 0:
-                        {
-                            widthPerTile = 60;
-                            heightPerTile = 60;
-                            break;
-                        }
-                    case 1:
-                        {
-                            widthPerTile = 80;
-                            heightPerTile = 60;
-                            break;
-                        }
-                    case 2:
-                        {
-                            widthPerTile = 60;
-                            heightPerTile = 80;
-                            break;
-                        }
-                    case 3:
-                        {
-                            widthPerTile = 80;
-                            heightPerTile = 80;
-                            break;
-                        }
-                    case 4:
-                        {
-                            widthPerTile = 100;
-                            heightPerTile = 80;
-                            break;
-                        }
-                    case 5:
-                        {
-                            widthPerTile = 120;
-                            heightPerTile = 80;
-                            break;
-                        }
-                    default: break;
-                }
-            }
+            maxLevel = 1000;
         }
-
-        /*
-        public void setTimeSpan (Double ms)
-        {
-            timeSpan = TimeSpan.FromMilliseconds(ms);
-        } */
 
         /// <summary>
             /// This is initialize method for class Game1.
@@ -281,8 +210,102 @@ namespace HarborMania
             font2 = Content.Load<SpriteFont>("Font/SpriteFont2");
             font3 = Content.Load<SpriteFont>("Font/SpriteFont3");
             font4 = Content.Load<SpriteFont>("Font/SpriteFont4");
-            
+
+            mainsound = Content.Load<Song>("Music/LikeABird");
+            playsound = Content.Load<Song>("Music/GoodIntentions");
+            colsound = Content.Load<SoundEffect>("Music/Collision");
             LoadLevel();
+            highscore = new int[mapLevel.Count];
+            for (int i = 0; i < mapLevel.Count; ++i)
+            {
+                highscore[i] = 0;
+            }
+
+            // Setting
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (isf.FileExists("SavedState.txt"))
+                {
+                    using (IsolatedStorageFileStream rawStream = isf.OpenFile("SavedState.txt", FileMode.Open))
+                    {
+                        StreamReader reader = new StreamReader(rawStream);
+                        String[] configuration = reader.ReadLine().Split(' ');
+                        flagpath = Convert.ToInt32(configuration[0]);
+                        sizeX = Convert.ToInt32(configuration[1]);
+                        sizeY = Convert.ToInt32(configuration[2]);
+                        speed = Convert.ToInt32(configuration[3]);
+                        screenflag = Convert.ToInt32(configuration[4]);
+                        maxLevel = Convert.ToInt32(configuration[5]);
+                        for (int i = 0; i < maxLevel - 1; ++i)
+                        {
+                            String tempstring = reader.ReadLine();
+                            highscore[i] = Convert.ToInt32(tempstring);
+                        }
+                        reader.Close();
+                    }
+                }
+                else
+                {
+                    flagpath = 1;
+                    sizeX = 6;
+                    sizeY = 6;
+                    speed = 10;
+                    screenflag = 3;
+                    maxLevel = 1;
+                    using (IsolatedStorageFileStream rawStream = isf.CreateFile("SavedState.txt"))
+                    {
+                        StreamWriter writer = new StreamWriter(rawStream);
+                        writer.WriteLine(flagpath + " " + sizeX + " " + sizeY + " " + speed + " " + screenflag + " " + maxLevel);
+                        for (int i = 0; i < maxLevel - 1; ++i)
+                        {
+                            writer.WriteLine(0);
+                        }
+                        writer.Close();
+                    }
+                }
+                switch (screenflag)
+                {
+                    case 0:
+                        {
+                            widthPerTile = 60;
+                            heightPerTile = 60;
+                            break;
+                        }
+                    case 1:
+                        {
+                            widthPerTile = 80;
+                            heightPerTile = 60;
+                            break;
+                        }
+                    case 2:
+                        {
+                            widthPerTile = 60;
+                            heightPerTile = 80;
+                            break;
+                        }
+                    case 3:
+                        {
+                            widthPerTile = 80;
+                            heightPerTile = 80;
+                            break;
+                        }
+                    case 4:
+                        {
+                            widthPerTile = 100;
+                            heightPerTile = 80;
+                            break;
+                        }
+                    case 5:
+                        {
+                            widthPerTile = 120;
+                            heightPerTile = 80;
+                            break;
+                        }
+                    default: break;
+                }
+            }
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(mainsound);
         }
 
         /// <summary>
@@ -766,24 +789,24 @@ namespace HarborMania
                     for (int k = 0; k <= mapLevel.Count / 18; ++k)
                     {
                         int tempbatas2 = (k == (mapLevel.Count / 18)) ? mapLevel.Count % 18 : 18;
-                        for (int j = 0; j <= tempbatas2; ++j)
+                        for (int j = 0; j <= tempbatas2 / 6; ++j)
                         {
                             int tempbatas = (j == (tempbatas2 / 6)) ? tempbatas2 % 6 : 6;
                             for (int i = 0; i < tempbatas; ++i)
                             {
-                                spriteBatch.Draw(levelbox, new Rectangle((k * 800) + 60 + i * 115, 110 + j * 110, 100, 100), Color.White);
+                                spriteBatch.Draw(levelbox, new Rectangle((k * 800) + 60 + i * 115 + statescreen, 110 + j * 110, 100, 100), Color.White);
                                 int digit = 0;
-                                int tempawal = ((j * 6) + (i + 1));
+                                int tempawal = ((k * 18) + (j * 6) + (i + 1));
                                 int temp = tempawal;
                                 while (temp >= 10)
                                 {
                                     temp /= 10;
                                     digit++;
                                 }
-                                spriteBatch.DrawString(font2, ((j * 6) + (i + 1)).ToString(), new Vector2((k * 800) + 98 - (digit * 14) + i * 115, 135 + j * 110), Color.White);
+                                spriteBatch.DrawString(font2, ((k * 18) + (j * 6) + (i + 1)).ToString(), new Vector2((k * 800) + 98 - (digit * 14) + i * 115 + statescreen, 135 + j * 110), Color.White);
                                 if (tempawal > maxLevel)
                                 {
-                                    spriteBatch.Draw(lockButton, new Rectangle((k * 800) + 65 + i * 115, 115 + j * 110, 90, 90), Color.White);
+                                    spriteBatch.Draw(lockButton, new Rectangle((k * 800) + 65 + i * 115 + statescreen, 115 + j * 110, 90, 90), Color.White);
                                 }
                             }
                         }
@@ -840,8 +863,8 @@ namespace HarborMania
 
                     if (finishPopUp == 1)
                     {
-                        Texture2D rect = new Texture2D(graphics.GraphicsDevice, 420, 240);
-                        Color[] data = new Color[420 * 240];
+                        Texture2D rect = new Texture2D(graphics.GraphicsDevice, 420, 300);
+                        Color[] data = new Color[420 * 300];
                         for (int i = 0; i < data.Length; ++i) data[i] = Color.AntiqueWhite;
                         rect.SetData(data);
                         spriteBatch.Begin();
@@ -849,11 +872,13 @@ namespace HarborMania
                         spriteBatch.DrawString(font1, "Congrats! You've finished level " + level, new Vector2(60, 140), Color.Tomato);
                         spriteBatch.DrawString(font1, "Move          : " + moveCount, new Vector2(60, 170), Color.Tomato);
                         spriteBatch.DrawString(font1, "Time spent : " + finishTime, new Vector2(60, 200), Color.Tomato);
-                        
+                        spriteBatch.DrawString(font1, "Score : " + currentscore, new Vector2(60, 230), Color.Tomato);
+                        spriteBatch.DrawString(font1, "Highscore : " + highscore[level - 1], new Vector2(60, 260), Color.Tomato);
+
                         //hitung score disini
-                        spriteBatch.Draw(replayButton, new Vector2(120, 270), Color.White);
-                        spriteBatch.Draw(chooseLevelButton, new Vector2(220, 270), Color.White);
-                        spriteBatch.Draw(nextLevelButton, new Vector2(320, 270), Color.White);
+                        spriteBatch.Draw(replayButton, new Vector2(120, 320), Color.White);
+                        spriteBatch.Draw(chooseLevelButton, new Vector2(220, 320), Color.White);
+                        spriteBatch.Draw(nextLevelButton, new Vector2(320, 320), Color.White);
                         spriteBatch.End();
                     }
 
@@ -886,7 +911,7 @@ namespace HarborMania
                         rect.SetData(data);
                         spriteBatch.Begin();
                         spriteBatch.Draw(rect, new Vector2(50, 120), Color.AntiqueWhite);
-                        spriteBatch.DrawString(font1, "Congrats! You've finished level " + level, new Vector2(60, 140), Color.Tomato);
+                        spriteBatch.DrawString(font1, "Level " + level + " has been finished.", new Vector2(60, 140), Color.Tomato);
                         spriteBatch.DrawString(font1, "Move          : " + moveCount, new Vector2(60, 170), Color.Tomato);
 
                         //hitung score disini
@@ -1025,18 +1050,21 @@ namespace HarborMania
                     {
                         // Bagian Player
                         _GameState = GameState.ChooseLevel;
+                        MediaPlayer.Play(mainsound);
                         break;
                     }
                     case GameState.ComputerPlay:
                     {
                         // Bagian Computer
                         _GameState = GameState.ChooseLevel;
+                        MediaPlayer.Play(mainsound);
                         break;
                     }
                     case GameState.GameOver:
                     {
                         // Bagian Game Over
                         _GameState = GameState.ChooseLevel;
+                        MediaPlayer.Play(mainsound);
                         break;
                     }
                     default: break;
@@ -1193,6 +1221,27 @@ namespace HarborMania
                                 loading = null;
                             }
                         }
+                        else if (animatescrolling)
+                        {
+                            if (touchxakhir > touchxawal)
+                            {
+                                statescreen += 20;
+                                if (statescreen > statescreenawal + 800)
+                                {
+                                    statescreen = statescreenawal + 800;
+                                    animatescrolling = false;
+                                }
+                            }
+                            else if (touchxakhir < touchxawal)
+                            {
+                                statescreen -= 20;
+                                if (statescreen < statescreenawal - 800)
+                                {
+                                    statescreen = statescreenawal - 800;
+                                    animatescrolling = false;
+                                }
+                            }
+                        }
                         else
                         {
                             startCoutingTime = false;
@@ -1201,34 +1250,86 @@ namespace HarborMania
                             {
                                 foreach (TouchLocation t in touchStateMain)
                                 {
-                                    for (int j = 0; j <= mapLevel.Count / 6; ++j)
+                                    if (t.State == TouchLocationState.Pressed)
                                     {
-                                        int tempbatas = (j == (mapLevel.Count / 6)) ? mapLevel.Count % 6 : 6;
-                                        for (int i = 0; i < tempbatas; ++i)
+                                        touchxawal = (int)t.Position.X;
+                                        statescreenawal = statescreen;
+                                        scrollflag = false;
+                                    }
+                                    else if (t.State == TouchLocationState.Moved)
+                                    {
+                                        Debug.WriteLine(statescreen);
+                                        if ((!scrollflag)&&(Math.Abs(t.Position.X - touchxawal) > 20))
+                                            scrollflag = true;
+                                        else if (scrollflag)
                                         {
-                                            if ((t.State == TouchLocationState.Released) && ((t.Position.X >= 60 + i * 115) && ((t.Position.X <= 60 + i * 115 + 100))) &&
-                                            ((t.Position.Y >= 110 + j * 110) && ((t.Position.Y <= 110 + j * 110 + 100))))
+                                            statescreen = (int)t.Position.X - touchxawal + statescreenawal;
+                                        }
+                                    }
+                                    else if (t.State == TouchLocationState.Released)
+                                    {
+                                        if (scrollflag)
+                                        {
+                                            if (Math.Abs(t.Position.X - touchxawal) > 200)
                                             {
-                                                // Jika menyentuh menu tertentu
-                                                level = j * 6 + i + 1; //ditambah 1 karena level mulai dari 1, bukan dari 0
-                                                if (level <= maxLevel)
+                                                if ((statescreenawal != 0) && ((int)t.Position.X > touchxawal))
                                                 {
-                                                    map = new Sea(this, widthPerTile, heightPerTile, sizeX, sizeY, mapLevel[level]);
-                                                    map.Initialize();
-                                                    map.LoadContent(out boats);
-
-                                                    if (play == GameType.Human)
+                                                    animatescrolling = true;
+                                                    touchxakhir = (int)t.Position.X;
+                                                }
+                                                else if ((statescreenawal != ((mapLevel.Count / 18) * -800)) && ((int)t.Position.X < touchxawal))
+                                                {
+                                                    animatescrolling = true;
+                                                    touchxakhir = (int)t.Position.X;
+                                                }
+                                                else
+                                                {
+                                                    statescreen = statescreenawal;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                statescreen = statescreenawal;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int k = 0; k <= mapLevel.Count / 18; ++k)
+                                            {
+                                                int tempbatas2 = (k == (mapLevel.Count / 18)) ? mapLevel.Count % 18 : 18;
+                                                for (int j = 0; j <= tempbatas2 / 6; ++j)
+                                                {
+                                                    int tempbatas = (j == (mapLevel.Count / 6)) ? mapLevel.Count % 6 : 6;
+                                                    for (int i = 0; i < tempbatas; ++i)
                                                     {
-                                                        lockboat = -1;
-                                                        timeSpan = TimeSpan.FromMilliseconds(1000);
-                                                        _GameState = GameState.HumanPlay;
-                                                    }
-                                                    else if (play == GameType.Computer)
-                                                    {
-                                                        loading = new Thread(new ParameterizedThreadStart(getPath));
-                                                        loading.Start(flagpath);
+                                                        if (((t.Position.X >= (k * 800) + statescreen + 60 + i * 115) &&
+                                                            ((t.Position.X <= (k * 800) + statescreen + 60 + i * 115 + 100))) && 
+                                                            ((t.Position.Y >= 110 + j * 110) && ((t.Position.Y <= 110 + j * 110 + 100))))
+                                                        {
+                                                            // Jika menyentuh menu tertentu
+                                                            level = (k * 18) + j * 6 + i + 1; //ditambah 1 karena level mulai dari 1, bukan dari 0
+                                                            if (level <= maxLevel)
+                                                            {
+                                                                MediaPlayer.Play(playsound);
+                                                                map = new Sea(this, widthPerTile, heightPerTile, sizeX, sizeY, mapLevel[level]);
+                                                                map.Initialize();
+                                                                map.LoadContent(out boats);
 
-                                                        countLoader = 0;
+                                                                if (play == GameType.Human)
+                                                                {
+                                                                    lockboat = -1;
+                                                                    timeSpan = TimeSpan.FromMilliseconds(1000);
+                                                                    _GameState = GameState.HumanPlay;
+                                                                }
+                                                                else if (play == GameType.Computer)
+                                                                {
+                                                                    loading = new Thread(new ParameterizedThreadStart(getPath));
+                                                                    loading.Start(flagpath);
+
+                                                                    countLoader = 0;
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -1257,7 +1358,6 @@ namespace HarborMania
                         {
                             startCoutingTime = true;
                             timeSpan = TimeSpan.FromMilliseconds(map.TIME);
-                            //setTimeSpan(map.TIME);
                         }
                         if (timeSpan.TotalSeconds == 0) {
                             _GameState = GameState.GameOver;
@@ -1289,7 +1389,7 @@ namespace HarborMania
                                     touchTimer = 5;
                                     foreach (TouchLocation t in touchStateMain)
                                     {
-                                        if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 120) && (t.Position.X <= 200) && (t.Position.Y >= 270) && (t.Position.Y <= 350))
+                                        if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 120) && (t.Position.X <= 200) && (t.Position.Y >= 320) && (t.Position.Y <= 400))
                                         {
                                             //replay
                                             finishFlag = 0;
@@ -1301,12 +1401,13 @@ namespace HarborMania
                                             map.Initialize();
                                             map.LoadContent(out boats);
                                         }
-                                        if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 220) && (t.Position.X <= 300) && (t.Position.Y >= 270) && (t.Position.Y <= 350))
+                                        if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 220) && (t.Position.X <= 300) && (t.Position.Y >= 320) && (t.Position.Y <= 400))
                                         {
                                             //choose level
+                                            MediaPlayer.Play(mainsound);
                                             _GameState = GameState.ChooseLevel;
                                         }
-                                        if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 320) && (t.Position.X <= 400) && (t.Position.Y >= 270) && (t.Position.Y <= 350))
+                                        if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 320) && (t.Position.X <= 400) && (t.Position.Y >= 320) && (t.Position.Y <= 400))
                                         {
                                             //next level 
                                             if (level != mapLevel.Count())
@@ -1323,6 +1424,7 @@ namespace HarborMania
                                             }
                                             else
                                             {
+                                                MediaPlayer.Play(mainsound);
                                                 _GameState = GameState.ChooseLevel;
                                             }
                                         }
@@ -1374,19 +1476,15 @@ namespace HarborMania
                                             posAkhirX += (int)(boats.ElementAt(lockboat).Size.X / widthPerTile);
                                             if (posAkhirX == sizeX)
                                             {
-                                                /*
-                                                if (level <= 3)
-                                                     waktuAwal = TimeSpan.FromMilliseconds(180000);
-                                                else if (level <= 6)
-                                                     waktuAwal = TimeSpan.FromMilliseconds(240000);
-                                                else if (level <= 9)
-                                                     waktuAwal = TimeSpan.FromMilliseconds(300000); */
-
                                                 waktuAwal = TimeSpan.FromMilliseconds(map.TIME);
 
                                                 waktuAwal = waktuAwal - timeSpan;
                                                 finishTime = String.Format("{0}:{1:D2}", waktuAwal.Minutes, waktuAwal.Seconds + 1);
                                                 finishFlag = 1;
+
+                                                currentscore = (300 - moveCount) + (timeSpan.Minutes) * 60 + (timeSpan.Seconds) * 10;
+                                                if (currentscore > highscore[level - 1])
+                                                    highscore[level - 1] = currentscore;
                                             }
                                         }
                                         lockboat = -1;
@@ -1441,9 +1539,15 @@ namespace HarborMania
                                                         (map.GetStatus((int)((t.Position.X + offx + boats.ElementAt(lockboat).Size.X - (widthPerTile / 2)) / widthPerTile), (int)(boats.ElementAt(lockboat).Position.Y / heightPerTile)) == 0))
                                                         boats.ElementAt(lockboat).Position = new Vector2(t.Position.X + offx, boats.ElementAt(lockboat).Position.Y);
                                                     else if (t.Position.X + offx < boats.ElementAt(lockboat).Position.X)
+                                                    {
+                                                        colsound.CreateInstance().Play();
                                                         minscroll = (int)((t.Position.X + offx + (widthPerTile / 2)) / widthPerTile);
+                                                    }
                                                     else if (t.Position.X + offx > boats.ElementAt(lockboat).Position.X)
+                                                    {
+                                                        colsound.CreateInstance().Play();
                                                         maxscroll = (int)((t.Position.X + offx + (widthPerTile / 2)) / widthPerTile);
+                                                    }
                                                 }
                                             }
                                             else if ((boats.ElementAt(lockboat).Arah == Boat.Orientation.Top) || (boats.ElementAt(lockboat).Arah == Boat.Orientation.Bottom))
@@ -1455,9 +1559,15 @@ namespace HarborMania
                                                         (map.GetStatus((int)(boats.ElementAt(lockboat).Position.X / widthPerTile), (int)(t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - (heightPerTile / 2)) / heightPerTile) == 0))
                                                         boats.ElementAt(lockboat).Position = new Vector2(boats.ElementAt(lockboat).Position.X, t.Position.Y + offy);
                                                     else if (t.Position.Y + offy < boats.ElementAt(lockboat).Position.Y)
+                                                    {
+                                                        colsound.CreateInstance().Play();
                                                         minscroll = (int)((t.Position.Y + offy + (heightPerTile / 2)) / heightPerTile);
+                                                    }
                                                     else if (t.Position.Y + offy > boats.ElementAt(lockboat).Position.Y)
+                                                    {
+                                                        colsound.CreateInstance().Play();
                                                         maxscroll = (int)((t.Position.Y + offy + boats.ElementAt(lockboat).Size.Y - (heightPerTile / 2)) / heightPerTile);
+                                                    }
                                                 }
                                             }
                                         }
@@ -1532,12 +1642,13 @@ namespace HarborMania
                                         if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 220) && (t.Position.X <= 300) && (t.Position.Y >= 270) && (t.Position.Y <= 350))
                                         {
                                             //choose level
+                                            MediaPlayer.Play(mainsound);
                                             _GameState = GameState.ChooseLevel;
                                         }
                                         if ((t.State == TouchLocationState.Pressed) && (t.Position.X >= 320) && (t.Position.X <= 400) && (t.Position.Y >= 270) && (t.Position.Y <= 350))
                                         {
                                             //next level 
-                                            if (level <= maxLevel)
+                                            if (level < maxLevel)
                                             {
                                                 level++;
                                                 finishFlag = 0;
@@ -1554,6 +1665,7 @@ namespace HarborMania
                                             }
                                             else
                                             {
+                                                MediaPlayer.Play(mainsound);
                                                 _GameState = GameState.ChooseLevel;
                                             }
                                         }
@@ -1891,6 +2003,10 @@ namespace HarborMania
                 {
                     StreamWriter writer = new StreamWriter(rawStream);
                     writer.WriteLine(flagpath + " " + sizeX + " " + sizeY + " " + speed + " " + screenflag + " " + maxLevel);
+                    for (int i = 0; i < maxLevel - 1; ++i)
+                    {
+                        writer.WriteLine(highscore[i]);
+                    }
                     writer.Close();
                 }
             }
