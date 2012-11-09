@@ -9,6 +9,6 @@
 1 3 2 1 Right Boat/BoatPlayer
 3 2 2 1 Right Boat/Boat21
 1 0 1 2 Top Boat/Boat12
-2 4 1 2 Bottom Boat/Boat12
+5 3 1 2 Bottom Boat/Boat12
 0 Tile/Sea
 1 Tile/Wood
