@@ -5,6 +5,7 @@
 0 0 0 0 0 0
 0 0 0 0 0 0
 2
+240000
 8
 1 2 2 1 Right Boat/BoatPlayer
 0 0 2 1 Left Boat/Boat21

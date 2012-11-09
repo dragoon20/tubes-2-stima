@@ -41,16 +41,21 @@ namespace HarborMania
         int moveCount = 0;
 
         // Bantu User Interface Player
+        bool scrollflag;
         bool touchflag;
         int touchTimer;
         int lockboat;
         int offx;
         int offy;
+        int statescreen;
+        int touchxawal;
+        int touchxakhir;
         int minscroll;
         int maxscroll;
         int countLoader;
 
         TimeSpan timeSpan = TimeSpan.FromMilliseconds(0);
+        TimeSpan waktuAwal = TimeSpan.FromMilliseconds(0);
 
         Sea map;
         List<Boat> boats;
@@ -140,6 +145,8 @@ namespace HarborMania
             // Set GameState jadi menu utama
             _GameState = GameState.MainMenu;
             touchflag = false;
+            scrollflag = false;
+            statescreen = 0;
             menuPlay = new Rectangle(30, 40, 300, 61);
             menuSetting = new Rectangle(30, 118, 300, 61);
             menuHelp = new Rectangle(30, 196, 300, 61);
@@ -224,10 +231,11 @@ namespace HarborMania
             }
         }
 
+        /*
         public void setTimeSpan (Double ms)
         {
             timeSpan = TimeSpan.FromMilliseconds(ms);
-        } 
+        } */
 
         /// <summary>
             /// This is initialize method for class Game1.
@@ -755,23 +763,28 @@ namespace HarborMania
                     spriteBatch.Begin();
                     spriteBatch.Draw(mainMenu, new Vector2(), Color.White);
                     spriteBatch.DrawString(font3, "Pilih Level", new Vector2(40, 30), Color.DarkSlateBlue);
-                    for (int j = 0; j <= mapLevel.Count/6; ++j)
+                    for (int k = 0; k <= mapLevel.Count / 18; ++k)
                     {
-                        int tempbatas = (j == (mapLevel.Count/6)) ? mapLevel.Count % 6 : 6;
-                        for (int i = 0; i < tempbatas; ++i)
+                        int tempbatas2 = (k == (mapLevel.Count / 18)) ? mapLevel.Count % 18 : 18;
+                        for (int j = 0; j <= tempbatas2; ++j)
                         {
-                            spriteBatch.Draw(levelbox, new Rectangle(60 + i * 115, 110 + j * 110, 100, 100), Color.White);
-                            int digit = 0;
-                            int temp = ((j * 6) + (i + 1));
-                            while (temp >= 10)
+                            int tempbatas = (j == (tempbatas2 / 6)) ? tempbatas2 % 6 : 6;
+                            for (int i = 0; i < tempbatas; ++i)
                             {
-                                temp /= 10;
-                                digit++;
-                            }
-                            spriteBatch.DrawString(font2, ((j * 6) + (i + 1)).ToString(), new Vector2(98 - (digit * 14) + i * 115, 135 + j * 110), Color.White);
-                            if (temp > maxLevel)
-                            {
-                                spriteBatch.Draw(lockButton, new Rectangle(65 + i * 115, 115 + j * 110, 90, 90), Color.White);
+                                spriteBatch.Draw(levelbox, new Rectangle((k * 800) + 60 + i * 115, 110 + j * 110, 100, 100), Color.White);
+                                int digit = 0;
+                                int tempawal = ((j * 6) + (i + 1));
+                                int temp = tempawal;
+                                while (temp >= 10)
+                                {
+                                    temp /= 10;
+                                    digit++;
+                                }
+                                spriteBatch.DrawString(font2, ((j * 6) + (i + 1)).ToString(), new Vector2((k * 800) + 98 - (digit * 14) + i * 115, 135 + j * 110), Color.White);
+                                if (tempawal > maxLevel)
+                                {
+                                    spriteBatch.Draw(lockButton, new Rectangle((k * 800) + 65 + i * 115, 115 + j * 110, 90, 90), Color.White);
+                                }
                             }
                         }
                     }
@@ -1084,15 +1097,15 @@ namespace HarborMania
                     case GameState.Help:
                     {
                         // Bagian Help
+                        if (startCoutingTime == false)
+                        {
+                            startCoutingTime = true;
+                            timeSpan = TimeSpan.FromMilliseconds(180000);
+                        }
                         TouchCollection touchStateMain = TouchPanel.GetState();
                         if ((!touchflag) && (touchStateMain.Count > 0))
                         {
-                            // Kalau di-touch
-                            if (startCoutingTime == false)
-                            {
-                                startCoutingTime = true;
-                                timeSpan = TimeSpan.FromMilliseconds(180000);
-                            }
+                            // Kalau di-touch     
                             touchflag = true;
                             touchTimer = 5;
                             foreach (TouchLocation t in touchStateMain)
@@ -1193,7 +1206,7 @@ namespace HarborMania
                                         int tempbatas = (j == (mapLevel.Count / 6)) ? mapLevel.Count % 6 : 6;
                                         for (int i = 0; i < tempbatas; ++i)
                                         {
-                                            if ((t.State == TouchLocationState.Pressed) && ((t.Position.X >= 60 + i * 115) && ((t.Position.X <= 60 + i * 115 + 100))) &&
+                                            if ((t.State == TouchLocationState.Released) && ((t.Position.X >= 60 + i * 115) && ((t.Position.X <= 60 + i * 115 + 100))) &&
                                             ((t.Position.Y >= 110 + j * 110) && ((t.Position.Y <= 110 + j * 110 + 100))))
                                             {
                                                 // Jika menyentuh menu tertentu
@@ -1243,14 +1256,8 @@ namespace HarborMania
 						if (startCoutingTime == false)
                         {
                             startCoutingTime = true;
-                            setTimeSpan(map.TIME);
-                            /*
-                            if (level <= 3) 
-                                timeSpan = TimeSpan.FromMilliseconds(180000);
-                            if (level <=6) 
-                                timeSpan = TimeSpan.FromMilliseconds(240000);
-                            if (level <=9)
-                                timeSpan = TimeSpan.FromMilliseconds(300000); */
+                            timeSpan = TimeSpan.FromMilliseconds(map.TIME);
+                            //setTimeSpan(map.TIME);
                         }
                         if (timeSpan.TotalSeconds == 0) {
                             _GameState = GameState.GameOver;
@@ -1367,7 +1374,6 @@ namespace HarborMania
                                             posAkhirX += (int)(boats.ElementAt(lockboat).Size.X / widthPerTile);
                                             if (posAkhirX == sizeX)
                                             {
-                                                TimeSpan waktuAwal = TimeSpan.FromMilliseconds(180000);
                                                 /*
                                                 if (level <= 3)
                                                      waktuAwal = TimeSpan.FromMilliseconds(180000);
