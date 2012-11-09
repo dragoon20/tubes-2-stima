@@ -16,3 +16,5 @@
 5 4 1 2 Top Boat/Boat12
 0 Tile/Sea
 1 Tile/Wood
+2 Tile/sea_starfish
+3 Tile/sea_lifevest
